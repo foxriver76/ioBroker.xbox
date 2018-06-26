@@ -1,0 +1,11 @@
+[console_scripts]
+xbox-client = xbox.sg.scripts.client:main
+xbox-discover = xbox.sg.scripts.discover:main
+xbox-input = xbox.sg.scripts.input:main
+xbox-pcap = xbox.sg.scripts.pcap:main
+xbox-poweroff = xbox.sg.scripts.poweroff:main
+xbox-poweron = xbox.sg.scripts.poweron:main
+xbox-recrypt = xbox.sg.scripts.recrypt:main
+xbox-text = xbox.sg.scripts.text:main
+xbox-tui = xbox.sg.scripts.tui:main
+

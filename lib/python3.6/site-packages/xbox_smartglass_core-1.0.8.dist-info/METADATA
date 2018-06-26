@@ -1,0 +1,121 @@
+Metadata-Version: 2.1
+Name: xbox-smartglass-core
+Version: 1.0.8
+Summary: A library to interact with the Xbox One gaming console via the SmartGlass protocol.
+Home-page: https://github.com/OpenXbox/xbox-smartglass-core-python
+Author: OpenXbox
+License: GPL
+Keywords: xbox one smartglass
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Provides-Extra: dev
+Requires-Dist: xbox-webapi (>=1.1.2)
+Requires-Dist: construct (==2.9.41)
+Requires-Dist: cryptography (==2.2.2)
+Requires-Dist: appdirs (==1.4.3)
+Requires-Dist: gevent (==1.2.2)
+Requires-Dist: urwid (==2.0.1)
+Requires-Dist: dpkt (==1.9.1)
+Requires-Dist: aenum (==2.1.2); python_version <= "3.5"
+Provides-Extra: dev
+Requires-Dist: bumpversion; extra == 'dev'
+Requires-Dist: watchdog; extra == 'dev'
+Requires-Dist: coverage; extra == 'dev'
+Requires-Dist: Sphinx; extra == 'dev'
+Requires-Dist: wheel; extra == 'dev'
+Requires-Dist: twine; extra == 'dev'
+
+====================
+Xbox-Smartglass-Core
+====================
+
+.. image:: https://pypip.in/version/xbox-smartglass-core/badge.svg
+    :target: https://pypi.python.org/pypi/xbox-smartglass-core/
+    :alt: Latest Version
+
+.. image:: https://readthedocs.org/projects/xbox-smartglass-core-python/badge/?version=latest
+    :target: http://xbox-smartglass-core-python.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: https://travis-ci.com/OpenXbox/xbox-smartglass-core-python.svg?branch=master
+    :target: https://travis-ci.com/OpenXbox/xbox-smartglass-core-python
+
+.. image:: https://img.shields.io/badge/discord-OpenXbox-blue.svg
+    :target: https://discord.gg/uzbC73m
+    :alt: Discord chat channel
+
+This library provides the core foundation for the smartglass protocol that is used
+with the Xbox One Gaming console
+
+For in-depth information, check out the documentation: (https://openxbox.github.io)
+
+Dependencies
+------------
+* Python >= 3.5
+* construct (https://construct.readthedocs.io/)
+* cryptography (https://cryptography.io/en/stable/)
+* gevent (http://www.gevent.org/)
+* dpkt (https://dpkt.readthedocs.io/en/latest/)
+
+Install
+-------
+
+Via pip:
+::
+
+    pip install xbox-smartglass-core
+
+
+How to use
+----------
+
+Authenticate first (Authentication provided by xbox-webapi-python):
+::
+
+    xbox-authenticate
+
+    # alternatively: ncurses terminal ui
+    xbox-auth-tui
+
+Now have a look in the Documentation_ how to use the provided shell-scripts!
+
+Known issues
+------------
+* Find, report and/or fix them ;)
+
+Contribute
+----------
+* Report bugs/suggest features
+* Add/update docs
+* Enhance managers
+
+Credits
+-------
+This package uses parts of Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+
+.. _Documentation: https://xbox-smartglass-core-python.readthedocs.io/en/latest/source/xbox.sg.scripts.html
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+
+
+=======
+History
+=======
+
+1.0.7 (2018-05-16)
+------------------
+* CoreProtocol.connect: Treat ConnectionResult.Pending as error
+* constants.WindowsClientInfo: Update ClientVersion 15 -> 39
+* Make CoreProtocol.start_channel take optional title_id / activity_id arguments
+
+1.0.1 (2018-05-03)
+------------------
+
+* First release on PyPI.
+
+
