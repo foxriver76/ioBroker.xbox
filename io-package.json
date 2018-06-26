@@ -1,0 +1,46 @@
+{
+    "common": {
+        "name": "template",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial adapter",
+                "de": "Initiale Version",
+            }
+        },
+		"title": "Javascript/Node.js based template adapter",
+        "titleLang": {
+            "en": "Javascript/Node.js based template adapter",
+            "de": "Javascript / Node.js basierte Vorlagenadapter"
+        },
+        "desc": {
+            "en": "ioBroker template Adapter",
+            "de": "ioBroker Template Adapter"
+        },
+        "authors": [
+            "Moritz Heusinger <moritz.heusinger@gmail.com>"
+        ],
+        "docs": {
+            "en": "docs/en/admin.md",
+            "de": "docs/de/admin.md",
+        },
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "xbox.png",
+        "materialize": true,
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",
+        "keywords": ["xbox"],
+        "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
+        "loglevel": "info",
+        "type": "multimedia",
+        "license": "MIT",
+        "messagebox": false
+    },
+    "native": {
+        "ip": "192.168.178.78"
+    },
+    "objects": [
+
+    ]
+}
