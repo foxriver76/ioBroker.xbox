@@ -5,7 +5,7 @@
         "news": {
             "0.0.1": {
                 "en": "initial adapter",
-                "de": "Initiale Version",
+                "de": "Initiale Version"
             }
         },
 		"title": "Javascript/Node.js based template adapter",
@@ -22,7 +22,7 @@
         ],
         "docs": {
             "en": "docs/en/admin.md",
-            "de": "docs/de/admin.md",
+            "de": "docs/de/admin.md"
         },
         "platform": "Javascript/Node.js",
         "mode": "daemon",
