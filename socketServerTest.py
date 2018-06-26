@@ -9,10 +9,10 @@ Created on Tue Jun 26 20:55:45 2018
 import socket
 import sys
 from _thread import start_new_thread
-from consoleTest import program
+import consoleTest
  
 HOST = ''   # Symbolic name meaning all available interfaces
-PORT = 8881 # Arbitrary non-privileged port
+PORT = 8876 # Arbitrary non-privileged port
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print('Socket created')
@@ -33,7 +33,7 @@ print ('Socket now listening')
 #Function for handling connections. This will be used to create threads
 def clientthread(conn):
     #Sending message to connected client
-    conn.send(b'Welcome to the server. Type something and hit enter\n') #send only takes string
+    conn.send(b'Welcome to the server. Type something and hit enter\n') #send only takes byte string
      
     #infinite loop so that function do not terminate and thread do not end.
     while True:
@@ -45,9 +45,12 @@ def clientthread(conn):
             break
         recvString = data.decode().strip()
         print('Received: ', recvString)
-        if(recvString == "start"):
-            print('Triggered Xbox Script')
-            program()
+        
+        if(recvString == "on"): # turn on xbox and connect
+            consoleTest.xbox_on()
+        elif(recvString == "off"):
+            consoleTest.xbox_off()
+            
         conn.sendall(reply)
      
     #came out of loop

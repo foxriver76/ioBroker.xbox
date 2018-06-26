@@ -25,7 +25,6 @@ if len(discovered):
         pass
 else:
     print("No consoles discovered")
-    sys.exit(1)
     
 """
 #xboxOne.power_on(tries=5)

@@ -14,7 +14,7 @@ XBOX_PING = "dd00000a000000000000000400000002"
 py3 = sys.version_info[0] > 2
 
 
-def turn_on(ip_addr, live_id, pingonly=False, forever=False):
+def turn_on(ip_addr, live_id, pingonly=False, forever=True):
 
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.setblocking(0)
@@ -30,7 +30,7 @@ def turn_on(ip_addr, live_id, pingonly=False, forever=False):
         power_payload = b'\x00' + chr(len(live_id)).encode() + live_id.upper() + b'\x00'
         power_header = b'\xdd\x02\x00' + chr(len(power_payload)).encode() + b'\x00\x00'
         power_packet = power_header + power_payload
-        print("Sending power on packets to {0}...".format(ip_addr))
+        print("Sending power on packets to {0}".format(ip_addr))
         send_power(s, power_packet)
 
         print("Xbox should turn on now, pinging to make sure...")
