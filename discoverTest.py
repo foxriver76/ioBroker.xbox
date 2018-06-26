@@ -26,3 +26,27 @@ if len(discovered):
 else:
     print("No consoles discovered")
     sys.exit(1)
+    
+"""
+#xboxOne.power_on(tries=5)
+#print(xboxOne.connection_state)
+#print(xboxOne.available)
+
+while(xboxOne.connected == False):
+    discovered = Console.discover(timeout=3)
+    
+    if(len(discovered) > 0):
+    #    print("%d console/s discovered" % (len(discovered)))
+        print(discovered[0])
+        xboxOne = discovered[0]
+        discovered[0].connect()
+        print(xboxOne.connection_state)
+        #xboxOne.power_off()
+        xboxOne.add_manager(InputManager)
+    else:
+        print("no console discovered")
+        
+    xboxOne.wait(7)
+            
+
+"""
