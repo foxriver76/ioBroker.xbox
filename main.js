@@ -12,6 +12,7 @@ const ping = require('ping');
 const address = 'localhost'; // not used
 let liveId;
 let ip;
+let blockXbox = false;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
@@ -44,7 +45,7 @@ adapter.on('stateChange', (id, state) => {
     	    if(connected) {
     		    handleStateChange(state, id);
     	    } else {
-    		    adapter.log.warn('Cant handle id change ' + id + ' with value ' + state + ' because not connected');
+    		    adapter.log.warn('[COMMAND] ===> Can not handle id change ' + id + ' with value ' + state + ' because not connected');
     	    } // endElse
         });
     }
@@ -169,12 +170,15 @@ function discover(cb) { // is used by connect
 function powerOn(cb) {
 		let statusURL = 'http://localhost:5557/device/' + liveId + '/poweron';
 		adapter.log.debug('Powering on console');
+		blockXbox = true;
 		
 		request(statusURL, (error, response, body) => {
 			if(error) adapter.log.error('[REQUEST] <=== ' + error.message);
 			// Ping to check if it is powered on and set state
 			adapter.getState('info.connection', (err, state) => {
-				if(!state.val) powerOn();
+				if(!state.val) {
+					powerOn();
+				} else blockXbox = false; // unblock Box because on
 			});
 			if(cb && typeof(cb) === "function") return cb();
 		});
@@ -182,7 +186,10 @@ function powerOn(cb) {
 } // endPowerOn
 
 function handleStateChange(state, id, cb) {
-    switch(id) {
+	if(blockXbox) return adapter.log.warn('[STATE] ' + id + ' change to ' + state + ' dropped, because Xbox blocked');
+    blockXbox = true;
+    let unblockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
+	switch(id) {
 		case 'settings.power':
 			if(state) {
 				powerOn();

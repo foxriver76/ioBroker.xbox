@@ -109,6 +109,277 @@
 			"native": {
 				
 			}
+		},
+		{
+			"_id": "gamepad.rightShoulder",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Right Shoulder Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.leftShoulder",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Left Shoulder Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.leftThumbstick",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Left Thumbstick Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.rightThumbstick",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Right Thumbstick Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.enroll",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Enroll Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.view",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "View Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.menu",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Menu Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.nexus",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Nexus Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.a",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "A Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.b",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "B Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.x",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "X Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.y",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Y Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.dpadUp",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "DPad Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.clear",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Clear Button",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.dpadRight",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "DPad Right",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.dpadLeft",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "DPad Left",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad.dpadDown",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "DPad Down",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "media.play",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Media Play",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
 		}
+		
 	]		
 }
