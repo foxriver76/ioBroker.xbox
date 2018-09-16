@@ -3,5 +3,6 @@
 'use strict';
 
 systemDictionary = {
-    "Your consoles live id": {"en": "Your consoles live id", "de": "LiveID deiner XBOX"}
+    "Your consoles live id": {"en": "Your consoles live id", "de": "LiveID deiner XBOX"},
+    "Your consoles ip address": {"en": "Your consoles ip adress", "de": "IP-Adresse deiner XBOX"}
 };

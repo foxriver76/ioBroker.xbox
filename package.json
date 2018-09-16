@@ -28,7 +28,8 @@
     "url": "https://github.com/foxriver76/ioBroker.xbox"
   },
   "dependencies": {
-		"request": "^2.87.0"
+		"request": "^2.87.0",
+		"ping": "^0.2.2"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
