@@ -1,6 +1,9 @@
 {
   "name": "iobroker.xbox",
   "version": "0.0.1",
+  "engines": {
+    	"node": ">=6.0.0"
+  },
   "description": "ioBroker Xbox Adapter",
   "author": {
     "name": "Moritz Heusinger",
@@ -24,7 +27,9 @@
     "type": "git",
     "url": "https://github.com/foxriver76/ioBroker.xbox"
   },
-  "dependencies": {},
+  "dependencies": {
+		"request": "^2.87.0"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "mocha": "^4.1.0",
