@@ -73,37 +73,44 @@ adapter.on('message', obj => {
 
             // Send response in callback if required
             if (obj.callback) adapter.sendTo(obj.from, obj.command, 'Message received', obj.callback);
-        }
-    }
+        } // endIf
+    } // endIf
 });
 
 adapter.on('ready', () => {
 	// TODO: check windows
+	liveId = adapter.config.liveId;
+	if(!liveId) {
+		adapter.log.warn('Please provide a Xbox Live ID');
+		return;
+	} // endIf
+	
 	exec('xbox-rest-server', (error, stdout, stderr) => {
 		if(error) {
 			adapter.log.error('[START] ' + stderr);
 		} // endIf
 	});
 	adapter.log.info('[START] Rest server started')
-    main();
+    setTimeout(() => main(), 5000); // give server time to start
 });
 
 function main() {
 	
-	liveId = adapter.config.liveId;
     adapter.subscribeStates('*');
+	discover(); // Search for devices
+
 
 } // endMain
 
 function connect(liveid, cb) {
 	
-	let statusURL = 'http://localhost:5557/device/' + liveId + '/connect'
+	let statusURL = 'http://localhost:5557/device/' + liveId + '/connect';
 	
 	request(statusURL, (error, response, body) => {
 		if(!error) {
 			if(response.success) adapter.setState('info.connection', true, true);
 			else {
-				adapter.log.warn('[CONNECT] <=== ' + response.message);
+				adapter.log.warn('[CONNECT] <=== ' + body);
 				adapter.setState('info.connection', false, true);
 			} //endElse
 		} else {
@@ -119,3 +126,18 @@ function connect(liveid, cb) {
 function powerOff(liveId, cb) {
 	if(cb && typeof(cb) === "function") return cb();
 } // endPowerOff
+
+function discover(cb) {
+	let statusURL = 'http://localhost:5557/device';
+	
+	request(statusURL, (error, response, body) => {
+		if(!error) {
+				adapter.log.info(body);
+		} else {
+			adapter.log.error('[CONNECT] <=== ' + error.message);
+			adapter.setState('info.connection', false, true);
+		}
+	});
+		
+	if(cb && typeof(cb) === "function") return cb();
+} // endDiscover
