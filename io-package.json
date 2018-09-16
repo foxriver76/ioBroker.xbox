@@ -1,6 +1,6 @@
 {
     "common": {
-        "name": "iobroker.xbox",
+        "name": "xbox",
         "version": "0.0.1",
         "news": {
             "0.0.1": {
@@ -20,10 +20,6 @@
         "authors": [
             "Moritz Heusinger <moritz.heusinger@gmail.com>"
         ],
-        "docs": {
-            "en": "docs/en/admin.md",
-            "de": "docs/de/admin.md"
-        },
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "xbox.png",
