@@ -1,6 +1,6 @@
 {
     "common": {
-        "name": "template",
+        "name": "iobroker.xbox",
         "version": "0.0.1",
         "news": {
             "0.0.1": {
@@ -8,14 +8,14 @@
                 "de": "Initiale Version"
             }
         },
-		"title": "Javascript/Node.js based template adapter",
+		"title": "Xbox",
         "titleLang": {
-            "en": "Javascript/Node.js based template adapter",
-            "de": "Javascript / Node.js basierte Vorlagenadapter"
+            "en": "Control your Xbox",
+            "de": "Steure deine Xbox "
         },
         "desc": {
-            "en": "ioBroker template Adapter",
-            "de": "ioBroker Template Adapter"
+            "en": "Control your Xbox",
+            "de": "Steuere deine Xbox"
         },
         "authors": [
             "Moritz Heusinger <moritz.heusinger@gmail.com>"
@@ -30,7 +30,7 @@
         "materialize": true,
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",
-        "keywords": ["xbox"],
+        "keywords": ["xbox", "gaming", "playstation"],
         "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
         "loglevel": "info",
         "type": "multimedia",
@@ -38,9 +38,81 @@
         "messagebox": false
     },
     "native": {
-        "ip": "192.168.178.78"
+        "email": "",
+        "password": "",
+        "liveId": ""
     },
-    "objects": [
-
-    ]
+    "objects": [],
+	"instanceObjects": [
+		{
+			"_id": "info",
+			"type": "channel",
+			"common": {
+				"name": "Information"
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "info.connection",
+			"type": "state",
+			"common": {
+				"role": "indicator.connected",
+				"name": "If connected to Xbox",
+				"type": "boolean",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "media",
+			"type": "channel",
+			"common": {
+				"name": "Media"
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "gamepad",
+			"type": "channel",
+			"common": {
+				"name": "Gamepad"
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "settings",
+			"type": "channel",
+			"common": {
+				"name": "Settings and device commands"
+			},
+			"native": {
+				
+			}
+		},
+		{
+			"_id": "settings.power",
+			"type": "state",
+			"common": {
+				"role": "switch.power",
+				"name": "Console power status",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {
+				
+			}
+		}
+	]		
 }

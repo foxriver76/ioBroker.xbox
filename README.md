@@ -6,13 +6,14 @@ This adapter allows you to control your Xbox via ioBroker.
 
 ## Steps 
 
-* pip install xbox-smartglass-core
 * Install the adapter from github and have fun
+* Fulfill the requirements
 
 ## Requirements
 
 * Python 3.6 is required
-* pip install xbox-smartglass-core
+* pip3 install xbox-smartglass-rest
+* pip3 install xbox-smartglass-core
 
 ## Changelog
 

@@ -24,8 +24,8 @@ from cryptography.hazmat.backends import default_backend
 
 testCurve = ec.SECP256R1()
 xboxKey = ec.EllipticCurvePublicNumbers(curve=testCurve, 
-x=29205441515073923487559868131118644438058724507779850563188099066744850429792, 
-y=65978933634580207595475043557351594754297380965211948229701265706146817682936)
+x=113472361600126925868739237652223851804502761650015899490510830642634235297372, 
+y=67096752455956867682932404529574015394230633718082371864977891599860814607333)
 
 #print(xboxKey.public_key(default_backend()))
 
@@ -42,14 +42,14 @@ xboxOne.connect()
 print('connected after: ', xboxOne.connected)
 
 xboxOne.wait(1)
-xboxOne.power_off()
+#xboxOne.power_off()
 
 xboxOne.gamepad_input(GamePadButton.Menu)
 xboxOne.wait(4)
 xboxOne.gamepad_input(GamePadButton.DPadDown)
 
 #xboxOne.power_on()
-
+"""
 
 """
 #-01
@@ -75,7 +75,7 @@ while(xboxOne.connected == False):
     xboxOne.wait(7)
             
 print('Trying to power off the console')
-    
+
 xboxOne.gamepad_input(GamePadButton.DPadDown)
 xboxOne.wait(1)
 xboxOne.gamepad_input(GamePadButton.DPadRight)
@@ -84,5 +84,6 @@ xboxOne.gamepad_input(GamePadButton.PadA)
 xboxOne.wait(1)
 xboxOne.gamepad_input(GamePadButton.PadA)
 #xboxOne.power_off()
+""""
 xboxOne.disconnect()
 """
