@@ -209,7 +209,7 @@ function handleStateChange(state, id, cb) {
 			break;
 			
 		default:
-			adapter.log.warn('Not a valid id: ' + id)
+			adapter.log.warn('[COMMAND] ===> Not a valid id: ' + id)
     } // endSwitch
 	if(cb && typeof(cb) === "function") return cb();
 } // endHandleStateChange
