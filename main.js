@@ -50,8 +50,12 @@ adapter.on('message', obj => {
 adapter.on('ready', () => {
 	exec('xbox-rest-server', (error, stdout, stderr) => {
 		if(error) adapter.log.error('[START] ' + stderr);
+		else {
+			adapter.log.debug(stdout);
+			adapter.log.info('[START] Rest server started')
+		    main();
+		}  // endElse
 	});
-    main();
 });
 
 function main() {
