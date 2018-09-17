@@ -41,14 +41,13 @@ adapter.on('stateChange', (id, state) => {
     if(state && id === 'settings.power') {
         handleStateChange(state, id);
     } else {
-    	connect(liveId, (connected) => {
-    	    if(connected) {
-    		    handleStateChange(state, id);
-    	    } else {
+    	adapter.getState('info.connection', (err, state) => {
+    		if(state) 
+    			handleStateChange(state, id);
+    		else 
     		    adapter.log.warn('[COMMAND] ===> Can not handle id change ' + id + ' with value ' + state + ' because not connected');
-    	    } // endElse
         });
-    }
+    } // endElse
 });
 
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
@@ -134,9 +133,9 @@ function connect(liveId, cb) {
 
 function powerOff(liveId, cb) {
 	
-	let statusURL = 'http://localhost:5557/device/' + liveId + '/poweroff';
+	let endpoint = 'http://localhost:5557/device/' + liveId + '/poweroff';
 	
-	request(statusURL, (error, response, body) => {
+	request(endpoint, (error, response, body) => {
 		if(!error) {
 			if(JSON.parse(body).success) {
 				adapter.setState('settings.power', false, true);
@@ -153,9 +152,9 @@ function powerOff(liveId, cb) {
 } // endPowerOff
 
 function discover(cb) { // is used by connect
-	let statusURL = 'http://localhost:5557/device';
+	let endpoint = 'http://localhost:5557/device';
 	
-	request(statusURL, (error, response, body) => {
+	request(endpoint, (error, response, body) => {
 		if(!error) {
 			adapter.log.debug('[DISCOVER] <=== ' + body);
 		} else {
@@ -168,11 +167,11 @@ function discover(cb) { // is used by connect
 } // endDiscover
 
 function powerOn(cb) {
-		let statusURL = 'http://localhost:5557/device/' + liveId + '/poweron';
+		let endpoint = 'http://localhost:5557/device/' + liveId + '/poweron';
 		adapter.log.debug('Powering on console');
 		blockXbox = true;
 		
-		request(statusURL, (error, response, body) => {
+		request(endpoint, (error, response, body) => {
 			if(error) adapter.log.error('[REQUEST] <=== ' + error.message);
 			// Ping to check if it is powered on and set state
 			adapter.getState('info.connection', (err, state) => {
@@ -207,9 +206,131 @@ function handleStateChange(state, id, cb) {
 				});
 			} // endElse
 			break;
-			
+		case 'gamepad.rightShoulder':
+			sendButton('right_shoulder');
+			break;
+		case 'gamepad.leftShoulder':
+			sendButton('left_shoulder');
+			break;
+		case 'gamepad.leftThumbstick':
+			sendButton('left_thumbstick');
+			break;
+		case 'gamepad.rightThumbstick':
+			sendButton('left_thumbstick');
+			break;
+		case 'gamepad.enroll':
+			sendButton('enroll');
+			break;
+		case 'gamepad.view':
+			sendButton('view');
+			break;
+		case 'gamepad.menu':
+			sendButton('menu');
+			break;
+		case 'gamepad.nexus':
+			sendButton('nexus');
+			break;
+		case 'gamepad.a':
+			sendButton('a');
+			break;
+		case 'gamepad.b':
+			sendButton('b');
+			break;
+		case 'gamepad.y':
+			sendButton('y');
+			break;
+		case 'gamepad.x':
+			sendButton('x');
+			break;
+		case 'gamepad.dpadUp':
+			sendButton('dpad_up');
+			break;
+		case 'gamepad.dpadDown':
+			sendButton('dpad_down');
+			break;
+		case 'gamepad.dpadLeft':
+			sendButton('dpad_left');
+			break;
+		case 'gamepad.dpadRight':
+			sendButton('dpad_right');
+			break;
+		case 'gamepad.clear':
+			sendButton('clear');
+			break;
+		case 'media.play':
+			sendMediaCmd('play');
+			break;
+		case 'media.pause':
+			sendMediaCmd('pause');
+			break;
+		case 'media.record':
+			sendMediaCmd('record');
+			break;
+		case 'media.playPause':
+			sendMediaCmd('play_pause');
+			break;
+		case 'media.previousTrack':
+			sendMediaCmd('prev_track');
+			break;
+		case 'media.seek':
+			sendMediaCmd('seek');
+			break;
+		case 'media.channelUp':
+			sendMediaCmd('channel_up');
+			break;
+		case 'media.nextTrack':
+			sendMediaCmd('next_track');
+			break;
+		case 'media.channelDown':
+			sendMediaCmd('channel_down');
+			break;
+		case 'media.menu':
+			sendMediaCmd('menu');
+			break;
+		case 'media.back':
+			sendMediaCmd('back');
+			break;
+		case 'media.rewind':
+			sendMediaCmd('rewind');
+			break;
+		case 'media.view':
+			sendMediaCmd('view');
+			break;
+		case 'media.fastForward':
+			sendMediaCmd('fast_forward');
+			break;
+		case 'media.stop':
+			sendMediaCmd('stop');
+			break;
 		default:
 			adapter.log.warn('[COMMAND] ===> Not a valid id: ' + id)
     } // endSwitch
 	if(cb && typeof(cb) === "function") return cb();
 } // endHandleStateChange
+
+function sendButton(button, cb) {
+	let endpoint = 'http://192.168.178.65:5557/device/' + liveId + '/input/' + button;
+	
+	request(endpoint, (error, response, body) => {
+		if(error) adapter.log.error('[REQUEST] <=== ' + error.message);
+		else if(JSON.parse(body).success) 
+			adapter.log.debug('[REQUEST] <=== Button ' + button + ' acknowledged by REST-Server');
+		else
+			adapter.log.warn('[REQUEST] <=== Button ' + button + ' not acknowledged by REST-Server');
+		
+		if(cb && typeof(cb) === "function") return cb();
+	});
+} // endSendButton
+
+function sendMediaCmd(cmd, cb) {
+	let endpoint = 'http://192.168.178.65:5557/device/' + liveId + '/media/' + cmd;
+	
+	request(endpoint, (error, response, body) => {
+		if(error) adapter.log.error('[REQUEST] <=== ' + error.message);
+		else if(JSON.parse(body).success) 
+			adapter.log.debug('[REQUEST] <=== Media command ' + cmd + ' acknowledged by REST-Server');
+		else
+			adapter.log.warn('[REQUEST] <=== Media command ' + cmd + ' not acknowledged by REST-Server');
+		if(cb && typeof(cb) === "function") return cb();
+	});
+} // endSendMediaCmd

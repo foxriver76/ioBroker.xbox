@@ -6,8 +6,8 @@ This adapter allows you to control your Xbox via ioBroker.
 
 ## Steps 
 
-* Install the adapter from github and have fun
 * Fulfill the requirements
+* Install the adapter from github and have fun
 
 ## Requirements
 
@@ -16,6 +16,152 @@ This adapter allows you to control your Xbox via ioBroker.
 * pip3 install xbox-smartglass-rest
 * pip3 install xbox-smartglass-core
 
+## States
+
+### Channel Info
+
+* info.connection
+   
+   *Read-only boolean indicator. Is true if adapter is connected to Xbox.*
+   
+### Channel Settings
+
+* settings.power
+
+   *Boolean-value to turn your Xbox on and off. State also indicates current power status of the Xbox.*
+   
+### Channel Gamepad
+
+* gamepad.a
+
+   *Emulates the A button of your gamepad.*
+
+* gamepad.b
+
+   *Emulates the B button of your gamepad.*
+
+* gamepad.x
+
+   *Emulates the X button of your gamepad.*
+   
+* gamepad.y
+
+   *Emulates the Y button of your gamepad.*
+   
+* gamepad.clear
+
+   *Emulates the Clear button of your Xbox.*
+   
+* gamepad.dPadDown
+
+   *Emulates the DPad Down button of your Xbox.*
+   
+* gamepad.dPadUp
+
+   *Emulates the DPad Up button of your Xbox.*
+   
+* gamepad.dPadRight
+
+   *Emulates the DPad Right button of your Xbox.*
+   
+* gamepad.dPadLeft
+
+   *Emulates the DPad Left button of your Xbox.*
+   
+* gamepad.enroll
+
+   *Emulates the Enroll button of your Xbox.*
+   
+* gamepad.leftShoulder
+
+   *Emulates the Left Shoulder button of your Xbox.*
+   
+* gamepad.rightShoulder
+
+   *Emulates the Right Shoulder button of your Xbox.*
+   
+* gamepad.leftThumbstick
+
+   *Emulates the Left Thumbstick button of your Xbox.*
+   
+* gamepad.rightThumbstick
+
+   *Emulates the Right Thumbstick button of your Xbox.*
+   
+* gamepad.menu
+
+   *Emulates the Menu button of your Xbox.*
+   
+* gamepad.nexus
+
+   *Emulates the Nexus (Xbox) button of your Xbox.*
+ 
+* gamepad.view
+
+   *Emulates the View (Xbox) button of your Xbox.*
+   
+### Channel Media
+
+* media.play
+
+   *Play button for media content.*
+   
+* media.pause
+
+   *Pause button for media content.*
+   
+* media.playPause
+
+   *Combined Play and Pause button for media content.*
+   
+* media.back
+
+   *Back button for media content.*
+   
+* media.channelDown
+
+   *Channel Down button for media content.*
+   
+* media.channelUp
+
+   *Channel Up button for media content.*
+   
+* media.fastForward
+
+   *Fast Forward button for media content.*
+   
+* media.menu
+
+   *Menu button for media content.*
+   
+* media.nextTrack
+
+   *Next Track button for media content.*
+   
+* media.previousTrack
+
+   *Previous Track button for media content.*
+   
+* media.record
+
+   *Record button for media content.*
+   
+* media.rewind
+
+   *Rewind button for media content.*
+   
+* media.seek
+
+   *Seek button for media content.*
+   
+* media.stop
+
+   *Stop button for media content.*
+   
+* media.view
+
+   *View button for media content.*
+   
 ## Changelog
 
 ### 0.0.1
