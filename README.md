@@ -10,15 +10,13 @@
 
 ## Steps 
 
-* Fulfill the requirements (make sure that **xbox-smartglass-rest and all it's dependencies are installed**)
+* Fulfill the requirements
 * Install the adapter and control your Xbox
 
 ## Requirements
 
 * Linux Kernel (maybe MAC will work too, MS currently not supported)
-* Python 3.6 is required
-* pip3 install xbox-smartglass-rest (https://github.com/OpenXbox/xbox-smartglass-rest-python)
-* pip3 install xbox-smartglass-core (https://github.com/OpenXbox/xbox-smartglass-core-python)
+* At least Python 3.5 is required
 
 ## Installation
 You can install the adapter via Admin interface (install from Github) or on your terminal.
@@ -27,7 +25,7 @@ You can install the adapter via Admin interface (install from Github) or on your
 Currently: Install from Github.
 
 ### Terminal
-Navigate into your iobroker folder and execute the following command:
+Navigate into your ioBroker folder and execute the following command:
  
 ```bash
 npm i iobroker.xbox --unsafe-perm

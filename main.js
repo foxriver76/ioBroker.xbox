@@ -26,7 +26,7 @@ adapter.on('unload', callback => {
     		} // endElse
     		
     		adapter.setState('info.connection', false, true);
-            adapter.log.info('cleaned everything up...');
+            adapter.log.info('[END] cleaned everything up...');
             callback();
     	});
 
@@ -92,7 +92,6 @@ adapter.on('ready', () => {
 function main() {
 	
     adapter.subscribeStates('*');
-	discover(); // Search for devices
 
 	let checkOnline = setInterval(() => {
 		ping.sys.probe(ip, (isAlive) => {
