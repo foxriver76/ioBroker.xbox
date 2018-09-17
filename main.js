@@ -334,3 +334,14 @@ function sendMediaCmd(cmd, cb) {
 		if(cb && typeof(cb) === "function") return cb();
 	});
 } // endSendMediaCmd
+
+adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
+    if (!obj) {
+        adapter.setForeignObject(adapter.namespace, {
+            type: 'device',
+            common: {
+                name: 'Xbox device'
+            }
+        });
+    } // endIf
+});
