@@ -1,8 +1,12 @@
 ![Logo](admin/xbox.png)
 # ioBroker.xbox
-=================
+===========================
 
-This adapter allows you to control your Xbox via ioBroker.
+[![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.xbox.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.xbox)[![Build status](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n/branch/master?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-xbox/branch/master)
+[![NPM version](http://img.shields.io/npm/v/iobroker.xbox.svg)](https://www.npmjs.com/package/iobroker.xbox)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.xbox.svg)](https://www.npmjs.com/package/iobroker.xbox)
+
+[![NPM](https://nodei.co/npm/iobroker.xbox.png?downloads=true)](https://nodei.co/npm/iobroker.xbox/)
 
 ## Steps 
 
@@ -25,7 +29,7 @@ You can isntall the adapter via Admin interface (install from Github) or on your
 Navigate into your iobroker folder and execute the following command:
  
 ```bash
-npm i iobroker.denon
+npm i iobroker.xbox
 ```
 
 ### Setup
