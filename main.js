@@ -18,16 +18,21 @@ let blockXbox = false;
 adapter.on('unload', callback => {
     try {
     	// TODO: check windows
-    	exec('pkill xbox', (error, stdout, stderr) => {
-    		if(!error) adapter.log.info('Rest server stopped');
-    		else adapter.log.warn(stderr);
+    	exec('pkill -f xbox-rest-server', (error, stdout, stderr) => {
+    		if(!error) {
+    			adapter.log.info('[END] REST server stopped');
+    		} else {
+    			adapter.log.info('[END] REST server stopped ' + stderr);
+    		} // endElse
+    		
+    		adapter.setState('info.connection', false, true);
+            adapter.log.info('cleaned everything up...');
+            callback();
     	});
-    	adapter.setState('info.connection', false, true);
-        adapter.log.info('cleaned everything up...');
-        callback();
+
     } catch (e) {
         callback();
-    }
+    } // endTryCatch
 });
 
 adapter.on('stateChange', (id, state) => {
@@ -72,14 +77,16 @@ adapter.on('ready', () => {
 		adapter.log.warn('Please provide a Xbox Live ID and a ip address');
 		return;
 	} else adapter.log.debug('[START] Live ID is ' + liveId + '\n[START] ip adress is ' + ip);
-	
-	exec('xbox-rest-server', (error, stdout, stderr) => {
-		if(error) {
-			adapter.log.error('[START] ' + stderr);
+
+	startRestServer((started) => {
+		if(!started) {
+			adapter.log.error('[START] Failed starting REST server');
+			// maybe we should restart the adapter in this case
 		} // endIf
 	});
-	adapter.log.info('[START] Starting rest server')
-    setTimeout(() => main(), 4000); // give server time to start
+	
+	setTimeout(() => main(), 4000); // Server needs time to start
+	
 });
 
 function main() {
@@ -345,3 +352,21 @@ adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device nam
         });
     } // endIf
 });
+
+function startRestServer(cb) {
+	
+	let cmd = '/opt/iobroker/node_modules/iobroker.xbox/node_modules/nopy/src/nopy.js '
+				+ '/opt/iobroker/node_modules/iobroker.xbox/python_modules/bin/xbox-rest-server';
+	let started;
+	
+	exec(cmd, (error, stdout, stderr) => {
+		if(error && !stderr.includes('REST server started')) {
+			started = false;
+		} else {
+			started = true;
+		} // endElse
+		// Callback is only executed when program is finished/goes on
+		if(cb && typeof(cb) === "function") return cb(started);
+	});
+	
+} // endStartRestServer

@@ -40,8 +40,10 @@
   },
   "python": {
   	"execPath": "python3",
+  	"path": ["."],
     "dependencies": {
-      "xbox-smartglass-rest": ""
+      "xbox-smartglass-rest": "",
+      "xbox-smartglass-core": ""
     }
   },
   "devDependencies": {
