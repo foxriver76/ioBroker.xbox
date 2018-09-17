@@ -7,14 +7,14 @@ This adapter allows you to control your Xbox via ioBroker.
 ## Steps 
 
 * Fulfill the requirements (make sure that **xbox-smartglass-rest and all it's dependencies are installed**)
-* Install the adapter from github and have fun
+* Install the adapter and control your Xbox
 
 ## Requirements
 
 * Linux Kernel (maybe MAC will work too, MS currently not supported)
 * Python 3.6 is required
 * pip3 install xbox-smartglass-rest (https://github.com/OpenXbox/xbox-smartglass-rest-python)
-* pip3 install xbox-smartglass-core
+* pip3 install xbox-smartglass-core (https://github.com/OpenXbox/xbox-smartglass-core-python)
 
 ## Installation
 You can isntall the adapter via Admin interface (install from Github) or on your terminal.
@@ -29,11 +29,12 @@ npm i iobroker.denon
 ```
 
 ### Setup
-1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console
-2. Fill in the ip address of your Xbox
+1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
+2. Fill in the ip address of your Xbox. <br/>
 ![Adapter Configuration](/doc/adapter-configuration.png)
 
 ## States
+
 
 ### Channel Info
 
