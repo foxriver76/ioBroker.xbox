@@ -2,7 +2,7 @@
   "name": "iobroker.xbox",
   "version": "0.0.1",
   "engines": {
-    	"node": ">=6.0.0"
+    "node": ">=6.0.0"
   },
   "description": "ioBroker Xbox Adapter",
   "author": {
@@ -28,8 +28,21 @@
     "url": "https://github.com/foxriver76/ioBroker.xbox"
   },
   "dependencies": {
-		"request": "^2.87.0",
-		"ping": "^0.2.2"
+    "request": "^2.87.0",
+    "ping": "^0.2.2",
+    "nopy": ""
+  },
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha --exit",
+    "install": "npip install",
+    "nopy": "nopy",
+    "npip": "npip"
+  },
+  "python": {
+  	"execPath": "python3",
+    "dependencies": {
+      "xbox-smartglass-rest": ""
+    }
   },
   "devDependencies": {
     "gulp": "^3.9.1",
@@ -37,9 +50,6 @@
     "chai": "^4.1.2"
   },
   "main": "main.js",
-  "scripts": {
-    "test": "node node_modules/mocha/bin/mocha --exit"
-  },
   "bugs": {
     "url": "https://github.com/foxriver76/ioBroker.xbox/issues"
   },

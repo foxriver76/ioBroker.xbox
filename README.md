@@ -30,7 +30,7 @@ Currently: Install from Github.
 Navigate into your iobroker folder and execute the following command:
  
 ```bash
-npm i iobroker.xbox
+npm i iobroker.xbox --unsafe-perm
 ```
 
 ### Setup
