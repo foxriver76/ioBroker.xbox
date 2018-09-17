@@ -2,7 +2,7 @@
 # ioBroker.xbox
 ===========================
 
-[![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.xbox.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.xbox)[![Build status](https://ci.appveyor.com/api/projects/status/mwkeddgjpgnpef5n/branch/master?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-xbox/branch/master)
+[![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.xbox.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.xbox)[![Build status](https://ci.appveyor.com/api/projects/status/s1we3cpcbxm97upp/branch/master?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-xbox/branch/master)
 [![NPM version](http://img.shields.io/npm/v/iobroker.xbox.svg)](https://www.npmjs.com/package/iobroker.xbox)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.xbox.svg)](https://www.npmjs.com/package/iobroker.xbox)
 
@@ -21,9 +21,10 @@
 * pip3 install xbox-smartglass-core (https://github.com/OpenXbox/xbox-smartglass-core-python)
 
 ## Installation
-You can isntall the adapter via Admin interface (install from Github) or on your terminal.
+You can install the adapter via Admin interface (install from Github) or on your terminal.
 
 ### Admin
+Currently: Install from Github.
 
 ### Terminal
 Navigate into your iobroker folder and execute the following command:
@@ -38,7 +39,7 @@ npm i iobroker.xbox
 ![Adapter Configuration](/doc/adapter-configuration.png)
 
 ## States
-
+In this section you can find a description of every state of the adapter.
 
 ### Channel Info
 
