@@ -60,9 +60,9 @@ adapter.on('stateChange', (id, state) => {
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
 adapter.on('message', obj => {
     if (typeof obj === 'object' && obj.message) {
-        if (obj.command === 'send') {
+        if (obj.command === 'browse') {
             // e.g. send email or pushover or whatever
-            console.log('send command');
+            adapter.log.info('[BROWSE] Start browsing');
 
             // Send response in callback if required
             if (obj.callback) adapter.sendTo(obj.from, obj.command, 'Message received', obj.callback);
@@ -83,10 +83,11 @@ adapter.on('ready', () => {
 	startRestServer((started) => {
 		if(!started) {
 			adapter.log.error('[START] Failed starting REST server');
-			// maybe we should restart the adapter in this case
+			adapter.log.error('[START] Restarting adapter in 30 seconds');
+			let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
 		} // endIf
 	});
-	
+
 	setTimeout(() => main(), 4000); // Server needs time to start
 	
 });
@@ -134,6 +135,10 @@ function connect(liveId, cb) {
 				adapter.log.error('[CONNECT] <=== ' + error.message);
 				adapter.setState('info.connection', false, true);
 				connected = false;
+				if(error.message.includes('ECONNREFUSED')) {
+					adapter.log.error('[CONNECT] REST server seems to be down, adapter will be restarted');
+					restartAdapter();
+				} // endIf
 			} // endElse
 			if(cb && typeof(cb) === "function") return cb(connected);
 		});
@@ -372,3 +377,9 @@ function startRestServer(cb) {
 	});
 	
 } // endStartRestServer
+
+function restartAdapter() {
+	adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) => {
+	    if(obj) adapter.setForeignObject('system.adapter.' + adapter.namespace, obj);
+	});
+} // endFunctionRestartAdapter

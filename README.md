@@ -189,6 +189,7 @@ In this section you can find a description of every state of the adapter.
 * (foxriver76) fixed state handling
 * (foxriver76) using ping to check consoles power status instead of connection
 * (foxriver76) stop powering on if it is unsuccessful for 15 seconds
+* (foxriver76) restarting adapter when REST server is down
 
 ### 0.0.2
 * (foxriver76) fixed endpoints
