@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "news": {
+            "0.0.2": {
+                "en": "Automated installation of deps, improved Code, fixed endpoints",
+                "de": "Abhängigkeiten werden nun automatisch isntalliert, Endpunkte korrigiert, Codeverbesserungen"
+            },
             "0.0.1": {
                 "en": "initial adapter",
                 "de": "Initiale Version"

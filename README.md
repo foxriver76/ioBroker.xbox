@@ -185,6 +185,12 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.0.2
+* (foxriver76) fixed endpoints
+* (foxriver76) automated installation of dependencies
+* (foxriver76) readme updated
+* (foxriver76) code optimized
+
 ### 0.0.1
 * (foxriver76) initial release
 
