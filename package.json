@@ -34,6 +34,7 @@
   },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --exit",
+    "preinstall": "apt install -y build-essential libssl-dev libffi-dev python3-dev",
     "install": "npip install",
     "nopy": "nopy",
     "npip": "npip"

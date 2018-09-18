@@ -17,6 +17,7 @@
 
 * Linux Kernel (maybe MAC will work too, MS currently not supported)
 * At least Python 3.5 is required
+* (sudo apt install -y build-essential libssl-dev libffi-dev python3-dev) -- trying to do this as preinstall script
 
 ## Installation
 You can install the adapter via Admin interface (install from Github) or on your terminal.
