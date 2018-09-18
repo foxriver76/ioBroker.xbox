@@ -111,7 +111,7 @@ function main() {
 
 function connect(liveId, cb) {
 	discover(() => {
-		let statusURL = 'http://localhost:5557/device/' + liveId + '/connect';
+		let statusURL = 'http://' + address + ':5557/device/' + liveId + '/connect';
 		let connected;
 		adapter.log.debug('[CONNECT] Check connection');
 		
@@ -139,7 +139,7 @@ function connect(liveId, cb) {
 
 function powerOff(liveId, cb) {
 	
-	let endpoint = 'http://localhost:5557/device/' + liveId + '/poweroff';
+	let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweroff';
 	
 	request(endpoint, (error, response, body) => {
 		if(!error) {
@@ -158,7 +158,7 @@ function powerOff(liveId, cb) {
 } // endPowerOff
 
 function discover(cb) { // is used by connect
-	let endpoint = 'http://localhost:5557/device';
+	let endpoint = 'http://' + address +':5557/device';
 	
 	request(endpoint, (error, response, body) => {
 		if(!error) {
@@ -173,7 +173,7 @@ function discover(cb) { // is used by connect
 } // endDiscover
 
 function powerOn(cb) {
-		let endpoint = 'http://localhost:5557/device/' + liveId + '/poweron';
+		let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweron';
 		adapter.log.debug('Powering on console');
 		blockXbox = true;
 		
@@ -315,7 +315,7 @@ function handleStateChange(state, id, cb) {
 } // endHandleStateChange
 
 function sendButton(button, cb) {
-	let endpoint = 'http://192.168.178.65:5557/device/' + liveId + '/input/' + button;
+	let endpoint = 'http://' + address + ':5557/device/' + liveId + '/input/' + button;
 	
 	request(endpoint, (error, response, body) => {
 		if(error) adapter.log.error('[REQUEST] <=== ' + error.message);
@@ -329,7 +329,7 @@ function sendButton(button, cb) {
 } // endSendButton
 
 function sendMediaCmd(cmd, cb) {
-	let endpoint = 'http://192.168.178.65:5557/device/' + liveId + '/media/' + cmd;
+	let endpoint = 'http://' + address +':5557/device/' + liveId + '/media/' + cmd;
 	
 	request(endpoint, (error, response, body) => {
 		if(error) adapter.log.error('[REQUEST] <=== ' + error.message);
