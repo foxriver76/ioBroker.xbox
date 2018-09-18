@@ -16,8 +16,7 @@
 ## Requirements
 
 * Linux Kernel (maybe MAC will work too, MS currently not supported)
-* At least Python 3.5 is required
-* (sudo apt install -y build-essential libssl-dev libffi-dev python3-dev) -- trying to do this as preinstall script
+* Needed packages will automatically be installed. Due this fact root privilges are required and the --unsafe-perm tag
 
 ## Installation
 You can install the adapter via Admin interface (install from Github) or on your terminal.
@@ -29,7 +28,7 @@ Currently: Install from Github.
 Navigate into your ioBroker folder and execute the following command:
  
 ```bash
-npm i iobroker.xbox --unsafe-perm
+sudo npm i iobroker.xbox --unsafe-perm
 ```
 
 ### Setup
@@ -185,6 +184,10 @@ In this section you can find a description of every state of the adapter.
    *View button for media content.*
    
 ## Changelog
+
+### 0.0.4
+* (foxriver76) automatically install required Debian packages
+* (foxriver76) updated Readme
 
 ### 0.0.3
 * (foxriver76) fixed state handling

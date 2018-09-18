@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
+            "0.0.4": {
+                "en": "Automatically install required Debian packages",
+                "de": "Automatisches installieren der benötigten Debian Packages"
+            },
             "0.0.3": {
                 "en": "Fix endless power on tries, fix state changes for power off, use ping to check powered on",
                 "de": "Es wird nicht mehr endlos versucht einzuschalten, power off geht wieder, ping wird genutzt für power status"
