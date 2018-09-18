@@ -42,15 +42,15 @@ adapter.on('stateChange', (id, state) => {
 
     adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state.val);
 
-    state = state.val;
+    let stateVal = state.val;
     id = id.substring(adapter.namespace.length + 1); // remove instance name and id
 
-    if(state && id === 'settings.power') {
+    if(stateVal && id === 'settings.power') {
         handleStateChange(state, id);
     } else {
     	adapter.getState('info.connection', (err, state) => {
-    		if(state) 
-    			handleStateChange(state, id);
+    		if(state.val) 
+    			handleStateChange(stateVal, id);
     		else 
     		    adapter.log.warn('[COMMAND] ===> Can not handle id change ' + id + ' with value ' + state + ' because not connected');
         });
@@ -144,6 +144,7 @@ function connect(liveId, cb) {
 function powerOff(liveId, cb) {
 	
 	let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweroff';
+	adapter.log.debug('[POWEROFF] Powering off Xbox');
 	
 	request(endpoint, (error, response, body) => {
 		if(!error) {
@@ -204,22 +205,14 @@ function handleStateChange(state, id, cb) {
 	if(blockXbox) return adapter.log.warn('[STATE] ' + id + ' change to ' + state + ' dropped, because Xbox blocked');
     blockXbox = true;
     let unblockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
+    adapter.log.warn(id + '   ' + state.val);
+    
 	switch(id) {
 		case 'settings.power':
 			if(state) {
 				powerOn();
 			} else {
-				adapter.getState('info.connection', (err, state) => {
-					if(state.val) {
-						adapter.log.debug('power off because connected');
-						powerOff(liveId);
-					} else {
-						adapter.log.debug('connect before powering off');
-						connect(liveId, () => {
-							powerOff(liveId);
-						});
-					} // endElse
-				});
+				powerOff(liveId);
 			} // endElse
 			break;
 		case 'gamepad.rightShoulder':

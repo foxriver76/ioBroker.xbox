@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "news": {
+            "0.0.3": {
+                "en": "Fix endless power on tries, fix state changes for power off, use ping to check powered on",
+                "de": "Es wird nicht mehr endlos versucht einzuschalten, power off geht wieder, ping wird genutzt für power status"
+            },
             "0.0.2": {
                 "en": "Automated installation of deps, improved Code, fixed endpoints",
                 "de": "Abhängigkeiten werden nun automatisch isntalliert, Endpunkte korrigiert, Codeverbesserungen"

@@ -185,6 +185,11 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.0.3
+* (foxriver76) fixed state handling
+* (foxriver76) using ping to check consoles power status instead of connection
+* (foxriver76) stop powering on if it is unsuccessful for 15 seconds
+
 ### 0.0.2
 * (foxriver76) fixed endpoints
 * (foxriver76) automated installation of dependencies
