@@ -13,6 +13,8 @@ const address = 'localhost'; // not used
 let liveId;
 let ip;
 let blockXbox = false;
+let tryPowerOn = false;
+let xboxOnline = false;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
@@ -97,11 +99,13 @@ function main() {
 		ping.sys.probe(ip, (isAlive) => {
 	        if(isAlive) {
 	        	adapter.setState('settings.power', true, true);
+	        	xboxOnline = true;
 	        	adapter.log.debug('[PING] Xbox online');
 	        	connect(liveId); // check if connection is (still) established
 	        } else {
 	        	adapter.setState('info.connection', false, true);
 	        	adapter.setState('settings.power', false, true);
+	        	xboxOnline = false;
 	        	adapter.log.debug('[PING] Xbox offline');
 	        } // endElse
 	    });		
@@ -174,18 +178,24 @@ function discover(cb) { // is used by connect
 
 function powerOn(cb) {
 		let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweron';
+		if(!tryPowerOn) { // if Xbox isn't on after 15 seconds, stop trying
+			tryPowerOn = true;
+			tryPowerOn = setTimeout(() => tryPowerOn = false, 15000);
+		} // endIf
 		adapter.log.debug('Powering on console');
 		blockXbox = true;
 		
 		request(endpoint, (error, response, body) => {
 			if(error) adapter.log.error('[REQUEST] <=== ' + error.message);
-			// Ping to check if it is powered on and set state
-			adapter.getState('info.connection', (err, state) => {
-				if(!state.val) {
+		
+			if(!xboxOnline) {
+				if(tryPowerOn)
 					powerOn();
-				} else blockXbox = false; // unblock Box because on
-			});
-			if(cb && typeof(cb) === "function") return cb();
+				else 
+					adapter.log.warn('[REQUEST] <=== Could not turn on Xbox');
+			} else blockXbox = false; // unblock Box because on
+			
+		if(cb && typeof(cb) === "function") return cb();
 		});
 		
 } // endPowerOn
