@@ -9,7 +9,7 @@ const { exec } = require('child_process');
 const request = require('request');
 const ping = require('ping');
 
-const address = 'localhost'; // not used
+const address = 'localhost'; // host of the REST server
 let liveId;
 let ip;
 let blockXbox = false;
@@ -179,9 +179,8 @@ function discover(cb) { // is used by connect
 
 function powerOn(cb) {
 		let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweron';
-		if(!tryPowerOn) { // if Xbox isn't on after 15 seconds, stop trying
-			tryPowerOn = true;
-			tryPowerOn = setTimeout(() => tryPowerOn = false, 15000);
+		if(!tryPowerOn) { // if Xbox isn't on after 17.5 seconds, stop trying
+			tryPowerOn = setTimeout(() => tryPowerOn = false, 17500);
 		} // endIf
 		adapter.log.debug('Powering on console');
 		blockXbox = true;
@@ -192,8 +191,10 @@ function powerOn(cb) {
 			if(!xboxOnline) {
 				if(tryPowerOn)
 					powerOn();
-				else 
+				else {
 					adapter.log.warn('[REQUEST] <=== Could not turn on Xbox');
+					blockXbox = false;
+				} // endElse
 			} else blockXbox = false; // unblock Box because on
 			
 		if(cb && typeof(cb) === "function") return cb();
@@ -202,10 +203,9 @@ function powerOn(cb) {
 } // endPowerOn
 
 function handleStateChange(state, id, cb) {
-	if(blockXbox) return adapter.log.warn('[STATE] ' + id + ' change to ' + state + ' dropped, because Xbox blocked');
+	if(blockXbox) return adapter.log.warn('[STATE] ' + id + ' change to ' + state.val + ' dropped, because Xbox blocked');
     blockXbox = true;
     let unblockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
-    adapter.log.warn(id + '   ' + state.val);
     
 	switch(id) {
 		case 'settings.power':
