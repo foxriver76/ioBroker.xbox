@@ -80,9 +80,9 @@ adapter.on('ready', () => {
 		return;
 	} else adapter.log.debug('[START] Live ID is ' + liveId + '\n[START] ip adress is ' + ip);
 
-	startRestServer((started) => {
+	startRestServer((started, err) => {
 		if(!started) {
-			adapter.log.error('[START] Failed starting REST server');
+			adapter.log.error('[START] Failed starting REST server: ' + err);
 			adapter.log.error('[START] Restarting adapter in 30 seconds');
 			let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
 		} // endIf
@@ -367,13 +367,15 @@ function startRestServer(cb) {
 	let started;
 	
 	exec(cmd, (error, stdout, stderr) => {
+		let err = false;
 		if(error && !stderr.includes('REST server started')) {
 			started = false;
+			err = stderr;
 		} else {
 			started = true;
 		} // endElse
 		// Callback is only executed when program is finished/goes on
-		if(cb && typeof(cb) === "function") return cb(started);
+		if(cb && typeof(cb) === "function") return cb(started, err);
 	});
 	
 } // endStartRestServer
