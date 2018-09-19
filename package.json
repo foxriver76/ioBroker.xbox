@@ -30,17 +30,20 @@
   "dependencies": {
     "request": "^2.87.0",
     "ping": "^0.2.2",
-    "nopy": "^0.2.5"
+    "nopy": "^0.2.6"
   },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --exit",
-    "preinstall": "apt install -y build-essential libssl-dev libffi-dev python3-dev || echo -e '[INFO] Cant install build-essential libssl-dev libffi-dev python3-dev Debian packages. If you are on a Linux system, try installing the package via: sudo npm i iobroker.xbox --unsafe-perm, otherwise you have to manage to install the packages by yourself. If your are not running on Linux, you can ignore this INFO.'",
+    "preinstall": "apt install -y build-essential libssl-dev libffi-dev python3-dev || echo -e '[INFO] Cant install build-essential libssl-dev libffi-dev python3-dev Debian packages. If you are on a Linux system, try installing the package via: sudo npm i iobroker.xbox --unsafe-perm, otherwise you have to manage to install the packages by yourself. If you are not running on Linux, you can ignore this INFO.'",
     "install": "npip install",
     "nopy": "nopy",
     "npip": "npip"
   },
   "python": {
-  	"execPath": "python3",
+  	"execPath": [
+      "python3",
+      "python"
+      ],
   	"path": ["."],
     "dependencies": {
       "xbox-smartglass-rest": "",
