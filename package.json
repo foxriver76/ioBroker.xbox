@@ -30,7 +30,7 @@
   "dependencies": {
     "request": "^2.87.0",
     "ping": "^0.2.2",
-    "nopy": ""
+    "nopy": "^0.2.5"
   },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --exit",
