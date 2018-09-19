@@ -34,7 +34,7 @@
   },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --exit",
-    "preinstall": "apt install -y build-essential libssl-dev libffi-dev python3-dev",
+    "preinstall": "apt install -y build-essential libssl-dev libffi-dev python3-dev || echo -e '\\x1b[1;31m [INFO] Cant install build-essential libssl-dev libffi-dev python3-dev Debian packages. If you are on a Linux system, try installing the package via \\x1b[33msudo npm i iobroker.xbox --unsafe-perm \\x1b[1;31m, otherwise you have to manage to install the packages by yourself. If your are not running on Linux, you can ignore this INFO.\\x1b[0m'",
     "install": "npip install",
     "nopy": "nopy",
     "npip": "npip"
