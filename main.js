@@ -8,6 +8,7 @@ const adapter = new utils.Adapter('xbox');
 const { exec } = require('child_process');
 const request = require('request');
 const ping = require('ping');
+const os = require('os').platform();
 
 const address = 'localhost'; // host of the REST server
 let liveId;
@@ -19,8 +20,16 @@ let xboxOnline = false;
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
     try {
-    	// TODO: check windows
-    	exec('pkill -f xbox-rest-server', (error, stdout, stderr) => {
+    	let killCmd;
+
+        // TODO: check windows
+        if(os.startsWith('win')) {
+            adapter.log.error('[END] Windows is currently not supported');
+            killCmd = '12345xxxy';
+        } else
+            killCmd = 'pkill -f xbox-rest-server';
+
+    	exec(killCmd, (error, stdout, stderr) => {
     		if(!error) {
     			adapter.log.info('[END] REST server stopped');
     		} else {
@@ -71,24 +80,30 @@ adapter.on('message', obj => {
 });
 
 adapter.on('ready', () => {
-	// TODO: check windows
+
 	liveId = adapter.config.liveId;
 	ip = adapter.config.ip;
-	
-	if(!liveId || !ip) {
-		adapter.log.warn('Please provide a Xbox Live ID and a ip address');
-		return;
-	} else adapter.log.debug('[START] Live ID is ' + liveId + '\n[START] ip adress is ' + ip);
 
-	startRestServer((started, err) => {
-		if(!started) {
-			adapter.log.error('[START] Failed starting REST server: ' + err);
-			adapter.log.error('[START] Restarting adapter in 30 seconds');
-			let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
-		} // endIf
-	});
+    // TODO: check windows
+    if(os.startsWith('win')) {
+    	adapter.log.error('[START] Windows is currently not supported');
+	} else {
 
-	setTimeout(() => main(), 4000); // Server needs time to start
+        if (!liveId || !ip) {
+            adapter.log.warn('Please provide a Xbox Live ID and a ip address');
+            return;
+        } else adapter.log.debug('[START] Live ID is ' + liveId + '\n[START] ip adress is ' + ip);
+
+        startRestServer((started, err) => {
+            if (!started) {
+                adapter.log.error('[START] Failed starting REST server: ' + err);
+                adapter.log.error('[START] Restarting adapter in 30 seconds');
+                let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
+            } // endIf
+        });
+
+        setTimeout(() => main(), 4000); // Server needs time to start
+    } // endElse
 	
 });
 
@@ -361,12 +376,18 @@ adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device nam
 });
 
 function startRestServer(cb) {
-	
-	let cmd = '/opt/iobroker/node_modules/iobroker.xbox/node_modules/nopy/src/nopy.js '
-				+ '/opt/iobroker/node_modules/iobroker.xbox/python_modules/bin/xbox-rest-server';
-	let started;
-	
-	exec(cmd, (error, stdout, stderr) => {
+
+    let startCmd;
+    let started;
+
+    if(os.startsWith('win')) {
+        adapter.log.error('[START] Windows is currently not supported');
+        startCmd = '';
+        // TODO: Windows
+    } else
+        startCmd = '/opt/iobroker/node_modules/iobroker.xbox/node_modules/nopy/src/nopy.js ' +
+            '/opt/iobroker/node_modules/iobroker.xbox/python_modules/bin/xbox-rest-server';
+	exec(startCmd, (error, stdout, stderr) => {
 		let err = false;
 		if(error && !stderr.includes('REST server started')) {
 			started = false;
