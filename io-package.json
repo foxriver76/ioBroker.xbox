@@ -4,8 +4,8 @@
         "version": "0.0.4",
         "news": {
             "0.0.4": {
-                "en": "Automatically install required Debian packages",
-                "de": "Automatisches installieren der benötigten Debian Packages"
+                "en": "Automatically install required Debian packages, detect OS, improved logging, installation for Windows",
+                "de": "Automatisches installieren der benötigten Debian Packages, Betriebssystem wird erkannt, besseres Logging, Windows Installation"
             },
             "0.0.3": {
                 "en": "Fix endless power on tries, fix state changes for power off, use ping to check powered on",

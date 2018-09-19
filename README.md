@@ -188,6 +188,9 @@ In this section you can find a description of every state of the adapter.
 ### 0.0.4
 * (foxriver76) automatically install required Debian packages
 * (foxriver76) updated Readme
+* (foxriver76) make installation for Windows possible
+* (foxriver76) improved logging
+* (foxriver76) detect OS
 
 ### 0.0.3
 * (foxriver76) fixed state handling

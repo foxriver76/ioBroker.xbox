@@ -142,7 +142,7 @@ function connect(liveId, cb) {
 					adapter.log.debug('[CONNECT] Connection successfully confirmed');
 					connected = true;
 				} else {
-					adapter.log.warn('[CONNECT] <=== ' + body);
+					adapter.log.warn('[CONNECT] <=== ' + JSON.parse(body).message);
 					adapter.setState('info.connection', false, true);
 					connected = false;
 				} //endElse
