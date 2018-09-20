@@ -193,6 +193,7 @@ In this section you can find a description of every state of the adapter.
 ### 0.0.6
 * (foxriver76) Stop making connect requests when already connected
 * (foxriver76) more user friendly logging
+* (foxriver76) more robustness in nopys path
 
 ### 0.0.5
 * (foxriver76) using relative paths for starting server

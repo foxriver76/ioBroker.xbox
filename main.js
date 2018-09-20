@@ -137,35 +137,41 @@ function connect(liveId, cb) {
 
 		adapter.log.debug('[CONNECT] Check connection');
 		if(conn) {
-			adapter.log.debug('[CONNECT] Still connected');
-            if(cb && typeof(cb) === "function")
-            	return cb(connected);
-            else
-            	return;
-		} // endIf
-		
-		request(statusURL, (error, response, body) => {
-			if(!error) {
-				if(JSON.parse(body).success) {
+			adapter.getState('info.connection', (err, state) => {
+				if(state.val && conn) {
+                    adapter.log.debug('[CONNECT] Still connected');
+                } else {
 					adapter.setState('info.connection', true, true);
-					adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
-					connected = true;
-				} else {
-					adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
-					adapter.setState('info.connection', false, true);
-					connected = false;
-				} //endElse
-			} else {
-				adapter.log.error('[CONNECT] <=== ' + error.message);
-				adapter.setState('info.connection', false, true);
-				connected = false;
-				if(error.message.includes('ECONNREFUSED')) {
-					adapter.log.error('[CONNECT] REST server seems to be down, adapter will be restarted');
-					restartAdapter();
+                    adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
 				} // endIf
-			} // endElse
-			if(cb && typeof(cb) === "function") return cb(connected);
-		});
+
+                if(cb && typeof(cb) === "function") return cb(connected);
+			});
+
+		} else {
+            request(statusURL, (error, response, body) => {
+                if (!error) {
+                    if (JSON.parse(body).success) {
+                        adapter.setState('info.connection', true, true);
+                        adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
+                        connected = true;
+                    } else {
+                        adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
+                        adapter.setState('info.connection', false, true);
+                        connected = false;
+                    } //endElse
+                } else {
+                    adapter.log.error('[CONNECT] <=== ' + error.message);
+                    adapter.setState('info.connection', false, true);
+                    connected = false;
+                    if (error.message.includes('ECONNREFUSED')) {
+                        adapter.log.error('[CONNECT] REST server seems to be down, adapter will be restarted');
+                        restartAdapter();
+                    } // endIf
+                } // endElse
+                if (cb && typeof(cb) === "function") return cb(connected);
+            });
+        } // endElse
 		
 	});
 } // endConnect
@@ -178,8 +184,8 @@ function powerOff(liveId, cb) {
 	request(endpoint, (error, response, body) => {
 		if(!error) {
 			if(JSON.parse(body).success) {
-				adapter.setState('settings.power', false, true);
                 adapter.setState('info.connection', false, true);
+                adapter.log.info('[POWEROFF] Connection to Xbox closed')
                 adapter.log.debug('[POWEROFF] <=== ' + body);
 			} else {
 				adapter.log.warn('[POWEROFF] <=== ' + body);
@@ -407,7 +413,7 @@ function startRestServer(cb) {
         startCmd = __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\bin\\xbox-rest-server';
     } else
     	// Linux and MAC
-        startCmd = __dirname + '/node_modules/nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server';
+        startCmd = __dirname + '/node_modules/.bin/nopy ' + __dirname + '/python_modules/bin/xbox-rest-server';
 
 	exec(startCmd, (error, stdout, stderr) => {
 		let err = false;
