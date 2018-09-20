@@ -90,6 +90,7 @@ adapter.on('ready', () => {
 	} else {
 		adapter.log.debug('[START] Live ID is ' + liveId);
 		adapter.log.debug('[START] IP adress is ' + ip);
+		adapter.log.info('[START] Starting REST server');
     } // endElse
 
 	startRestServer((started, err) => {
@@ -412,8 +413,9 @@ function startRestServer(cb) {
 		// Windows
         startCmd = __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\bin\\xbox-rest-server';
     } else
-    	// Linux and MAC
-        startCmd = __dirname + '/node_modules/.bin/nopy ' + __dirname + '/python_modules/bin/xbox-rest-server';
+    	// Linux and MAC -- if not found in node_modules try root project
+        startCmd = __dirname + '/node_modules/nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server' +
+			' || ' + __dirname + '/../nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server';
 
 	exec(startCmd, (error, stdout, stderr) => {
 		let err = false;
