@@ -89,7 +89,7 @@ adapter.on('ready', () => {
 		return;
 	} else {
 		adapter.log.debug('[START] Live ID is ' + liveId);
-		adapter.log.debug('[START] ip adress is ' + ip);
+		adapter.log.debug('[START] IP adress is ' + ip);
     } // endElse
 
 	startRestServer((started, err) => {
@@ -115,7 +115,12 @@ function main() {
 	        	adapter.log.debug('[PING] Xbox online');
 	        	connect(liveId); // check if connection is (still) established
 	        } else {
-	        	adapter.setState('info.connection', false, true);
+	        	adapter.getState('info.connection', (err, state) => {
+	        		if(state.val) {
+                        adapter.setState('info.connection', false, true);
+                        adapter.log.info('[PING] Lost connection to your Xbox');
+					} // endIf
+				});
 	        	adapter.setState('settings.power', false, true);
 	        	xboxOnline = false;
 	        	adapter.log.debug('[PING] Xbox offline');
@@ -146,7 +151,7 @@ function connect(liveId, cb) {
 					adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
 					connected = true;
 				} else {
-					adapter.log.warn('[CONNECT] <=== ' + JSON.parse(body).message);
+					adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
 					adapter.setState('info.connection', false, true);
 					connected = false;
 				} //endElse
@@ -174,7 +179,8 @@ function powerOff(liveId, cb) {
 		if(!error) {
 			if(JSON.parse(body).success) {
 				adapter.setState('settings.power', false, true);
-				adapter.log.debug('[POWEROFF] <=== ' + body);
+                adapter.setState('info.connection', false, true);
+                adapter.log.debug('[POWEROFF] <=== ' + body);
 			} else {
 				adapter.log.warn('[POWEROFF] <=== ' + body);
 			} //endElse
@@ -216,7 +222,7 @@ function powerOn(cb) {
 		if(!tryPowerOn) { // if Xbox isn't on after 17.5 seconds, stop trying
 			tryPowerOn = setTimeout(() => tryPowerOn = false, 17500);
 		} // endIf
-		adapter.log.debug('Powering on console');
+		adapter.log.debug('[POWERON] Powering on console');
 		blockXbox = true;
 		
 		request(endpoint, (error, response, body) => {
@@ -353,15 +359,17 @@ function handleStateChange(state, id, cb) {
 
 function sendButton(button, cb) {
 	let endpoint = 'http://' + address + ':5557/device/' + liveId + '/input/' + button;
+	let success = false;
 	
 	request(endpoint, (error, response, body) => {
 		if(error) adapter.log.error('[REQUEST] <=== ' + error.message);
-		else if(JSON.parse(body).success) 
-			adapter.log.debug('[REQUEST] <=== Button ' + button + ' acknowledged by REST-Server');
-		else
+		else if(JSON.parse(body).success) {
+            adapter.log.debug('[REQUEST] <=== Button ' + button + ' acknowledged by REST-Server');
+            success = true;
+        } else
 			adapter.log.warn('[REQUEST] <=== Button ' + button + ' not acknowledged by REST-Server');
 		
-		if(cb && typeof(cb) === "function") return cb();
+		if(cb && typeof(cb) === "function") return cb(success);
 	});
 } // endSendButton
 
