@@ -22,10 +22,8 @@ adapter.on('unload', callback => {
     try {
     	let killCmd;
 
-        // TODO: check windows
         if(os.startsWith('win')) {
-            adapter.log.error('[END] Windows is currently not supported');
-            killCmd = '12345xxxy';
+            killCmd = 'Taskkill /IM xbox-rest-server /F';
         } else
             killCmd = 'pkill -f xbox-rest-server';
 
@@ -61,7 +59,7 @@ adapter.on('stateChange', (id, state) => {
     		if(state.val) 
     			handleStateChange(stateVal, id);
     		else 
-    		    adapter.log.warn('[COMMAND] ===> Can not handle id change ' + id + ' with value ' + state + ' because not connected');
+    		    adapter.log.warn('[COMMAND] ===> Can not handle id change ' + id + ' with value ' + stateVal + ' because not connected');
         });
     } // endElse
 });
