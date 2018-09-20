@@ -11,7 +11,7 @@
 ## Steps 
 
 * Fulfill the requirements
-* Install the adapter and control your Xbox
+* Install the adapter and control your Xbox One or Xbox One X
 
 ## Requirements
 
@@ -190,6 +190,10 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.0.6
+* (foxriver76) Stop making connect requests when already connected
+* (foxriver76) more user friendly logging
+
 ### 0.0.5
 * (foxriver76) using relative paths for starting server
 * (foxriver76) adding commands for windows
@@ -206,7 +210,7 @@ In this section you can find a description of every state of the adapter.
 * (foxriver76) fixed state handling
 * (foxriver76) using ping to check consoles power status instead of connection
 * (foxriver76) stop powering on if it is unsuccessful for 15 seconds
-* (foxriver76) restarting adapter when REST server is down
+* (foxriver76) restarting adapter when REST snpm erver is down
 
 ### 0.0.2
 * (foxriver76) fixed endpoints

@@ -87,7 +87,10 @@ adapter.on('ready', () => {
 	if (!liveId || !ip) {
 		adapter.log.warn('Please provide a Xbox Live ID and a ip address');
 		return;
-	} else adapter.log.debug('[START] Live ID is ' + liveId + '\n[START] ip adress is ' + ip);
+	} else {
+		adapter.log.debug('[START] Live ID is ' + liveId);
+		adapter.log.debug('[START] ip adress is ' + ip);
+    } // endElse
 
 	startRestServer((started, err) => {
 		if (!started) {
@@ -123,16 +126,24 @@ function main() {
 } // endMain
 
 function connect(liveId, cb) {
-	discover(() => {
+	discover(liveId, (conn, device) => {
 		let statusURL = 'http://' + address + ':5557/device/' + liveId + '/connect';
-		let connected;
+		let connected = conn;
+
 		adapter.log.debug('[CONNECT] Check connection');
+		if(conn) {
+			adapter.log.debug('[CONNECT] Still connected');
+            if(cb && typeof(cb) === "function")
+            	return cb(connected);
+            else
+            	return;
+		} // endIf
 		
 		request(statusURL, (error, response, body) => {
 			if(!error) {
 				if(JSON.parse(body).success) {
 					adapter.setState('info.connection', true, true);
-					adapter.log.debug('[CONNECT] Connection successfully confirmed');
+					adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
 					connected = true;
 				} else {
 					adapter.log.warn('[CONNECT] <=== ' + JSON.parse(body).message);
@@ -175,17 +186,27 @@ function powerOff(liveId, cb) {
 	
 } // endPowerOff
 
-function discover(cb) { // is used by connect
+function discover(discoverLiveId, cb) { // is used by connect
 	let endpoint = 'http://' + address +':5557/device';
+	let connected = false;
 	
 	request(endpoint, (error, response, body) => {
+        let device;
 		if(!error) {
-			adapter.log.debug('[DISCOVER] <=== ' + body);
+			let jsonBody = JSON.parse(body);
+			try{
+				if(jsonBody.devices[discoverLiveId].connection_state === 'Connected')
+					connected = true;
+				device = jsonBody.devices[discoverLiveId];
+                adapter.log.debug('[DISCOVER] <=== ' + JSON.stringify(jsonBody.devices));
+			} catch (e){
+                adapter.log.debug('[DISCOVER] <=== ' + body);
+			}
 		} else {
 			adapter.log.error('[DISCOVER] <=== ' + error.message);
 			adapter.setState('info.connection', false, true);
 		}
-		if(cb && typeof(cb) === "function") return cb();
+		if(cb && typeof(cb) === "function") return cb(connected, device);
 	});
 		
 } // endDiscover

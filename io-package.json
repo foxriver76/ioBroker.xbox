@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.0.5",
+        "version": "0.0.6",
         "news": {
+			"0.0.6": {
+				"en": "Stop making connect requests when already connected, more user friendly logging",
+				"de": "Keine Verbindungsversuche mehr wenn bereits verbunden, nutzerfreundlicheres Logging"
+			},
 			"0.0.5": {
 				"en": "Start and stop REST server on windows, using relative paths",
 				"de": "Starten und stoppen des REST Servers auf Windows, Nutzung relativer Pfade"
@@ -26,12 +30,12 @@
         },
 		"title": "Xbox",
         "titleLang": {
-            "en": "Control your Xbox",
-            "de": "Steure deine Xbox "
+            "en": "Xbox One",
+            "de": "Xbox One"
         },
         "desc": {
-            "en": "Control your Xbox",
-            "de": "Steuere deine Xbox"
+            "en": "Control your Xbox One (X)",
+            "de": "Steuere deine Xbox One (X)"
         },
         "authors": [
             "Moritz Heusinger <moritz.heusinger@gmail.com>"
