@@ -23,8 +23,10 @@ adapter.on('unload', callback => {
     	let killCmd;
 
         if(os.startsWith('win')) {
+        	// Windows
             killCmd = 'Taskkill /IM xbox-rest-server /F';
         } else
+        	// Linux and Mac
             killCmd = 'pkill -f xbox-rest-server';
 
     	exec(killCmd, (error, stdout, stderr) => {
@@ -82,27 +84,20 @@ adapter.on('ready', () => {
 	liveId = adapter.config.liveId;
 	ip = adapter.config.ip;
 
-    // TODO: check windows
-    if(os.startsWith('win')) {
-    	adapter.log.error('[START] Windows is currently not supported');
-	} else {
+	if (!liveId || !ip) {
+		adapter.log.warn('Please provide a Xbox Live ID and a ip address');
+		return;
+	} else adapter.log.debug('[START] Live ID is ' + liveId + '\n[START] ip adress is ' + ip);
 
-        if (!liveId || !ip) {
-            adapter.log.warn('Please provide a Xbox Live ID and a ip address');
-            return;
-        } else adapter.log.debug('[START] Live ID is ' + liveId + '\n[START] ip adress is ' + ip);
+	startRestServer((started, err) => {
+		if (!started) {
+			adapter.log.error('[START] Failed starting REST server: ' + err);
+			adapter.log.error('[START] Restarting adapter in 30 seconds');
+			let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
+		} // endIf
+	});
 
-        startRestServer((started, err) => {
-            if (!started) {
-                adapter.log.error('[START] Failed starting REST server: ' + err);
-                adapter.log.error('[START] Restarting adapter in 30 seconds');
-                let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
-            } // endIf
-        });
-
-        setTimeout(() => main(), 4000); // Server needs time to start
-    } // endElse
-	
+	setTimeout(() => main(), 4000); // Server needs time to start
 });
 
 function main() {
@@ -379,12 +374,12 @@ function startRestServer(cb) {
     let started;
 
     if(os.startsWith('win')) {
-        adapter.log.error('[START] Windows is currently not supported');
-        startCmd = '';
-        // TODO: Windows
+		// Windows
+        startCmd = __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\bin\\xbox-rest-server';
     } else
-        startCmd = '/opt/iobroker/node_modules/iobroker.xbox/node_modules/nopy/src/nopy.js ' +
-            '/opt/iobroker/node_modules/iobroker.xbox/python_modules/bin/xbox-rest-server';
+    	// Linux and MAC
+        startCmd = __dirname + '/node_modules/nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server';
+
 	exec(startCmd, (error, stdout, stderr) => {
 		let err = false;
 		if(error && !stderr.includes('REST server started')) {

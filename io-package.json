@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "news": {
+			"0.0.5": {
+				"en": "Start and stop REST server on windows, using relative paths",
+				"de": "Starten und stoppen des REST Servers auf Windows, Nutzung relativer Pfade"
+			},
             "0.0.4": {
                 "en": "Automatically install required Debian packages, detect OS, improved logging, installation for Windows",
                 "de": "Automatisches installieren der benötigten Debian Packages, Betriebssystem wird erkannt, besseres Logging, Windows Installation"

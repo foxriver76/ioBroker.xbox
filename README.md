@@ -185,6 +185,10 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.0.5
+* (foxriver76) using relative paths for starting server
+* (foxriver76) adding commands for windows
+
 ### 0.0.4
 * (foxriver76) automatically install required Debian packages
 * (foxriver76) updated Readme
