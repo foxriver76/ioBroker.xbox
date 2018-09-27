@@ -16,6 +16,7 @@ let ip;
 let blockXbox = false;
 let tryPowerOn = false;
 let xboxOnline = false;
+let firstReonnectAttempt = true;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
@@ -112,7 +113,11 @@ function main() {
 		ping.sys.probe(ip, (isAlive) => {
 	        if(isAlive) {
 	        	adapter.setState('settings.power', true, true);
-	        	xboxOnline = true;
+                if (!xboxOnline)
+                    firstReonnectAttempt = true;
+	        	else
+	        	    firstReonnectAttempt = false;
+                xboxOnline = true;
 	        	adapter.log.debug('[PING] Xbox online');
 	        	connect(liveId); // check if connection is (still) established
 	        } else {
@@ -157,7 +162,10 @@ function connect(liveId, cb) {
                         adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
                         connected = true;
                     } else {
-                        adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
+                        if (firstReonnectAttempt)
+                        	adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
+                        else
+                            adapter.log.debug('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
                         adapter.setState('info.connection', false, true);
                         connected = false;
                     } //endElse
