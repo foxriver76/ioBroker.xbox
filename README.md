@@ -190,7 +190,7 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
-### 0.0.6
+### 0.0.7
 * (foxriver76) If reconnect attempts fail often in a row, only log it once
 * (foxriver76) removed unneeded objects from io-package and adjusted title
 
