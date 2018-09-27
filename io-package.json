@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "news": {
+			"0.0.7": {
+				"en": "Reduce spam of reconnect logging, fixes in io-package like title lang and removed mail, pw,
+				"de": "Reconnect logging reduziert, kleinere Anpassungen in io-package.json"
+			},
 			"0.0.6": {
 				"en": "Stop making connect requests when already connected, more user friendly logging",
 				"de": "Keine Verbindungsversuche mehr wenn bereits verbunden, nutzerfreundlicheres Logging"
