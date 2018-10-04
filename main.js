@@ -177,7 +177,9 @@ function connect(ip, cb) {
                 } // endElse
                 if (cb && typeof(cb) === "function") return cb(connected);
             });
-        } else
+        } else if (firstReonnectAttempt)
+            adapter.log.warn('[CONNECT] No LiveID discovered until now');
+        else
             adapter.log.debug('[CONNECT] No LiveID discovered until now');
     });
 } // endConnect
