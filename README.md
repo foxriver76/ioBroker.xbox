@@ -37,8 +37,7 @@ npm i iobroker.xbox --unsafe-perm
 ```
 
 ### Setup
-1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
-2. Fill in the ip address of your Xbox. <br/>
+Fill in the ip address of your Xbox in the settings of the adapter. <br/>
 ![Adapter Configuration](/doc/adapter-configuration.png)
 
 ## States
