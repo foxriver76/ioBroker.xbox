@@ -26,7 +26,11 @@
 You can install the adapter via Admin interface (install from Github) or on your terminal.
 
 ### Admin
-Currently: Install from Github.
+1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
+2. Click on Tab "Adapters"
+3. Type "Xbox" in the filter
+4. Click on the three points and then on the "+" symbol of the Xbox adapter <br/>
+![Add Adapter](/doc/plusAddAdapter.png)
 
 ### Terminal
 Navigate into your ioBroker folder and execute the following command (on Linux Root privileges are required to install 
