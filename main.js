@@ -135,15 +135,16 @@ function main() {
 } // endMain
 
 function connect(ip, cb) {
-    discover(ip, (conn, discovered, device) => {
+    discover(ip, (connectionState, discovered, device) => {
         let statusURL = 'http://' + address + ':5557/device/' + liveId + '/connect';
-        let connected = conn;
 
         adapter.log.debug('[CONNECT] Check connection');
-        if (conn) {
+        if (connectionState && connectionState != 'Disconnected') {
             adapter.getState('info.connection', (err, state) => {
-                if (state.val && conn) {
+                if (state.val && connectionState == 'Connected') {
                     adapter.log.debug('[CONNECT] Still connected');
+                } else if (state.val && connectionState == 'Connecting') {
+                    adapter.log.debug('[CONNECT] Currently connecting');
                 } else {
                     adapter.setState('info.connection', true, true);
                     adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
@@ -157,25 +158,25 @@ function connect(ip, cb) {
                     if (JSON.parse(body).success) {
                         adapter.setState('info.connection', true, true);
                         adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
-                        connected = true;
+                        connectionState = true;
                     } else {
                         if (firstReonnectAttempt)
                             adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
                         else
                             adapter.log.debug('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
                         adapter.setState('info.connection', false, true);
-                        connected = false;
+                        connectionState = false;
                     } //endElse
                 } else {
                     adapter.log.error('[CONNECT] <=== ' + error.message);
                     adapter.setState('info.connection', false, true);
-                    connected = false;
+                    connectionState = false;
                     if (error.message.includes('ECONNREFUSED')) {
                         adapter.log.error('[CONNECT] REST server seems to be down, adapter will be restarted');
                         restartAdapter();
                     } // endIf
                 } // endElse
-                if (cb && typeof(cb) === "function") return cb(connected);
+                if (cb && typeof(cb) === "function") return cb(connectionState);
             });
         } else if (firstReonnectAttempt)
             adapter.log.warn('[CONNECT] No LiveID discovered until now');
@@ -208,7 +209,7 @@ function powerOff(liveId, cb) {
 
 function discover(ip, cb) { // is used by connect
     let endpoint = 'http://' + address + ':5557/device';
-    let connected = false;
+    let connectionState = false;
     let discovered = false;
     adapter.log.debug('[DISCOVER] Searching for consoles');
 
@@ -223,8 +224,8 @@ function discover(ip, cb) { // is used by connect
                         discovered = true;
                     } // endIf
                 } // endFor
-                if (jsonBody.devices[liveId].connection_state === 'Connected')
-                    connected = true;
+                if (jsonBody.devices[liveId].connection_state)
+                    connectionState = jsonBody.devices[liveId].connection_state;
                 device = jsonBody.devices[liveId];
                 adapter.log.debug('[DISCOVER] <=== ' + JSON.stringify(jsonBody.devices));
             } catch (e) {
@@ -234,7 +235,7 @@ function discover(ip, cb) { // is used by connect
             adapter.log.error('[DISCOVER] <=== ' + error.message);
             adapter.setState('info.connection', false, true);
         }
-        if (cb && typeof(cb) === "function") return cb(connected, discovered, device);
+        if (cb && typeof(cb) === "function") return cb(connectionState, discovered, device);
     });
 
 } // endDiscover

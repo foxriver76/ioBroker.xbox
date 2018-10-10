@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "news": {
+      "0.0.10": {
+        "en": "improve connection handling",
+        "de": "Zuverlässigere Verbindungsherstellung"
+      },
       "0.0.9": {
         "en": "remove live id as parameter",
         "de": "LiveID ist nicht mehr nötig"
