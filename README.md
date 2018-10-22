@@ -194,6 +194,9 @@ In this section you can find a description of every state of the adapter.
 ## Changelog
 
 ### 0.0.10
+* (foxriver76) minor connection fix
+
+### 0.0.10
 * (foxriver76) when status is connecting, don't connect again
 
 ### 0.0.9

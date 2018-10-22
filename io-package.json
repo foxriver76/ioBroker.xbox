@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "news": {
+      "0.0.11": {
+        "en": "minor connection fix",
+        "de": "kleiner Verbindungsfix"
+      },
       "0.0.10": {
         "en": "improve connection handling",
         "de": "Zuverlässigere Verbindungsherstellung"

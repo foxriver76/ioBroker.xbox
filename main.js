@@ -150,7 +150,7 @@ function connect(ip, cb) {
                     adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
                 } // endIf
 
-                if (cb && typeof(cb) === "function") return cb(connected);
+                if (cb && typeof(cb) === "function") return cb(connectionState);
             });
         } else if (liveId) {
             request(statusURL, (error, response, body) => {
