@@ -110,7 +110,12 @@ function main() {
     let checkOnline = setInterval(() => {
         ping.sys.probe(ip, (isAlive) => {
             if (isAlive) {
-                adapter.setState('settings.power', true, true);
+
+                adapter.getState('settings.power', (err, state) => {
+                    if(!state.val)
+                        adapter.setState('settings.power', true, true);
+                });
+
                 if (!xboxOnline)
                     firstReonnectAttempt = true;
                 else
@@ -125,7 +130,10 @@ function main() {
                         adapter.log.info('[PING] Lost connection to your Xbox');
                     } // endIf
                 });
-                adapter.setState('settings.power', false, true);
+                adapter.getState('settings.power', (err, state) => {
+                    if (state.val)
+                        adapter.setState('settings.power', false, true);
+                });
                 xboxOnline = false;
                 adapter.log.debug('[PING] Xbox offline');
             } // endElse
@@ -139,11 +147,12 @@ function connect(ip, cb) {
         let statusURL = 'http://' + address + ':5557/device/' + liveId + '/connect';
 
         adapter.log.debug('[CONNECT] Check connection');
+
         if (connectionState && connectionState != 'Disconnected') {
             adapter.getState('info.connection', (err, state) => {
                 if (state.val && connectionState == 'Connected') {
                     adapter.log.debug('[CONNECT] Still connected');
-                } else if (state.val && connectionState == 'Connecting') {
+                } else if (connectionState == 'Connecting') {
                     adapter.log.debug('[CONNECT] Currently connecting');
                 } else {
                     adapter.setState('info.connection', true, true);
@@ -152,7 +161,8 @@ function connect(ip, cb) {
 
                 if (cb && typeof(cb) === "function") return cb(connectionState);
             });
-        } else if (liveId) {
+        } else if (liveId && device && device.device_status === 'Available') {
+
             request(statusURL, (error, response, body) => {
                 if (!error) {
                     if (JSON.parse(body).success) {
@@ -178,6 +188,8 @@ function connect(ip, cb) {
                 } // endElse
                 if (cb && typeof(cb) === "function") return cb(connectionState);
             });
+        } else if (device && device.device_status) {
+            adapter.log.debug('[CONNECT] Console currently unavailable');
         } else if (firstReonnectAttempt)
             adapter.log.warn('[CONNECT] No LiveID discovered until now');
         else

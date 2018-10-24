@@ -193,7 +193,12 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
-### 0.0.10
+### 0.0.12
+* (foxriver76) when console unavailable, also do not connect
+* (foxriver76) debug logging for unavailable console
+* (foxriver76) only set power states on change
+
+### 0.0.11
 * (foxriver76) minor connection fix
 
 ### 0.0.10
