@@ -112,7 +112,7 @@ function main() {
             if (isAlive) {
 
                 adapter.getState('settings.power', (err, state) => {
-                    if(!state.val)
+                    if(!state || !state.val)
                         adapter.setState('settings.power', true, true);
                 });
 

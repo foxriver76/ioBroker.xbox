@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "news": {
+      "0.0.13": {
+        "en": "minor fix",
+        "de": "kleine Fehlerbehebung"
+      },
       "0.0.12": {
         "en": "do not connect when console unavailable, log unavailable console on debug, only set power states on change",
         "de": "Keine Verbindungsversuche mehr, wenn Konsole nicht verfügbar, Nicht-Verfügbarkeit wird auf Debug geloggt, Power Stati werden nur noch bei Änderung gesetzt"

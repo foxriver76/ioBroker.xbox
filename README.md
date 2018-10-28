@@ -193,6 +193,9 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.0.13
+* (foxriver76) minor fix
+
 ### 0.0.12
 * (foxriver76) when console unavailable, also do not connect
 * (foxriver76) debug logging for unavailable console
