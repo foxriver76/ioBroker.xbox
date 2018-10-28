@@ -125,7 +125,7 @@ function main() {
                 connect(ip); // check if connection is (still) established
             } else {
                 adapter.getState('info.connection', (err, state) => {
-                    if (state.val) {
+                    if (!state || state.val) {
                         adapter.setState('info.connection', false, true);
                         adapter.log.info('[PING] Lost connection to your Xbox');
                     } // endIf
@@ -148,6 +148,11 @@ function connect(ip, cb) {
 
         adapter.log.debug('[CONNECT] Check connection');
 
+        if(connectionState === 'Error') {
+            adapter.log.warn('[CONNECT] Error with rest server, restarting adapter');
+            return restartAdapter();
+        } // endIf
+
         if (connectionState && connectionState != 'Disconnected') {
             adapter.getState('info.connection', (err, state) => {
                 if (state.val && connectionState == 'Connected') {
@@ -161,39 +166,47 @@ function connect(ip, cb) {
 
                 if (cb && typeof(cb) === "function") return cb(connectionState);
             });
-        } else if (liveId && device && device.device_status === 'Available') {
+        } else {
+            adapter.getState('info.connection', (err, state) => {
+                if (!state || state.val) {
+                    adapter.setState('info.connection', false, true);
+                    adapter.log.info('[CONNECT] Lost connection to your Xbox');
+                } // endIf
+            });
 
-            request(statusURL, (error, response, body) => {
-                if (!error) {
-                    if (JSON.parse(body).success) {
-                        adapter.setState('info.connection', true, true);
-                        adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
-                        connectionState = true;
+            if (liveId && device && device.device_status === 'Available') {
+                request(statusURL, (error, response, body) => {
+                    if (!error) {
+                        if (JSON.parse(body).success) {
+                            adapter.setState('info.connection', true, true);
+                            adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
+                            connectionState = true;
+                        } else {
+                            if (firstReonnectAttempt)
+                                adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
+                            else
+                                adapter.log.debug('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
+                            adapter.setState('info.connection', false, true);
+                            connectionState = false;
+                        } //endElse
                     } else {
-                        if (firstReonnectAttempt)
-                            adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
-                        else
-                            adapter.log.debug('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
+                        adapter.log.error('[CONNECT] <=== ' + error.message);
                         adapter.setState('info.connection', false, true);
                         connectionState = false;
-                    } //endElse
-                } else {
-                    adapter.log.error('[CONNECT] <=== ' + error.message);
-                    adapter.setState('info.connection', false, true);
-                    connectionState = false;
-                    if (error.message.includes('ECONNREFUSED')) {
-                        adapter.log.error('[CONNECT] REST server seems to be down, adapter will be restarted');
-                        restartAdapter();
-                    } // endIf
-                } // endElse
-                if (cb && typeof(cb) === "function") return cb(connectionState);
-            });
-        } else if (device && device.device_status) {
-            adapter.log.debug('[CONNECT] Console currently unavailable');
-        } else if (firstReonnectAttempt)
-            adapter.log.warn('[CONNECT] No LiveID discovered until now');
-        else
-            adapter.log.debug('[CONNECT] No LiveID discovered until now');
+                        if (error.message.includes('ECONNREFUSED')) {
+                            adapter.log.error('[CONNECT] REST server seems to be down, adapter will be restarted');
+                            restartAdapter();
+                        } // endIf
+                    } // endElse
+                    if (cb && typeof(cb) === "function") return cb(connectionState);
+                });
+            } else if (device && device.device_status === 'Unavailable') {
+                adapter.log.debug('[CONNECT] Console currently unavailable');
+            } else if (firstReonnectAttempt)
+                adapter.log.warn('[CONNECT] No LiveID discovered until now');
+            else
+                adapter.log.debug('[CONNECT] No LiveID discovered until now');
+        }
     });
 } // endConnect
 

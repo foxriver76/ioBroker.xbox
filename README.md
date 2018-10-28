@@ -195,6 +195,8 @@ In this section you can find a description of every state of the adapter.
 
 ### 0.0.13
 * (foxriver76) minor fix
+* (foxriver76) restart adapter on rest server error
+* (foxriver76) log when losing connection without ping
 
 ### 0.0.12
 * (foxriver76) when console unavailable, also do not connect
