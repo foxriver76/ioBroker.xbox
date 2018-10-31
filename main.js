@@ -83,9 +83,10 @@ adapter.on('message', obj => {
 adapter.on('ready', () => {
 
     ip = adapter.config.ip;
+    liveId = adapter.config.liveId
 
-    if (!ip) {
-        adapter.log.warn('Please provide the ip address of your console');
+    if (!ip || !liveId) {
+        adapter.log.warn('Please provide the ip address and the Live ID of your console');
         return;
     } else {
         adapter.log.debug('[START] IP address is ' + ip);
@@ -122,7 +123,27 @@ function main() {
                     firstReonnectAttempt = false;
                 xboxOnline = true;
                 adapter.log.debug('[PING] Xbox online');
-                connect(ip); // check if connection is (still) established
+                connect(ip, connectionState => { // check if connection is (still) established
+                    if (connectionState === 'Connected') {
+                      request('http://' + address + ':5557/device/' + liveId + '/console_status', (error, response, body) => {
+                          if(error)
+                              return adapter.log.warn('[STATUS] <=== Error getting status: ' + error.message);
+
+                          let activeTitles = JSON.parse(body).console_status.active_titles;
+                          let activeTitlesState = {};
+                          for (let i in activeTitles) {
+                              let titleName = JSON.stringify(activeTitles[i].name).split('_')[0].replace('"', '');
+                              let titleHex = parseInt(JSON.stringify(activeTitles[i].title_id)).toString(16);
+                              activeTitlesState[titleName] = titleHex;
+                          } // endFor
+                          adapter.log.debug('[STATUS] Set ' + JSON.stringify(activeTitlesState));
+                          adapter.getState('info.currentTitles', (err, state) => {
+                              if (state.val !== JSON.stringify(activeTitlesState))
+                                adapter.setState('info.currentTitles', JSON.stringify(activeTitlesState), true);
+                          });
+                      });
+                    } // endIf
+                });
             } else {
                 adapter.getState('info.connection', (err, state) => {
                     if (!state || state.val) {
@@ -233,7 +254,7 @@ function powerOff(liveId, cb) {
 } // endPowerOff
 
 function discover(ip, cb) { // is used by connect
-    let endpoint = 'http://' + address + ':5557/device';
+    let endpoint = 'http://' + address + ':5557/device?addr=' + ip;
     let connectionState = false;
     let discovered = false;
     adapter.log.debug('[DISCOVER] Searching for consoles');
@@ -399,6 +420,14 @@ function handleStateChange(state, id, cb) {
         case 'media.stop':
             sendMediaCmd('stop');
             break;
+        case 'settings.inputText':
+            sendCustomCommand('http://' + address + ':5557/device/' + liveId + '/text/' + state,
+                () => adapter.setState(id, state, true));
+            break;
+        case 'settings.launchTitle':
+            sendCustomCommand('http://' + address + ':5557/device/' + liveId + '/launch/ms-xbl-' + state + '://',
+                () => adapter.setState(id, state, true));
+            break;
         default:
             adapter.log.warn('[COMMAND] ===> Not a valid id: ' + id)
     } // endSwitch
@@ -433,6 +462,18 @@ function sendMediaCmd(cmd, cb) {
         if (cb && typeof(cb) === "function") return cb();
     });
 } // endSendMediaCmd
+
+function sendCustomCommand(endpoint, cb) {
+    // Returns cb on success
+    request(endpoint, (error, response, body) => {
+        if (error) adapter.log.error('[REQUEST] <=== Custom request error: ' + error.message);
+        else if (JSON.parse(body).success) {
+            adapter.log.debug('[REQUEST] <=== Custom Command ' + endpoint + ' acknowledged by REST-Server');
+            if (cb && typeof(cb) === "function") return cb();
+        } else
+            adapter.log.warn('[REQUEST] <=== Custom command ' + endpoint + ' not acknowledged by REST-Server');
+    });
+} // endSendCustomCommand
 
 adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
     if (!obj) {

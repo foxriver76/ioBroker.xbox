@@ -41,7 +41,8 @@ npm i iobroker.xbox --unsafe-perm
 ```
 
 ### Setup
-Fill in the ip address of your Xbox in the settings of the adapter. <br/>
+1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
+2. Fill in the ip address of your Xbox. <br/>
 ![Adapter Configuration](/doc/adapter-configuration.png)
 
 ## States
@@ -52,13 +53,42 @@ In this section you can find a description of every state of the adapter.
 * info.connection
    
    *Read-only boolean indicator. Is true if adapter is connected to Xbox.*
+
+* info.currentTitles
+
+   *Read-only JSON string, which consits of key-value pairs. The key is the name of an active title,
+   while the value is the title id converted to hexadecimal. The hex title id can be used to launch a
+   title via the settings.launchTitlte state.*
    
 ### Channel Settings
 
 * settings.power
 
    *Boolean-value to turn your Xbox on and off. State also indicates current power status of the Xbox.*
-   
+
+* settings.launchTitle
+
+   *A writable string, which allows the user to launch a specific title by its title id
+   (converted to hexadecimal). To find out about the hex code of a desired title, you can
+   use the info.currentTitles state. The command is acknowledged when it has arrived at the server,
+   which does not mean, that the command has been executed.*
+
+   *Example:*
+    ```javascript
+        setState('settings.launchTitle', '2340236c', false); // Launch Read Ded Redemption 2
+    ```
+
+* settings.inputText
+
+   *Writable string, which allows the user to fill text into an active text field, e.g. to send
+   private messages. The command is acknowledged when it has arrived at the server, which does
+   not mean, that the command has been executed.*
+
+   *Example:*
+   ```javascript
+   setState('settings.inputText', 'H1 M8 h0w d0 u do?', false); // Send a super nerdy text so someone
+   ```
+
 ### Channel Gamepad
 
 * gamepad.a
@@ -192,6 +222,12 @@ In this section you can find a description of every state of the adapter.
    *View button for media content.*
    
 ## Changelog
+
+### 0.1.0
+* (foxriver76) brought back live id to settings
+* (foxriver76) input text state to enter text in an open text field
+* (foxriver76) ability to find consoles which are not available via broadcast
+* (foxriver76) info state for active titles & launch title state
 
 ### 0.0.13
 * (foxriver76) minor fix

@@ -1,598 +1,644 @@
 {
-  "common": {
-    "name": "xbox",
-    "version": "0.0.13",
-    "news": {
-      "0.0.13": {
-        "en": "minor fix, restart adapter on rest server error, log lose of connection without ping",
-        "de": "kleine Fehlerbehebung, Adapter neustarten, wenn Rest Server Fehler, erkenne Verbindungsverlust auch ohne Ping"
-      },
-      "0.0.12": {
-        "en": "do not connect when console unavailable, log unavailable console on debug, only set power states on change",
-        "de": "Keine Verbindungsversuche mehr, wenn Konsole nicht verfügbar, Nicht-Verfügbarkeit wird auf Debug geloggt, Power Stati werden nur noch bei Änderung gesetzt"
-      },
-      "0.0.11": {
-        "en": "minor connection fix",
-        "de": "kleiner Verbindungsfix"
-      },
-      "0.0.10": {
-        "en": "improve connection handling",
-        "de": "Zuverlässigere Verbindungsherstellung"
-      },
-      "0.0.9": {
-        "en": "remove live id as parameter",
-        "de": "LiveID ist nicht mehr nötig"
-      },
-      "0.0.8": {
-        "en": "Reduce spam of reconnect logging, fixes in io-package like title lang and removed mail, pw",
-        "de": "Reconnect logging reduziert, kleinere Anpassungen in io-package.json"
-      },
-      "0.0.6": {
-        "en": "Stop making connect requests when already connected, more user friendly logging",
-        "de": "Keine Verbindungsversuche mehr wenn bereits verbunden, nutzerfreundlicheres Logging"
-      },
-      "0.0.5": {
-        "en": "Start and stop REST server on windows, using relative paths",
-        "de": "Starten und stoppen des REST Servers auf Windows, Nutzung relativer Pfade"
-      },
-      "0.0.4": {
-        "en": "Automatically install required Debian packages, detect OS, improved logging, installation for Windows",
-        "de": "Automatisches installieren der benötigten Debian Packages, Betriebssystem wird erkannt, besseres Logging, Windows Installation"
-      },
-      "0.0.3": {
-        "en": "Fix endless power on tries, fix state changes for power off, use ping to check powered on",
-        "de": "Es wird nicht mehr endlos versucht einzuschalten, power off geht wieder, ping wird genutzt für power status"
-      },
-      "0.0.2": {
-        "en": "Automated installation of deps, improved Code, fixed endpoints",
-        "de": "Abhängigkeiten werden nun automatisch isntalliert, Endpunkte korrigiert, Codeverbesserungen"
-      },
-      "0.0.1": {
-        "en": "initial adapter",
-        "de": "Initiale Version"
-      }
+    "common": {
+        "name": "xbox",
+        "version": "0.1.0",
+        "news": {
+            "0.1.0": {
+                "en": "added possibility to enter text in active text fields, brought back live id to settings, find consoles which are not available via broadcast, title states added",
+                "de": "State zur Texteingabe hinzugefügt, Live ID wurde zurück gebracht, Konsolen können nun auch gefunden werden, wenn sie nicht über Broadcast erreichbar sind, Titel Stati hinzugefügt"
+            },
+            "0.0.13": {
+                "en": "minor fix, restart adapter on rest server error, log lose of connection without ping",
+                "de": "kleine Fehlerbehebung, Adapter neustarten, wenn Rest Server Fehler, erkenne Verbindungsverlust auch ohne Ping"
+            },
+            "0.0.12": {
+                "en": "do not connect when console unavailable, log unavailable console on debug, only set power states on change",
+                "de": "Keine Verbindungsversuche mehr, wenn Konsole nicht verfügbar, Nicht-Verfügbarkeit wird auf Debug geloggt, Power Stati werden nur noch bei Änderung gesetzt"
+            },
+            "0.0.11": {
+                "en": "minor connection fix",
+                "de": "kleiner Verbindungsfix"
+            },
+            "0.0.10": {
+                "en": "improve connection handling",
+                "de": "Zuverlässigere Verbindungsherstellung"
+            },
+            "0.0.9": {
+                "en": "remove live id as parameter",
+                "de": "LiveID ist nicht mehr nötig"
+            },
+            "0.0.8": {
+                "en": "Reduce spam of reconnect logging, fixes in io-package like title lang and removed mail, pw",
+                "de": "Reconnect logging reduziert, kleinere Anpassungen in io-package.json"
+            },
+            "0.0.6": {
+                "en": "Stop making connect requests when already connected, more user friendly logging",
+                "de": "Keine Verbindungsversuche mehr wenn bereits verbunden, nutzerfreundlicheres Logging"
+            },
+            "0.0.5": {
+                "en": "Start and stop REST server on windows, using relative paths",
+                "de": "Starten und stoppen des REST Servers auf Windows, Nutzung relativer Pfade"
+            },
+            "0.0.4": {
+                "en": "Automatically install required Debian packages, detect OS, improved logging, installation for Windows",
+                "de": "Automatisches installieren der benötigten Debian Packages, Betriebssystem wird erkannt, besseres Logging, Windows Installation"
+            },
+            "0.0.3": {
+                "en": "Fix endless power on tries, fix state changes for power off, use ping to check powered on",
+                "de": "Es wird nicht mehr endlos versucht einzuschalten, power off geht wieder, ping wird genutzt für power status"
+            },
+            "0.0.2": {
+                "en": "Automated installation of deps, improved Code, fixed endpoints",
+                "de": "Abhängigkeiten werden nun automatisch isntalliert, Endpunkte korrigiert, Codeverbesserungen"
+            },
+            "0.0.1": {
+                "en": "initial adapter",
+                "de": "Initiale Version"
+            }
+        },
+        "title": "Xbox",
+        "desc": {
+            "en": "Control your Xbox One (X)",
+            "de": "Steuere deine Xbox One (X)"
+        },
+        "authors": [
+            "Moritz Heusinger <moritz.heusinger@gmail.com>"
+        ],
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "xbox.png",
+        "materialize": true,
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",
+        "keywords": [
+            "xbox",
+            "gaming",
+            "playstation"
+        ],
+        "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
+        "loglevel": "info",
+        "type": "multimedia",
+        "license": "MIT",
+        "messagebox": false
     },
-    "title": "Xbox",
-    "desc": {
-      "en": "Control your Xbox One (X)",
-      "de": "Steuere deine Xbox One (X)"
+    "native": {
+        "ip": ""
     },
-    "authors": [
-      "Moritz Heusinger <moritz.heusinger@gmail.com>"
-    ],
-    "platform": "Javascript/Node.js",
-    "mode": "daemon",
-    "icon": "xbox.png",
-    "materialize": true,
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",
-    "keywords": [
-      "xbox",
-      "gaming",
-      "playstation"
-    ],
-    "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
-    "loglevel": "info",
-    "type": "multimedia",
-    "license": "MIT",
-    "messagebox": false
-  },
-  "native": {
-    "ip": ""
-  },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "info",
-      "type": "channel",
-      "common": {
-        "name": "Information"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "info.connection",
-      "type": "state",
-      "common": {
-        "role": "indicator.connected",
-        "name": "If connected to Xbox",
-        "type": "boolean",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media",
-      "type": "channel",
-      "common": {
-        "name": "Media"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad",
-      "type": "channel",
-      "common": {
-        "name": "Gamepad"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings",
-      "type": "channel",
-      "common": {
-        "name": "Settings and device commands"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.power",
-      "type": "state",
-      "common": {
-        "role": "switch.power",
-        "name": "Console power status",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.rightShoulder",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Right Shoulder Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.leftShoulder",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Left Shoulder Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.leftThumbstick",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Left Thumbstick Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.rightThumbstick",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Right Thumbstick Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.enroll",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Enroll Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.view",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "View Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.menu",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Menu Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.nexus",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Nexus Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.a",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "A Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.b",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "B Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.x",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "X Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.y",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Y Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.dpadUp",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "DPad Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.clear",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Clear Button",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.dpadRight",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "DPad Right",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.dpadLeft",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "DPad Left",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "gamepad.dpadDown",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "DPad Down",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.play",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Play",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.pause",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Pause",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.record",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Record",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.previousTrack",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Previous Track",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.playPause",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Play/Pause",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.seek",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Seek",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.channelUp",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Channel Up",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.nextTrack",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Next Track",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.channelDown",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Channel Down",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.menu",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Menu",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.back",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Back",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.rewind",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Rewind",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.view",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "View",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.fastForward",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Fast Forward",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "media.stop",
-      "type": "state",
-      "common": {
-        "role": "button",
-        "name": "Stop",
-        "type": "boolean",
-        "read": true,
-        "write": true,
-        "def": false
-      },
-      "native": {
-      }
-    }
-  ]
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "If connected to Xbox",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media",
+            "type": "channel",
+            "common": {
+                "name": "Media"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad",
+            "type": "channel",
+            "common": {
+                "name": "Gamepad"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings",
+            "type": "channel",
+            "common": {
+                "name": "Settings and device commands"
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.power",
+            "type": "state",
+            "common": {
+                "role": "switch.power",
+                "name": "Console power status",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.rightShoulder",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Right Shoulder Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.leftShoulder",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Left Shoulder Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.leftThumbstick",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Left Thumbstick Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.rightThumbstick",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Right Thumbstick Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.enroll",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Enroll Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.view",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "View Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.menu",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Menu Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.nexus",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Nexus Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.a",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "A Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.b",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "B Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.x",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "X Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.y",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Y Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.dpadUp",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "DPad Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.clear",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Clear Button",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.dpadRight",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "DPad Right",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.dpadLeft",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "DPad Left",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "gamepad.dpadDown",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "DPad Down",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.play",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Play",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.pause",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Pause",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.record",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Record",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.previousTrack",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Previous Track",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.playPause",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Play/Pause",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.seek",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Seek",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.channelUp",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Channel Up",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.nextTrack",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Next Track",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.channelDown",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Channel Down",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.menu",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Menu",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.back",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Back",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.rewind",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Rewind",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.view",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "View",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.fastForward",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Fast Forward",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "media.stop",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Stop",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.inputText",
+            "type": "state",
+            "common": {
+                "role": "text.input",
+                "name": "Input Text",
+                "type": "string",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "settings.launchTitle",
+            "type": "state",
+            "common": {
+                "role": "text.launch",
+                "name": "Launch Title",
+                "type": "string",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.currentTitles",
+            "type": "state",
+            "common": {
+                "role": "info.titles",
+                "name": "Current Titles",
+                "type": "string",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {
+            }
+        }
+    ]
 }
