@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "news": {
+            "0.1.1": {
+                "en": "minor fixes, explicitly require python deps version, fix for power on when not accessable via broadcast",
+                "de": "kleine Fehlerbehebungen, explizite Versionen Python Abhängigkeiten festgelegt, Power on gefixt, wenn Xbox nicht im Broadcast Netzwerk"
+            },
             "0.1.0": {
                 "en": "added possibility to enter text in active text fields, brought back live id to settings, find consoles which are not available via broadcast, title states added",
                 "de": "State zur Texteingabe hinzugefügt, Live ID wurde zurück gebracht, Konsolen können nun auch gefunden werden, wenn sie nicht über Broadcast erreichbar sind, Titel Stati hinzugefügt"
@@ -82,7 +86,8 @@
         "messagebox": false
     },
     "native": {
-        "ip": ""
+        "ip": "",
+        "lvieId": ""
     },
     "objects": [],
     "instanceObjects": [

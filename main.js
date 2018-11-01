@@ -83,7 +83,7 @@ adapter.on('message', obj => {
 adapter.on('ready', () => {
 
     ip = adapter.config.ip;
-    liveId = adapter.config.liveId
+    liveId = adapter.config.liveId;
 
     if (!ip || !liveId) {
         adapter.log.warn('Please provide the ip address and the Live ID of your console');
@@ -287,7 +287,7 @@ function discover(ip, cb) { // is used by connect
 } // endDiscover
 
 function powerOn(cb) {
-    let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweron';
+    let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweron?addr=' + ip;
     if (!tryPowerOn) { // if Xbox isn't on after 17.5 seconds, stop trying
         tryPowerOn = setTimeout(() => tryPowerOn = false, 17500);
     } // endIf

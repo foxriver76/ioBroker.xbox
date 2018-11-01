@@ -223,6 +223,11 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.1.1
+* (foxriver76) minor fixes
+* (foxriver76) explicit require versions of python deps
+* (foxriver76) fix for power on, when Xbox not in broadcast network
+
 ### 0.1.0
 * (foxriver76) brought back live id to settings
 * (foxriver76) input text state to enter text in an open text field
