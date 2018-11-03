@@ -23,7 +23,7 @@
    python3-dev).
 
 ## Installation
-You can install the adapter via Admin interface (install from Github) or on your terminal.
+You can install the adapter via Admin interface or on your terminal.
 
 ### Admin
 1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
