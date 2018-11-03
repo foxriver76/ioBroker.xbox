@@ -75,7 +75,7 @@ In this section you can find a description of every state of the adapter.
 
    *Example:*
     ```javascript
-        setState('settings.launchTitle', '2340236c', false); // Launch Red Ded Redemption 2
+    setState('settings.launchTitle', '2340236c', false); // Launch Red Ded Redemption 2
     ```
 
 * settings.inputText
