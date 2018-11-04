@@ -75,7 +75,7 @@ In this section you can find a description of every state of the adapter.
 
    *Example:*
     ```javascript
-    setState('settings.launchTitle', '2340236c', false); // Launch Red Ded Redemption 2
+    setState('settings.launchTitle', '2340236c', false); // Launch Red Dead Redemption 2
     ```
 
 * settings.inputText
@@ -86,7 +86,7 @@ In this section you can find a description of every state of the adapter.
 
    *Example:*
    ```javascript
-   setState('settings.inputText', 'H1 M8 h0w d0 u do?', false); // Send a super nerdy text so someone
+   setState('settings.inputText', 'H1 M8 h0w d0 u do?', false); // Send a super nerdy text to someone
    ```
 
 ### Channel Gamepad
