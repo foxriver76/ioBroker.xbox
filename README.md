@@ -224,6 +224,9 @@ In this section you can find a description of every state of the adapter.
 ## Changelog
 
 ### 0.1.1
+* (foxriver76) fix when currentTitles is empty
+
+### 0.1.1
 * (foxriver76) minor fixes
 * (foxriver76) explicit require versions of python deps
 * (foxriver76) fix for power on, when Xbox not in broadcast network

@@ -138,7 +138,7 @@ function main() {
                           } // endFor
                           adapter.log.debug('[STATUS] Set ' + JSON.stringify(activeTitlesState));
                           adapter.getState('info.currentTitles', (err, state) => {
-                              if (state.val !== JSON.stringify(activeTitlesState))
+                              if (state && state.val !== JSON.stringify(activeTitlesState))
                                 adapter.setState('info.currentTitles', JSON.stringify(activeTitlesState), true);
                           });
                       });
