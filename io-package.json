@@ -4,8 +4,8 @@
         "version": "0.1.3",
         "news": {
             "0.1.3": {
-                "en": "bump smartglass-rest to 0.9.7, powering on not multicastable consoles should work now, minor fix",
-                "de": "smartglass-rest library auf 0.9.7 erhöht, nicht per Multicast erreichbare Konsolen können nun auch eingeschaltet werden, kleine Fehlerbehebung"
+                "en": "bump smartglass-rest to 0.9.7, powering on not multicastable consoles should work now, minor fix, reduce discovery",
+                "de": "smartglass-rest library auf 0.9.7 erhöht, nicht per Multicast erreichbare Konsolen können nun auch eingeschaltet werden, kleine Fehlerbehebung, Discovery nur wenn Xbox online und nicht verbunden"
             },
             "0.1.2": {
                 "en": "minor fix on currentTitles beeing empty",

@@ -164,7 +164,7 @@ function main() {
 } // endMain
 
 function connect(ip, cb) {
-    discover(ip, (connectionState, discovered, device) => {
+    discoverAndUpdateConsole(ip, (connectionState, discovered, device) => {
         let statusURL = 'http://' + address + ':5557/device/' + liveId + '/connect';
 
         adapter.log.debug('[CONNECT] Check connection');
@@ -227,7 +227,7 @@ function connect(ip, cb) {
                 adapter.log.warn('[CONNECT] No LiveID discovered until now');
             else
                 adapter.log.debug('[CONNECT] No LiveID discovered until now');
-        }
+        } // endElse
     });
 } // endConnect
 
@@ -253,35 +253,48 @@ function powerOff(liveId, cb) {
 
 } // endPowerOff
 
-function discover(ip, cb) { // is used by connect
-    let endpoint = 'http://' + address + ':5557/device?addr=' + ip;
-    let connectionState = false;
-    let discovered = false;
-    adapter.log.debug('[DISCOVER] Searching for consoles');
-
-    request(endpoint, (error, response, body) => {
-        let device;
-        if (!error) {
-            let jsonBody = JSON.parse(body);
-            try {
-                for (let i in jsonBody.devices) {
-                    if (jsonBody.devices[i].address === ip) {
-                        liveId = jsonBody.devices[i].liveid;
-                        discovered = true;
-                    } // endIf
-                } // endFor
-                if (jsonBody.devices[liveId].connection_state)
-                    connectionState = jsonBody.devices[liveId].connection_state;
-                device = jsonBody.devices[liveId];
-                adapter.log.debug('[DISCOVER] <=== ' + JSON.stringify(jsonBody.devices));
-            } catch (e) {
-                adapter.log.debug('[DISCOVER] <=== ' + body);
-            }
+function discoverAndUpdateConsole(ip, cb) { // is used by connect
+    adapter.getState('info.connection', (err, state) => {
+        let endpoint;
+        if(!state || !state.val) {
+            endpoint = 'http://' + address + ':5557/device?addr=' + ip;
+            adapter.log.debug('[DISCOVER] Searching for consoles');
         } else {
-            adapter.log.error('[DISCOVER] <=== ' + error.message);
-            adapter.setState('info.connection', false, true);
-        }
-        if (cb && typeof(cb) === "function") return cb(connectionState, discovered, device);
+            endpoint = 'http://' + address + ':5557/device/' + liveId;
+            adapter.log.debug('[UPDATE] Check console status');
+        } // endElse
+        let connectionState = false;
+        let discovered = false;
+
+        request(endpoint, (error, response, body) => {
+            let device;
+            if (!error) {
+                let jsonBody = JSON.parse(body);
+                if(state && state.val) {
+                    device = jsonBody.device;
+                    liveId = jsonBody.device.liveid;
+                    connectionState = jsonBody.device.connection_state;
+                    adapter.log.debug('[UPDATE] <=== ' + body);
+                } else try {
+                    for (let i in jsonBody.devices) {
+                        if (jsonBody.devices[i].address === ip) {
+                            liveId = jsonBody.devices[i].liveid;
+                            discovered = true;
+                        } // endIf
+                    } // endFor
+                    if (jsonBody.devices[liveId].connection_state)
+                        connectionState = jsonBody.devices[liveId].connection_state;
+                    device = jsonBody.devices[liveId];
+                    adapter.log.debug('[DISCOVER] <=== ' + JSON.stringify(jsonBody.devices));
+                } catch (e) {
+                    adapter.log.debug('[DISCOVER] <=== ' + body);
+                }
+            } else {
+                adapter.log.error('[DISCOVER] <=== ' + error.message);
+                adapter.setState('info.connection', false, true);
+            }
+            if (cb && typeof(cb) === "function") return cb(connectionState, discovered, device);
+        });
     });
 
 } // endDiscover

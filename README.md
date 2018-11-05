@@ -227,6 +227,7 @@ In this section you can find a description of every state of the adapter.
 * (foxriver76) minor fix
 * (foxriver76) bump smartglass-rest requirement to 0.9.7
 * (foxriver76) enables pwoer on for not multicastable consoles
+* (foxriver76) only use discovery when Xbox disconnected and online
 
 ### 0.1.2
 * (foxriver76) fix when currentTitles is empty
