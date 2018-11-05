@@ -223,6 +223,11 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.1.3
+* (foxriver76) minor fix
+* (foxriver76) bump smartglass-rest requirement to 0.9.7
+* (foxriver76) enables pwoer on for not multicastable consoles
+
 ### 0.1.2
 * (foxriver76) fix when currentTitles is empty
 

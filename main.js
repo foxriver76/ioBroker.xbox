@@ -27,7 +27,7 @@ adapter.on('unload', callback => {
             // Windows
             killCmd = 'Taskkill /IM xbox-rest-server /F';
         } else
-        // Linux and Mac
+            // Linux and Mac
             killCmd = 'pkill -f xbox-rest-server';
 
         exec(killCmd, (error, stdout, stderr) => {
@@ -148,7 +148,7 @@ function main() {
                 adapter.getState('info.connection', (err, state) => {
                     if (!state || state.val) {
                         adapter.setState('info.connection', false, true);
-                        adapter.log.info('[PING] Lost connection to your Xbox');
+                        adapter.log.info('[PING] Lost connection to your Xbox (' + ip + ')');
                     } // endIf
                 });
                 adapter.getState('settings.power', (err, state) => {
@@ -191,7 +191,7 @@ function connect(ip, cb) {
             adapter.getState('info.connection', (err, state) => {
                 if (!state || state.val) {
                     adapter.setState('info.connection', false, true);
-                    adapter.log.info('[CONNECT] Lost connection to your Xbox');
+                    adapter.log.info('[CONNECT] Lost connection to your Xbox (' + ip + ')');
                 } // endIf
             });
 
@@ -234,13 +234,13 @@ function connect(ip, cb) {
 function powerOff(liveId, cb) {
 
     let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweroff';
-    adapter.log.debug('[POWEROFF] Powering off Xbox');
+    adapter.log.debug('[POWEROFF] Powering off Xbox' + ip +')');
 
     request(endpoint, (error, response, body) => {
         if (!error) {
             if (JSON.parse(body).success) {
                 adapter.setState('info.connection', false, true);
-                adapter.log.info('[POWEROFF] Connection to Xbox closed')
+                adapter.log.info('[POWEROFF] Connection to Xbox closed');
                 adapter.log.debug('[POWEROFF] <=== ' + body);
             } else {
                 adapter.log.warn('[POWEROFF] <=== ' + body);

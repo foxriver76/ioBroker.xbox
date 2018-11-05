@@ -1,6 +1,6 @@
 {
   "name": "iobroker.xbox",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "engines": {
     "node": ">=6.0.0"
   },
@@ -46,7 +46,7 @@
       ],
   	"path": ["."],
     "dependencies": {
-      "xbox-smartglass-rest": ">=0.9.6"
+      "xbox-smartglass-rest": ">=0.9.7"
     }
   },
   "devDependencies": {
