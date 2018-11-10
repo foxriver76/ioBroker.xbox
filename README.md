@@ -21,6 +21,8 @@
    The required packages will automatically be installed. Due to this fact root privileges are required as well as the 
    --unsafe-perm flag. If this fails, you have to install the packages manually (build-essential libssl-dev libffi-dev 
    python3-dev).
+* If you want to power your Xbox on with this adapter, you have to
+[configure the instant-on power modus](https://support.xbox.com/en-GB/xbox-one/console/learn-about-power-modes) on your Xbox.
 
 ## Installation
 You can install the adapter via Admin interface or on your terminal.
