@@ -225,6 +225,10 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.1.4
+* (foxriver76) set info.connection and settings.power to false on unload
+* (foxriver76) not only rely on ping to check if xbox is on, use available too
+
 ### 0.1.3
 * (foxriver76) minor fix
 * (foxriver76) bump smartglass-rest requirement to 0.9.7

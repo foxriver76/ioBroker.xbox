@@ -15,14 +15,16 @@ let liveId;
 let ip;
 let blockXbox = false;
 let tryPowerOn = false;
-let xboxOnline = false;
-let firstReonnectAttempt = true;
+let xboxPingable = false;
+let firstReconnectAttempt = true;
+let xboxAvailable = false;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
     try {
         let killCmd;
-
+        adapter.setState('info.connection', false, true);
+        adapter.setState('power.settings', false, true);
         if (os.startsWith('win')) {
             // Windows
             killCmd = 'Taskkill /IM xbox-rest-server /F';
@@ -110,19 +112,16 @@ function main() {
 
     let checkOnline = setInterval(() => {
         ping.sys.probe(ip, (isAlive) => {
-            if (isAlive) {
+            if (isAlive || xboxAvailable) {
 
                 adapter.getState('settings.power', (err, state) => {
-                    if(!state || !state.val)
+                    if(((!state || !state.val) || (state.val && !state.ack)) && xboxAvailable)
                         adapter.setState('settings.power', true, true);
                 });
 
-                if (!xboxOnline)
-                    firstReonnectAttempt = true;
-                else
-                    firstReonnectAttempt = false;
-                xboxOnline = true;
-                adapter.log.debug('[PING] Xbox online');
+                xboxPingable = true;
+                if (isAlive) adapter.log.debug('[PING] Xbox online');
+                else adapter.log.debug('[PING] Xbox offline, but marked available');
                 connect(ip, connectionState => { // check if connection is (still) established
                     if (connectionState === 'Connected') {
                       request('http://' + address + ':5557/device/' + liveId + '/console_status', (error, response, body) => {
@@ -146,16 +145,17 @@ function main() {
                 });
             } else {
                 adapter.getState('info.connection', (err, state) => {
-                    if (!state || state.val) {
+                    if ((!state || state.val) && !xboxAvailable) {
                         adapter.setState('info.connection', false, true);
                         adapter.log.info('[PING] Lost connection to your Xbox (' + ip + ')');
+                        firstReconnectAttempt = true;
                     } // endIf
                 });
                 adapter.getState('settings.power', (err, state) => {
-                    if (state.val)
+                    if (!state || (state.val && !xboxAvailable))
                         adapter.setState('settings.power', false, true);
                 });
-                xboxOnline = false;
+                xboxPingable = false;
                 adapter.log.debug('[PING] Xbox offline');
             } // endElse
         });
@@ -173,6 +173,10 @@ function connect(ip, cb) {
             adapter.log.warn('[CONNECT] Error with rest server, restarting adapter');
             return restartAdapter();
         } // endIf
+
+        // Set device status to var to not only rely on ping to check if Xbox is online
+        if (device && device.device_status === 'Available') xboxAvailable = true;
+        else xboxAvailable = false;
 
         if (connectionState && connectionState != 'Disconnected') {
             adapter.getState('info.connection', (err, state) => {
@@ -192,6 +196,7 @@ function connect(ip, cb) {
                 if (!state || state.val) {
                     adapter.setState('info.connection', false, true);
                     adapter.log.info('[CONNECT] Lost connection to your Xbox (' + ip + ')');
+                    firstReconnectAttempt = true;
                 } // endIf
             });
 
@@ -203,7 +208,7 @@ function connect(ip, cb) {
                             adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
                             connectionState = true;
                         } else {
-                            if (firstReonnectAttempt)
+                            if (firstReconnectAttempt)
                                 adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
                             else
                                 adapter.log.debug('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
@@ -223,8 +228,10 @@ function connect(ip, cb) {
                 });
             } else if (device && device.device_status === 'Unavailable') {
                 adapter.log.debug('[CONNECT] Console currently unavailable');
-            } else if (firstReonnectAttempt)
+            } else if (firstReconnectAttempt) {
                 adapter.log.warn('[CONNECT] No LiveID discovered until now');
+                firstReconnectAttempt = false;
+            }
             else
                 adapter.log.debug('[CONNECT] No LiveID discovered until now');
         } // endElse
@@ -310,7 +317,7 @@ function powerOn(cb) {
     request(endpoint, (error, response, body) => {
         if (error) adapter.log.error('[REQUEST] <=== ' + error.message);
 
-        if (!xboxOnline) {
+        if (!xboxPingable) {
             if (tryPowerOn)
                 powerOn();
             else {
