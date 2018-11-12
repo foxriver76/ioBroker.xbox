@@ -24,6 +24,11 @@
 * If you want to power your Xbox on with this adapter, you have to
 [configure the instant-on power modus](https://support.xbox.com/en-GB/xbox-one/console/learn-about-power-modes) on your Xbox.
 
+## Acknowledgement
+Thanks to [Team Open Xbox](https://openxbox.org/) for developing and maintaining the
+[xbox-rest-server](https://github.com/OpenXbox/xbox-smartglass-rest-python) and the related libraries.
+Without their effort, developing this package would not be possible.
+
 ## Installation
 You can install the adapter via Admin interface or on your terminal.
 
