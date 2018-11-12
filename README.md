@@ -225,6 +225,10 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.1.5
+* (foxriver76) starting rest-server on windows fixed
+* (foxriver76) stopping rest-server on windows fixed
+
 ### 0.1.4
 * (foxriver76) set info.connection and settings.power to false on unload
 * (foxriver76) not only rely on ping to check if xbox is on, use available too

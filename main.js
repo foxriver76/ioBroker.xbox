@@ -18,19 +18,23 @@ let tryPowerOn = false;
 let xboxPingable = false;
 let firstReconnectAttempt = true;
 let xboxAvailable = false;
+let restServerProcess;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
     try {
+        let pid = restServerProcess.pid;
         let killCmd;
+
         adapter.setState('info.connection', false, true);
         adapter.setState('power.settings', false, true);
         if (os.startsWith('win')) {
             // Windows
-            killCmd = 'Taskkill /IM xbox-rest-server /F';
-        } else
+            killCmd = 'taskkill /F /PID ' + pid;
+        } else {
             // Linux and Mac
             killCmd = 'pkill -f xbox-rest-server';
+        } // endElse
 
         exec(killCmd, (error, stdout, stderr) => {
             if (!error) {
@@ -278,10 +282,14 @@ function discoverAndUpdateConsole(ip, cb) { // is used by connect
             if (!error) {
                 let jsonBody = JSON.parse(body);
                 if(state && state.val) {
-                    device = jsonBody.device;
-                    liveId = jsonBody.device.liveid;
-                    connectionState = jsonBody.device.connection_state;
-                    adapter.log.debug('[UPDATE] <=== ' + body);
+                    try {
+                        device = jsonBody.device;
+                        liveId = jsonBody.device.liveid;
+                        connectionState = jsonBody.device.connection_state;
+                        adapter.log.debug('[UPDATE] <=== ' + body);
+                    } catch (e) {
+                        adapter.log.debug('[UPDATE] <=== ' + body)
+                    }
                 } else try {
                     for (let i in jsonBody.devices) {
                         if (jsonBody.devices[i].address === ip) {
@@ -513,13 +521,13 @@ function startRestServer(cb) {
 
     if (os.startsWith('win')) {
         // Windows
-        startCmd = __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\bin\\xbox-rest-server';
+        startCmd = 'node ' + __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\Python36\\Scripts\\xbox-rest-server.exe';
     } else
     // Linux and MAC -- if not found in node_modules try root project
         startCmd = __dirname + '/node_modules/nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server' +
             ' || ' + __dirname + '/../nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server';
 
-    exec(startCmd, (error, stdout, stderr) => {
+    restServerProcess = exec(startCmd, (error, stdout, stderr) => {
         let err = false;
         if (error && !stderr.includes('REST server started')) {
             started = false;
