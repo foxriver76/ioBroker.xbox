@@ -19,6 +19,7 @@ let xboxPingable = false;
 let firstReconnectAttempt = true;
 let xboxAvailable = false;
 let restServerProcess;
+let winPath;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
@@ -98,14 +99,28 @@ adapter.on('ready', () => {
         adapter.log.debug('[START] IP address is ' + ip);
         adapter.log.info('[START] Starting REST server');
     } // endElse
+    if (os.startsWith('win')) {
+        // Get correct python directory for windows
+        exec('dir /B ' + __dirname + '\\python_modules\\Python3', (err, stdout, stderr) => {
+            winPath = stdout.replace(/[^ -~]+/g, '') || 'Python36';
+            startRestServer((started, err) => {
+                if (!started) {
+                    adapter.log.error('[START] Failed starting REST server: ' + err);
+                    adapter.log.error('[START] Restarting adapter in 30 seconds');
+                    let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
+                } // endIf
+            });
+        });
 
-    startRestServer((started, err) => {
-        if (!started) {
-            adapter.log.error('[START] Failed starting REST server: ' + err);
-            adapter.log.error('[START] Restarting adapter in 30 seconds');
-            let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
-        } // endIf
-    });
+    } else {
+        startRestServer((started, err) => {
+            if (!started) {
+                adapter.log.error('[START] Failed starting REST server: ' + err);
+                adapter.log.error('[START] Restarting adapter in 30 seconds');
+                let restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
+            } // endIf
+        });
+    } // endElse
 
     setTimeout(() => main(), 4000); // Server needs time to start
 });
@@ -521,7 +536,7 @@ function startRestServer(cb) {
 
     if (os.startsWith('win')) {
         // Windows
-        startCmd = 'node ' + __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\Python36\\Scripts\\xbox-rest-server.exe';
+        startCmd = 'node ' + __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\' + winPath + '\\Scripts\\xbox-rest-server.exe';
     } else
     // Linux and MAC -- if not found in node_modules try root project
         startCmd = __dirname + '/node_modules/nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server' +
