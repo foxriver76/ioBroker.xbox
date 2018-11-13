@@ -537,7 +537,7 @@ function startRestServer(cb) {
     if (os.startsWith('win')) {
         // Windows
         startCmd = 'node ' + __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\' + winPath + '\\Scripts\\xbox-rest-server.exe' +
-            ' || ' + 'node ' __dirname + '\\..\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\' + winPath + '\\Scripts\\xbox-rest-server.exe';
+            ' || ' + 'node ' + __dirname + '\\..\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\' + winPath + '\\Scripts\\xbox-rest-server.exe';
     } else
     // Linux and MAC -- if not found in node_modules try root project
         startCmd = __dirname + '/node_modules/nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server' +
