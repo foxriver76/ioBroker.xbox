@@ -230,6 +230,9 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.1.6
+* (foxriver76) fix rest-server start on win when nopy not in own node_modules folder
+
 ### 0.1.5
 * (foxriver76) starting rest-server on windows fixed
 * (foxriver76) stopping rest-server on windows fixed

@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.1.5",
+        "version": "0.1.6",
         "news": {
+            "0.1.6": {
+                "en": "fix start of rest server for windows when nopy not in own node_modules",
+                "de": "Ergänzender Fix für das Starten des Rest Server unter Windows"
+            },
             "0.1.5": {
                 "en": "fix start command of rest server for windows and try to kill on windows by pid",
                 "de": "Starten des Rest-Servers unter Windows gefixt sowie beenden des Servers"
