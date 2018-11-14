@@ -158,9 +158,8 @@ function main() {
                           let activeTitles = JSON.parse(body).console_status.active_titles;
                           let activeTitlesState = {};
                           for (let i in activeTitles) {
-                              adapter.log.warn(activeTitles[i].name);
                               let titleName = activeTitles[i].name.split('_')[0];
-                              let titleHex = parseInt(JSON.stringify(activeTitles[i].title_id)).toString(16);
+                              let titleHex = parseInt(activeTitles[i].title_id).toString(16);
                               activeTitlesState[titleName] = titleHex;
                           } // endFor
                           adapter.log.debug('[STATUS] Set ' + JSON.stringify(activeTitlesState));
