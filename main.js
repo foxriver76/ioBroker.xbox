@@ -10,7 +10,7 @@ const request = require('request');
 const ping = require('ping');
 const os = require('os').platform();
 
-const address = 'localhost'; // host of the REST server
+const restServerAddress = 'localhost'; // host of the REST server
 let liveId;
 let ip;
 let blockXbox = false;
@@ -20,18 +20,18 @@ let firstReconnectAttempt = true;
 let xboxAvailable = false;
 let restServerProcess;
 let winPath;
+let restServerPid;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
     try {
-        let pid = restServerProcess.pid;
         let killCmd;
 
         adapter.setState('info.connection', false, true);
         adapter.setState('power.settings', false, true);
         if (os.startsWith('win')) {
             // Windows
-            killCmd = 'taskkill /F /PID ' + pid;
+            killCmd = 'taskkill /F /PID ' + restServerPid;
         } else {
             // Linux and Mac
             killCmd = 'pkill -f xbox-rest-server';
@@ -129,6 +129,14 @@ function main() {
 
     adapter.subscribeStates('*');
 
+    // Get Rest Server PID once for killing on windows
+    if (os.startsWith('win')) {
+        exec('wmic process get processid, commandline | findstr "^py *xbox-rest-server.exe>"', (err, stdout, stderr) => {
+            restServerPid = stdout.split('.exe')[1].replace(/\s+/g, '');
+            adapter.log.debug('[START] REST-Server is running as ' + restServerPid);
+        });
+    } // endIf
+
     let checkOnline = setInterval(() => {
         ping.sys.probe(ip, (isAlive) => {
             if (isAlive || xboxAvailable) {
@@ -143,7 +151,7 @@ function main() {
                 else adapter.log.debug('[PING] Xbox offline, but marked available');
                 connect(ip, connectionState => { // check if connection is (still) established
                     if (connectionState === 'Connected') {
-                      request('http://' + address + ':5557/device/' + liveId + '/console_status', (error, response, body) => {
+                      request('http://' + restServerAddress + ':5557/device/' + liveId + '/console_status', (error, response, body) => {
                           if(error)
                               return adapter.log.warn('[STATUS] <=== Error getting status: ' + error.message);
 
@@ -184,7 +192,7 @@ function main() {
 
 function connect(ip, cb) {
     discoverAndUpdateConsole(ip, (connectionState, discovered, device) => {
-        let statusURL = 'http://' + address + ':5557/device/' + liveId + '/connect';
+        let statusURL = 'http://' + restServerAddress + ':5557/device/' + liveId + '/connect';
 
         adapter.log.debug('[CONNECT] Check connection');
 
@@ -259,7 +267,7 @@ function connect(ip, cb) {
 
 function powerOff(liveId, cb) {
 
-    let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweroff';
+    let endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/poweroff';
     adapter.log.debug('[POWEROFF] Powering off Xbox' + ip +')');
 
     request(endpoint, (error, response, body) => {
@@ -283,10 +291,10 @@ function discoverAndUpdateConsole(ip, cb) { // is used by connect
     adapter.getState('info.connection', (err, state) => {
         let endpoint;
         if(!state || !state.val) {
-            endpoint = 'http://' + address + ':5557/device?addr=' + ip;
+            endpoint = 'http://' + restServerAddress + ':5557/device?addr=' + ip;
             adapter.log.debug('[DISCOVER] Searching for consoles');
         } else {
-            endpoint = 'http://' + address + ':5557/device/' + liveId;
+            endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId;
             adapter.log.debug('[UPDATE] Check console status');
         } // endElse
         let connectionState = false;
@@ -330,7 +338,7 @@ function discoverAndUpdateConsole(ip, cb) { // is used by connect
 } // endDiscover
 
 function powerOn(cb) {
-    let endpoint = 'http://' + address + ':5557/device/' + liveId + '/poweron?addr=' + ip;
+    let endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/poweron?addr=' + ip;
     if (!tryPowerOn) { // if Xbox isn't on after 17.5 seconds, stop trying
         tryPowerOn = setTimeout(() => tryPowerOn = false, 17500);
     } // endIf
@@ -464,11 +472,11 @@ function handleStateChange(state, id, cb) {
             sendMediaCmd('stop');
             break;
         case 'settings.inputText':
-            sendCustomCommand('http://' + address + ':5557/device/' + liveId + '/text/' + state,
+            sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/text/' + state,
                 () => adapter.setState(id, state, true));
             break;
         case 'settings.launchTitle':
-            sendCustomCommand('http://' + address + ':5557/device/' + liveId + '/launch/ms-xbl-' + state + '://',
+            sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/launch/ms-xbl-' + state + '://',
                 () => adapter.setState(id, state, true));
             break;
         default:
@@ -478,7 +486,7 @@ function handleStateChange(state, id, cb) {
 } // endHandleStateChange
 
 function sendButton(button, cb) {
-    let endpoint = 'http://' + address + ':5557/device/' + liveId + '/input/' + button;
+    let endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/input/' + button;
     let success = false;
 
     request(endpoint, (error, response, body) => {
@@ -494,7 +502,7 @@ function sendButton(button, cb) {
 } // endSendButton
 
 function sendMediaCmd(cmd, cb) {
-    let endpoint = 'http://' + address + ':5557/device/' + liveId + '/media/' + cmd;
+    let endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/media/' + cmd;
 
     request(endpoint, (error, response, body) => {
         if (error) adapter.log.error('[REQUEST] <=== ' + error.message);

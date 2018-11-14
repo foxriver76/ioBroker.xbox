@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.1.6",
+        "version": "0.1.7",
         "news": {
+            "0.1.7": {
+                "en": "Rest-Server will no be stopped at unload on windows too",
+                "de": "Rest-Server wird nun auch unter Windows bei triggern von unload gestoppt"
+            },
             "0.1.6": {
                 "en": "fix start of rest server for windows when nopy not in own node_modules",
                 "de": "Ergänzender Fix für das Starten des Rest Server unter Windows"
