@@ -45,6 +45,31 @@
                     });
                 }
             });
+            getIsAdapterAlive(function (isAlive) {
+                if (isAlive || common.enabled) {
+                    // Check authenticate checkbox on startup
+                    if ($('#authenticate').prop('checked')) {
+                        $('#password').prop('disabled', false);
+                        $('#mail').prop('disabled', false);
+                    } else {
+                        $('#password').prop('disabled', true);
+                        $('#mail').prop('disabled', true);
+                    } // endElse
+
+                    // Listen on checkbox changes
+                    $('#authenticate').on('change', function () {
+                        if ($(this).prop('checked')) {
+                            showToast(null, _('Please provide your Xbox Live account information'));
+                            $('#password').prop('disabled', false);
+                            $('#mail').prop('disabled', false);
+                            mail.focus();
+                        } else {
+                            $('#password').prop('disabled', true);
+                            $('#mail').prop('disabled', true);
+                        } // endElse
+                    });
+                }
+            });
             onChange(false);
             M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
         }
@@ -90,6 +115,22 @@
             <input class="value" id="ip" type="text">
             <label for="ip">IP</label>
             <span class="translate">Your consoles ip address</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12 m6 l4">
+            <input class="value" id="authenticate" type="checkbox">
+            <label for="authenticate" class="translate">Authenticate on Xbox Live</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12 m6 l4">
+            <input class="value" id="mail" type="text" disabled>
+            <label for="mail" class="translate">E-mail address</label>
+        </div>
+        <div class="input-field col s12 m6 l4">
+            <input class="value" id="password" type="password" disabled>
+            <label for="password" class="translate">Password</label>
         </div>
     </div>
 </div>

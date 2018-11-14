@@ -111,7 +111,9 @@
     },
     "native": {
         "ip": "",
-        "lvieId": ""
+        "lvieId": "",
+        "mail": "",
+        "password": ""
     },
     "objects": [],
     "instanceObjects": [
