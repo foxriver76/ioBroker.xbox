@@ -230,6 +230,12 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.2.0
+* (foxriver76) Authentication for Xbox Live added
+* (foxriver76) When logged in current titles contains the correct title full name
+* (foxriver76) Added decryption and encryption
+* (foxriver76) minor fixes
+
 ### 0.1.7
 * (foxriver76) rest-server will now be stopped on windows unload too
 * (foxriver76) enhanced windows debug logging

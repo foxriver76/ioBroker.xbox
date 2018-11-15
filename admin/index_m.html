@@ -45,55 +45,58 @@
         // the function loadSettings has to exist ...
         function load(settings, onChange) {
             // example: select elements with id=key and class=value and insert value
-            if (!settings) return;
-            $('.value').each(function () {
-                var $key = $(this);
-                var id = $key.attr('id');
-                if ($key.attr('type') === 'checkbox') {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.prop('checked', settings[id]).change(function () {
-                        onChange();
-                    });
-                } else {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.val(settings[id]).change(function () {
-                        onChange();
-                    }).keyup(function () {
-                        onChange();
-                    });
-                }
-            });
-            getIsAdapterAlive(function (isAlive) {
-                if (isAlive || common.enabled) {
-                    // Check authenticate checkbox on startup
-                    var $authenticate = $('#authenticate');
-                    var $password = $('#password');
-                    var $mail = $('#mail');
-                    if ($authenticate.prop('checked')) {
-                        $password.prop('disabled', false);
-                        $mail.prop('disabled', false);
+            socket.emit('getObject', 'system.config', function (err, obj) {
+                secret = (obj.native ? obj.native.secret : '') || 'Zgfr56gFe87jJOM';
+                if (!settings) return;
+                $('.value').each(function () {
+                    var $key = $(this);
+                    var id = $key.attr('id');
+                    if ($key.attr('type') === 'checkbox') {
+                        // do not call onChange direct, because onChange could expect some arguments
+                        $key.prop('checked', settings[id]).change(function () {
+                            onChange();
+                        });
                     } else {
-                        $password.prop('disabled', true);
-                        $mail.prop('disabled', true);
-                    } // endElse
-
-                    // Listen on checkbox changes
-                    $authenticate.on('change', function () {
-                        if ($(this).prop('checked')) {
-                            showToast(null, _('Please provide your Xbox Live account information'));
+                        // do not call onChange direct, because onChange could expect some arguments
+                        $key.val(settings[id]).change(function () {
+                            onChange();
+                        }).keyup(function () {
+                            onChange();
+                        });
+                    }
+                });
+                getIsAdapterAlive(function (isAlive) {
+                    if (isAlive || common.enabled) {
+                        // Check authenticate checkbox on startup
+                        var $authenticate = $('#authenticate');
+                        var $password = $('#password');
+                        var $mail = $('#mail');
+                        if ($authenticate.prop('checked')) {
                             $password.prop('disabled', false);
                             $mail.prop('disabled', false);
-                            $mail.focus();
                         } else {
                             $password.prop('disabled', true);
                             $mail.prop('disabled', true);
                         } // endElse
-                    });
-                }
+
+                        // Listen on checkbox changes
+                        $authenticate.on('change', function () {
+                            if ($(this).prop('checked')) {
+                                showToast(null, _('Please provide your Xbox Live account information'));
+                                $password.prop('disabled', false);
+                                $mail.prop('disabled', false);
+                                $mail.focus();
+                            } else {
+                                $password.prop('disabled', true);
+                                $mail.prop('disabled', true);
+                            } // endElse
+                        });
+                    }
+                });
+                onChange(false);
+                M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
             });
-            onChange(false);
-            M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
-        }
+        } // endLoad
 
         // ... and the function save has to exist.
         // you have to make sure the callback is called with the settings object as first param!

@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.1.7",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "added authentication for xboxLive",
+                "de": "Authentikation zu Xbox Live hinzugefügt"
+            },
             "0.1.7": {
                 "en": "Rest-Server will no be stopped at unload on windows too",
                 "de": "Rest-Server wird nun auch unter Windows bei triggern von unload gestoppt"
