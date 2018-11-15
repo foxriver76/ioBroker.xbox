@@ -108,7 +108,7 @@
                 if ($this.attr('type') === 'checkbox') {
                     obj[$this.attr('id')] = $this.prop('checked');
                 } else {
-                    obj[$this.attr('id')] = $this.val();
+                    obj[$this.attr('id')] = $this.data('crypt') && $this.val() ? encrypt(secret, $this.val()) : $this.val();
                 }
             });
             callback(obj);
