@@ -641,8 +641,7 @@
                 "name": "Input Text",
                 "type": "string",
                 "read": true,
-                "write": true,
-                "def": false
+                "write": true
             },
             "native": {
             }
@@ -655,8 +654,7 @@
                 "name": "Launch Title",
                 "type": "string",
                 "read": true,
-                "write": true,
-                "def": false
+                "write": true
             },
             "native": {
             }
@@ -669,8 +667,33 @@
                 "name": "Current Titles",
                 "type": "string",
                 "read": true,
-                "write": false,
-                "def": false
+                "write": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.activeTitleName",
+            "type": "state",
+            "common": {
+                "role": "name.title",
+                "name": "Active title name",
+                "type": "string",
+                "read": true,
+                "write": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.activeTitleId",
+            "type": "state",
+            "common": {
+                "role": "id.title",
+                "name": "Active title id",
+                "type": "string",
+                "read": true,
+                "write": false
             },
             "native": {
             }

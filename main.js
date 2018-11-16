@@ -13,6 +13,9 @@ const os = require('os').platform();
 const restServerAddress = 'localhost'; // host of the REST server
 let liveId;
 let ip;
+let mail;
+let password;
+let authenticate;
 let blockXbox = false;
 let tryPowerOn = false;
 let xboxPingable = false;
@@ -37,18 +40,19 @@ adapter.on('unload', callback => {
             killCmd = 'pkill -f xbox-rest-server';
         } // endElse
 
-        exec(killCmd, (error, stdout, stderr) => {
-            if (!error) {
-                adapter.log.info('[END] REST server stopped');
-            } else {
-                adapter.log.info('[END] REST server stopped ' + stderr);
-            } // endElse
+        logOut(() => {
+            exec(killCmd, (error, stdout, stderr) => {
+                if (!error) {
+                    adapter.log.info('[END] REST server stopped');
+                } else {
+                    adapter.log.info('[END] REST server stopped ' + stderr);
+                } // endElse
 
-            adapter.setState('info.connection', false, true);
-            adapter.log.info('[END] cleaned everything up...');
-            callback();
+                adapter.setState('info.connection', false, true);
+                adapter.log.info('[END] cleaned everything up...');
+                callback();
+            });
         });
-
     } catch (e) {
         callback();
     } // endTryCatch
@@ -91,6 +95,9 @@ adapter.on('ready', () => {
 
     ip = adapter.config.ip;
     liveId = adapter.config.liveId;
+    authenticate = adapter.config.authenticate || false;
+    mail = adapter.config.mail || '';
+    password = adapter.config.password || '';
 
     if (!ip || !liveId) {
         adapter.log.warn('Please provide the ip address and the Live ID of your console');
@@ -99,6 +106,7 @@ adapter.on('ready', () => {
         adapter.log.debug('[START] IP address is ' + ip);
         adapter.log.info('[START] Starting REST server');
     } // endElse
+
     if (os.startsWith('win')) {
         // Get correct python directory for windows
         exec('dir /B ' + __dirname + '\\python_modules\\Python3', (err, stdout, stderr) => {
@@ -122,12 +130,17 @@ adapter.on('ready', () => {
         });
     } // endElse
 
-    setTimeout(() => main(), 4000); // Server needs time to start
+    prepareAuthentication(authenticate, () => setTimeout(() => main(), 6500)); // Server needs time to start
 });
 
 function main() {
 
     adapter.subscribeStates('*');
+
+    // Authenticate on Xbox Live, make sure to be logged out first
+    if (authenticate) {
+        logOut(() => authenticateOnServer());
+    } // endIf
 
     // Get Rest Server PID once for killing on windows
     if (os.startsWith('win')) {
@@ -155,17 +168,31 @@ function main() {
                           if(error)
                               return adapter.log.warn('[STATUS] <=== Error getting status: ' + error.message);
 
-                          let activeTitles = JSON.parse(body).console_status.active_titles;
-                          let activeTitlesState = {};
-                          for (let i in activeTitles) {
-                              let titleName = activeTitles[i].name.split('_')[0];
-                              let titleHex = parseInt(activeTitles[i].title_id).toString(16);
-                              activeTitlesState[titleName] = titleHex;
+                          let currentTitles = JSON.parse(body).console_status.active_titles;
+                          let currentTitlesState = {};
+                          let activeName;
+                          let activeHex;
+                          for (let i in currentTitles) {
+                              let titleName = currentTitles[i].name.split('_')[0];
+                              let titleHex = parseInt(currentTitles[i].title_id).toString(16);
+                              currentTitlesState[titleName] = titleHex;
+                              if(currentTitles[i].has_focus) {
+                                  activeName = titleName;
+                                  activeHex = titleHex;
+                              }
                           } // endFor
-                          adapter.log.debug('[STATUS] Set ' + JSON.stringify(activeTitlesState));
+                          adapter.log.debug('[STATUS] Set ' + JSON.stringify(currentTitlesState));
                           adapter.getState('info.currentTitles', (err, state) => {
-                              if (!state || state.val !== JSON.stringify(activeTitlesState))
-                                adapter.setState('info.currentTitles', JSON.stringify(activeTitlesState), true);
+                              if (!state || state.val !== JSON.stringify(currentTitlesState))
+                                adapter.setState('info.currentTitles', JSON.stringify(currentTitlesState), true);
+                          });
+                          adapter.getState('info.activeTitleName', (err, state) => {
+                              if (!state || state.val !== activeName)
+                                  adapter.setState('info.activeTitleName', activeName, true);
+                          });
+                          adapter.getState('info.activeTitleId', (err, state) => {
+                              if (!state || state.val !== activeHex)
+                                  adapter.setState('info.activeTitleId', activeHex, true);
                           });
                       });
                     } // endIf
@@ -479,6 +506,9 @@ function handleStateChange(state, id, cb) {
             sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/launch/ms-xbl-' + state + '://',
                 () => adapter.setState(id, state, true));
             break;
+        case 'settings.gameDvr':
+            sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/gamedvr');
+            break;
         default:
             adapter.log.warn('[COMMAND] ===> Not a valid id: ' + id)
     } // endSwitch
@@ -579,3 +609,113 @@ function decrypt(key, value) {
     }
     return result;
 } // endDecrypt
+
+function authenticateOnServer(cb) {
+    request.post('http://' + restServerAddress + ':5557/auth/login',
+            {form: {email: mail, password: password}}, (err, response, body) => {
+        if (err || JSON.parse(body).success === false) {
+            adapter.log.warn('[LOGIN] <=== Error: ' + body);
+            adapter.getState('info.authenticated', (err, state) => {
+               if (!state || state.val) {
+                   adapter.setState('info.authenticated', false, true);
+               } // endIf
+            });
+            adapter.getState('info.gamertag', (err, state) => {
+                if (state && state.val !== '') {
+                    adapter.setState('info.gamertag', '', true);
+                } // endIf
+            });
+        } else {
+            adapter.log.debug('[LOGIN] <=== Successfully logged in: ' + body);
+            adapter.getState('info.authenticated', (err, state) => {
+                if (!state || !state.val) {
+                    adapter.setState('info.authenticated', true, true);
+                } // endIf
+            });
+            adapter.getState('info.gamertag', (err, state) => {
+                if (state && state.val !== JSON.parse(body).gamertag) {
+                    adapter.setState('info.gamertag', JSON.parse(body).gamertag, true);
+                } // endIf
+            });
+        } // endElse
+
+        if (cb && typeof(cb === 'function')) cb();
+    });
+} // endAuthenticateOnServer
+
+function logOut(cb) {
+    request.post('http://' + restServerAddress + ':5557/auth/logout', (err, response, body) => {
+
+        if (!err && JSON.parse(body).success) {
+            adapter.log.debug('[LOGOUT] <=== Successfully logged out');
+            adapter.setState('info.authenticated', false, true);
+            adapter.setState('info.gamertag', '', true, () => {
+                if (cb && typeof(cb === 'function')) cb();
+            });
+        } else {
+            adapter.log.debug('[LOGOUT] <=== Failed to logout: ' + body);
+            if (cb && typeof(cb === 'function')) cb();
+        } // endElse
+    });
+} // endLogOut
+
+function prepareAuthentication(authenticate, cb) {
+    if (authenticate) {
+        // create Auth-Only Objects
+        adapter.setObjectNotExists('info.authenticated', {
+            type: 'state',
+            common: {
+                name: 'Xbox Live authenticated',
+                role: 'indicator.authenticated',
+                type: 'boolean',
+                read: true,
+                write: false,
+                def: false
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('info.gamertag', {
+            type: 'state',
+            common: {
+                name: 'Authenticated Gamertag',
+                role: 'name.user',
+                type: 'string',
+                read: true,
+                write: false
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('settings.gameDvr', {
+            type: 'state',
+            common: {
+                name: 'Authenticated Gamertag',
+                role: 'button',
+                type: 'boolean',
+                read: true,
+                write: true
+            },
+            native: {}
+        }, () => {
+            adapter.getForeignObject('system.config', (err, obj) => {
+                if (obj && obj.native && obj.native.secret) {
+                    password = decrypt(obj.native.secret, password);
+                    mail = decrypt(obj.native.secret, mail);
+                } else {
+                    password = decrypt('Zgfr56gFe87jJOM', password);
+                    mail = decrypt('Zgfr56gFe87jJOM', mail);
+                } // endElse
+                if (cb && typeof(cb) === "function") return cb();
+            });
+        });
+    } else {
+        // del Objects
+        adapter.delObject('info.authenticated');
+        adapter.delObject('info.gamertag');
+        adapter.delObject('info.gameDvr', () => {
+            if (cb && typeof(cb) === "function") return cb();
+        });
+    } // endElse
+
+}
