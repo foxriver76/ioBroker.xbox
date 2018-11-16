@@ -172,6 +172,7 @@ function main() {
                           let currentTitlesState = {};
                           let activeName;
                           let activeHex;
+                          let activeImage;
                           for (let i in currentTitles) {
                               let titleName = currentTitles[i].name.split('_')[0];
                               let titleHex = parseInt(currentTitles[i].title_id).toString(16);
@@ -179,6 +180,7 @@ function main() {
                               if(currentTitles[i].has_focus) {
                                   activeName = titleName;
                                   activeHex = titleHex;
+                                  activeImage = currentTitles[i].image || '';
                               }
                           } // endFor
                           adapter.log.debug('[STATUS] Set ' + JSON.stringify(currentTitlesState));
@@ -193,6 +195,10 @@ function main() {
                           adapter.getState('info.activeTitleId', (err, state) => {
                               if (!state || state.val !== activeHex)
                                   adapter.setState('info.activeTitleId', activeHex, true);
+                          });
+                          adapter.getState('info.activeTitleImage', (err, state) => {
+                              if (!state || state.val !== activeImage)
+                                  adapter.setState('info.activeTitleImage', activeImage, true);
                           });
                       });
                     } // endIf
@@ -675,6 +681,18 @@ function prepareAuthentication(authenticate, cb) {
             native: {}
         });
 
+        adapter.setObjectNotExists('info.activeTitleImage', {
+            type: 'state',
+            common: {
+                name: 'Active title image',
+                role: 'icon',
+                type: 'string',
+                read: true,
+                write: false
+            },
+            native: {}
+        });
+
         adapter.setObjectNotExists('info.gamertag', {
             type: 'state',
             common: {
@@ -713,6 +731,7 @@ function prepareAuthentication(authenticate, cb) {
         // del Objects
         adapter.delObject('info.authenticated');
         adapter.delObject('info.gamertag');
+        adapter.delObject('info.activeTitleImage');
         adapter.delObject('info.gameDvr', () => {
             if (cb && typeof(cb) === "function") return cb();
         });
