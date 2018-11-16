@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "news": {
+            "0.2.2": {
+                "en": "Minor fix when currentTitles empty, activeTitle states should be too",
+                "de": "Fix, dass in activeTitle states keine Angaben mehr stehen, wenn currenTitles leer ist"
+            },
             "0.2.1": {
                 "en": "minor fix on state name",
                 "de": "Fix für State Name"

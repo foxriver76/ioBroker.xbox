@@ -49,6 +49,11 @@ adapter.on('unload', callback => {
                 } // endElse
 
                 adapter.setState('info.connection', false, true);
+                adapter.setState('info.activeTitleImage', '', true);
+                adapter.setState('info.activeTitleName', '', true);
+                adapter.setState('info.activeTitleId', '', true);
+                adapter.setState('info.currentTitles', '{}', true);
+
                 adapter.log.info('[END] cleaned everything up...');
                 callback();
             });
@@ -170,9 +175,9 @@ function main() {
 
                           let currentTitles = JSON.parse(body).console_status.active_titles;
                           let currentTitlesState = {};
-                          let activeName;
-                          let activeHex;
-                          let activeImage;
+                          let activeName = '';
+                          let activeHex = '';
+                          let activeImage = '';
                           for (let i in currentTitles) {
                               let titleName = currentTitles[i].name.split('_')[0];
                               let titleHex = parseInt(currentTitles[i].title_id).toString(16);
@@ -207,6 +212,10 @@ function main() {
                 adapter.getState('info.connection', (err, state) => {
                     if ((!state || state.val) && !xboxAvailable) {
                         adapter.setState('info.connection', false, true);
+                        adapter.setState('info.activeTitleImage', '', true);
+                        adapter.setState('info.activeTitleName', '', true);
+                        adapter.setState('info.activeTitleId', '', true);
+                        adapter.setState('info.currentTitles', '{}', true);
                         adapter.log.info('[PING] Lost connection to your Xbox (' + ip + ')');
                         firstReconnectAttempt = true;
                     } // endIf
@@ -255,6 +264,10 @@ function connect(ip, cb) {
             adapter.getState('info.connection', (err, state) => {
                 if (!state || state.val) {
                     adapter.setState('info.connection', false, true);
+                    adapter.setState('info.activeTitleImage', '', true);
+                    adapter.setState('info.activeTitleName', '', true);
+                    adapter.setState('info.activeTitleId', '', true);
+                    adapter.setState('info.currentTitles', '{}', true);
                     adapter.log.info('[CONNECT] Lost connection to your Xbox (' + ip + ')');
                     firstReconnectAttempt = true;
                 } // endIf
@@ -306,8 +319,6 @@ function powerOff(liveId, cb) {
     request(endpoint, (error, response, body) => {
         if (!error) {
             if (JSON.parse(body).success) {
-                adapter.setState('info.connection', false, true);
-                adapter.log.info('[POWEROFF] Connection to Xbox closed');
                 adapter.log.debug('[POWEROFF] <=== ' + body);
             } else {
                 adapter.log.warn('[POWEROFF] <=== ' + body);

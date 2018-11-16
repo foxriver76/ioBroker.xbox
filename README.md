@@ -302,6 +302,11 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.2.2
+* (foxriver76) minor fix when currentTitles empty, activeTitle states should be too
+* (foxriver76) dont set info.connection on power off, because will be
+self detected and prevents reconnection on shutdown
+
 ### 0.2.1
 * (foxriver76) minor fix on state name
 
