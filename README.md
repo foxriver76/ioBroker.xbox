@@ -302,6 +302,9 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.2.1
+* (foxriver76) minor fix on state name
+
 ### 0.2.0
 * (foxriver76) Authentication for Xbox Live added
 * (foxriver76) When logged in current titles contains the correct title full name

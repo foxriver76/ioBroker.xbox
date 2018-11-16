@@ -708,7 +708,7 @@ function prepareAuthentication(authenticate, cb) {
         adapter.setObjectNotExists('settings.gameDvr', {
             type: 'state',
             common: {
-                name: 'Authenticated Gamertag',
+                name: 'Game Recorder',
                 role: 'button',
                 type: 'boolean',
                 read: true,

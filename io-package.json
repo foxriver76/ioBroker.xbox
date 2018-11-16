@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "news": {
+            "0.2.1": {
+                "en": "minor fix on state name",
+                "de": "Fix für State Name"
+            },
             "0.2.0": {
                 "en": "added authentication for xboxLive",
                 "de": "Authentikation zu Xbox Live hinzugefügt"
