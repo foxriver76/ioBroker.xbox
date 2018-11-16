@@ -51,6 +51,9 @@ npm i iobroker.xbox --unsafe-perm
 1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
 2. Fill in the ip address of your Xbox. <br/>
 ![Adapter Configuration](/doc/adapter-configuration.png)
+3. If you want to use the features which require authentication on Xbox Live,
+you have to enable the authenticate checkbox.
+4. Provide the e-mail address as well as the password of you Xbox Live account.
 
 ## States
 In this section you can find a description of every state of the adapter.
@@ -58,22 +61,81 @@ In this section you can find a description of every state of the adapter.
 ### Channel Info
 
 * info.connection
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |boolean|R|
    
    *Read-only boolean indicator. Is true if adapter is connected to Xbox.*
 
 * info.currentTitles
 
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R|
+
    *Read-only JSON string, which consits of key-value pairs. The key is the name of an active title,
    while the value is the title id converted to hexadecimal. The hex title id can be used to launch a
    title via the settings.launchTitlte state.*
+
+* info.activeTitleName
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R|
+
+    *Contains the name of the active title (which is focused) as read-only string.*
+
+* info.activeTitleId
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R|
+
+    *Contains the id (converted to hex) of the active title (which is focused) as read-only string.*
+
+* info.activeTitleImage
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R|
+
+    *Contains the link to the active titles (which is focused) cover image as a string.
+    The state is only available when authenticate is activated in the settings.*
+
+* info.gamertag
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R|
+
+    *String which contains the gamertag of the currently authenticated user.
+    The state is only available when authenticate is activated in the settings.*
+
+* info.authenticated
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |boolean|R|
+
+    *Boolean value which indicates if you are successfully authenticated on Xbox Live.
+    The state is only available when authenticate is activated in the settings.*
    
 ### Channel Settings
 
 * settings.power
 
+    |Data type|Permission|
+    |:---:|:---:|
+    |boolean|R/W|
+
    *Boolean-value to turn your Xbox on and off. State also indicates current power status of the Xbox.*
 
 * settings.launchTitle
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R/W|
 
    *A writable string, which allows the user to launch a specific title by its title id
    (converted to hexadecimal). To find out about the hex code of a desired title, you can
@@ -87,6 +149,10 @@ In this section you can find a description of every state of the adapter.
 
 * settings.inputText
 
+    |Data type|Permission|
+    |:---:|:---:|
+    |string|R/W|
+
    *Writable string, which allows the user to fill text into an active text field, e.g. to send
    private messages. The command is acknowledged when it has arrived at the server, which does
    not mean, that the command has been executed.*
@@ -95,6 +161,12 @@ In this section you can find a description of every state of the adapter.
    ```javascript
    setState('settings.inputText', 'H1 M8 h0w d0 u do?', false); // Send a super nerdy text to someone
    ```
+
+* settings.gameDvr
+
+    *Button which records the previous minute of gameplay. The button is available when
+    authenticate is turned on in the settings. You have to be logged in on your Xbox with the same account
+    as you are authenticated with. A game needs to be in foreground.*
 
 ### Channel Gamepad
 
@@ -235,6 +307,7 @@ In this section you can find a description of every state of the adapter.
 * (foxriver76) When logged in current titles contains the correct title full name
 * (foxriver76) Added decryption and encryption
 * (foxriver76) minor fixes
+* (foxriver76) Added new states
 
 ### 0.1.7
 * (foxriver76) rest-server will now be stopped on windows unload too
