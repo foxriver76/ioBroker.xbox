@@ -255,7 +255,7 @@ function connect(ip, cb) {
                     adapter.log.debug('[CONNECT] Currently connecting');
                 } else {
                     adapter.setState('info.connection', true, true);
-                    adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
+                    adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + device.address + ')');
                 } // endIf
 
                 if (cb && typeof(cb) === "function") return cb(connectionState);
@@ -278,7 +278,7 @@ function connect(ip, cb) {
                     if (!error) {
                         if (JSON.parse(body).success) {
                             adapter.setState('info.connection', true, true);
-                            adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + JSON.stringify(device.address) + ')');
+                            adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + device.address + ')');
                             connectionState = true;
                         } else {
                             if (firstReconnectAttempt)
