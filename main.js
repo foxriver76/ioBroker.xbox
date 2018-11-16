@@ -639,7 +639,7 @@ function authenticateOnServer(cb) {
             });
         } // endElse
 
-        if (cb && typeof(cb === 'function')) cb();
+        if (cb && typeof(cb === 'function')) return cb();
     });
 } // endAuthenticateOnServer
 
@@ -650,11 +650,11 @@ function logOut(cb) {
             adapter.log.debug('[LOGOUT] <=== Successfully logged out');
             adapter.setState('info.authenticated', false, true);
             adapter.setState('info.gamertag', '', true, () => {
-                if (cb && typeof(cb === 'function')) cb();
+                if (cb && typeof(cb === 'function')) return cb();
             });
         } else {
             adapter.log.debug('[LOGOUT] <=== Failed to logout: ' + body);
-            if (cb && typeof(cb === 'function')) cb();
+            if (cb && typeof(cb === 'function')) return cb();
         } // endElse
     });
 } // endLogOut
