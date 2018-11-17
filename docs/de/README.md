@@ -1,4 +1,4 @@
-![Logo](admin/xbox.png)
+![Logo](media/xbox.png)
 
 # Xbox One Adapter
 
@@ -36,7 +36,7 @@ You can install the adapter via Admin interface or on your terminal.
 2. Click on Tab "Adapters"
 3. Type "Xbox" in the filter
 4. Click on the three points and then on the "+" symbol of the Xbox adapter <br/>
-![Add Adapter](/docs/de/img/plusAddAdapter.png)
+![Add Adapter](/docs/de/media/plusAddAdapter.png)
 
 ### Terminal
 Navigate into your ioBroker folder and execute the following command (on Linux Root privileges are required to install 
@@ -49,7 +49,7 @@ npm i iobroker.xbox --unsafe-perm
 ### Setup
 1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
 2. Fill in the ip address of your Xbox. <br/>
-![Adapter Configuration](/docs/de/img/adapter-configuration.png)
+![Adapter Configuration](/docs/de/media/adapter-configuration.png)
 3. If you want to use the features which require authentication on Xbox Live,
 you have to enable the authenticate checkbox.
 4. Provide the e-mail address as well as the password of you Xbox Live account.
