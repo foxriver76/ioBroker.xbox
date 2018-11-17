@@ -41,7 +41,8 @@ Die ausführliche Anleitung für die dazu notwendigen Installatonschritte kann h
 Nach Abschluss der Installation einer Adapterinstanz öffnet sich automatisch ein Konfigurationsfenster.
 
 ## Konfiguration
-![Adapter Configuration](media/adapter-configuration.png "Konfiguration")<span style="color:grey">*Admin Oberfläche*</span>
+![Adapter Configuration](media/adapter-configuration.png "Konfiguration")<br/>
+<span style="color:grey">*Admin Oberfläche*</span>
 
 | Feld         | Beschreibung |
 |:-------------|:-------------|
@@ -57,8 +58,8 @@ Dadurch efolgt im Anschluß ein Neustart des Adapters.
 ## Instanzen
 Die Installation des Adapters hat im Bereich `Instanzen` eine aktive Instanz des Xbox Adapters angelegt.
 <br/><br/>
-![Instanz](media/instance.png "Instanz")<span style="color:grey">
-*Erste Instanz*</span>
+![Instanz](media/instance.png "Instanz")<br/>
+<span style="color:grey">*Erste Instanz*</span>
 
 Auf einem ioBroker Server können mehrere Xbox Adapter Instanzen angelegt werden. Ebenfalls kann eine mit mehreren
 ioBroker Servern gleichzeitig verbunden sein. Sollen mehrere Geräte von einem ioBroker Server gesteuert werden, sollte
@@ -73,8 +74,8 @@ unterstützen Informationen und Aktivitäten aufgelistet. Zusätzlich wird auch 
 darüber informiert, ob die Kommunikation mit der Xbox reibungslos erfolgt.
 
 
-![Objekte](media/objects.png "Xbox Objekte")<span style="color:grey">
-*Objekte des Xbox Adapters*</span>
+![Objekte](media/objects.png "Xbox Objekte")</br>
+<span style="color:grey">*Objekte des Xbox Adapters*</span>
 
 Nachfolgend werden die Objekte nach Channel unterteilt.
 Jeder Datenpunkt ist mit seinem zugehörigen Datentyp sowie seinen Berechtigungen aufgehführt. Insofern es sich um einen Button
