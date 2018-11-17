@@ -1,63 +1,89 @@
 ![Logo](media/xbox.png)
 
-# Xbox One Adapter
+# Xbox Adapter
 
 Der Xbox Adapter ermöglicht die Einbindung einer Xbox One bzw. Xbox One X
 Spielekonsole in das ioBroker System.
 
 ## Überblick
 
-## Steps 
+### Xbox One Spielekonsole
+Die Xbox One ist eine von Microsoft entwickelte Spielekonsole, die aktuell gängige
+Videospiele wiedergeben kann. Zusätzlich ist die Xbox One fähig, diverese Komponenten
+des Heimkinosystems zu steuern und ermöglicht die Nutzung von Microsoft Apps. <br/>
+Weiter Ausprägungen der Xbox One sind derzeit die Xbox One X und die Xbox One S, welche
+die gleichen Funktionalitäten wie die Ursprungskonsole, jedoch mit verbesserter Leistung
+bieten.
 
-* Fulfill the requirements
-* Install the adapter and control your Xbox One or Xbox One X
+### Xbox Adapter
+Der Xbox Adapter kann für je eine Xbox One Konsole eingerichtet werden, was eine
+Steuerung sowie das Auslesen von Informationen ermöglicht. <br/>
+Der Adapter legt automatisch alle Befehle und Stati in Form von Objekten an.
+Ein Großteil der Stati kann ebenfalls ausgelesen werden, wie z. B. der aktuelle Titel, der Einschaltzustand usw.
+Durch geziehltes Beschreiben oder Lesen der angelegten Objekten kann deren Status geändert und
+damit Aktionen ausgelöst oder auch abgefragt werden.
 
-## Requirements
+## Voraussetzungen vor der Installation
+1. Bevor der Adapter hinzugefügt werden kann, muss mindestens Python 3.5 auf dem Hostsystem
+installiert sein.
+2. Wenn die Xbox über den Adapter eingeschaltet werden soll, muss der
+['Schnelles Hochfahren'-Modus](https://support.xbox.com/de-DE/xbox-one/console/learn-about-power-modes)
+in der Konsole konfiguriert sein.
 
-* You need to have Python >= 3.5 installed
-* For Linux additional packages are required.
-   
-   The required packages will automatically be installed. Due to this fact root privileges are required as well as the 
-   --unsafe-perm flag. If this fails, you have to install the packages manually (build-essential libssl-dev libffi-dev 
-   python3-dev).
-* If you want to power your Xbox on with this adapter, you have to
-[configure the instant-on power modus](https://support.xbox.com/en-GB/xbox-one/console/learn-about-power-modes) on your Xbox.
-
-## Acknowledgement
-Thanks to [Team Open Xbox](https://openxbox.org/) for developing and maintaining the
-[xbox-rest-server](https://github.com/OpenXbox/xbox-smartglass-rest-python) and the related libraries.
-Without their effort, developing this package would not be possible.
+## Danksagung
+Vielen Dank an [Team Open Xbox](https://openxbox.org/) für die Entwicklung und Bereitstellung des
+[xbox-rest-server](https://github.com/OpenXbox/xbox-smartglass-rest-python) sowie den zugehörigen Bilbiotheken.
 
 ## Installation
-You can install the adapter via Admin interface or on your terminal.
+Eine Instanz des Adapters wird über die ioBroker Admin-Oberfläche installiert.
+Die ausführliche Anleitung für die dazu notwendigen Installatonschritte kann hier (TODO:LINK) nachgelesen werden.
+<br/><br/>
+Nach Abschluss der Installation einer Adapterinstanz öffnet sich automatisch ein Konfigurationsfenster.
 
-### Admin
-1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
-2. Click on Tab "Adapters"
-3. Type "Xbox" in the filter
-4. Click on the three points and then on the "+" symbol of the Xbox adapter <br/>
-![Add Adapter](/docs/de/media/plusAddAdapter.png)
+## Konfiguration
+![Adapter Configuration](media/adapter-configuration.png "Konfiguration")<span style="color:grey">*Admin Oberfläche*</span>
 
-### Terminal
-Navigate into your ioBroker folder and execute the following command (on Linux Root privileges are required to install 
-the additional packages, use sudo):
- 
-```bash
-npm i iobroker.xbox --unsafe-perm
-```
+| Feld         | Beschreibung |
+|:-------------|:-------------|
+|Xbox Live ID  |Hier soll die Live ID der Xbox eingetragen werden, welche in den Einstellungen der Konsole zu finden ist.|
+|IP            |Hier soll die IP-Adresse der Konsole eingetragen werden.|
+|Authentifizierung bei Xbox Live|Wenn die Checkbox angehakt wurde, wird sich mit der E-Mail Adresse und Password bei Xbox Live eingeloggt.|
+|E-Mail Adresse|Hier soll die E-Mail Adresse des Xbox Live Kontos eingetragen werden.|
+|Passwort      |Hier soll das zugehörige Passwort für das Xbox Live Konto eingegeben werden.|
 
-### Setup
-1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
-2. Fill in the ip address of your Xbox. <br/>
-![Adapter Configuration](/docs/de/media/adapter-configuration.png)
-3. If you want to use the features which require authentication on Xbox Live,
-you have to enable the authenticate checkbox.
-4. Provide the e-mail address as well as the password of you Xbox Live account.
+Nach Abschluss der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen.
+Dadurch efolgt im Anschluß ein Neustart des Adapters.
 
-## States
-In this section you can find a description of every state of the adapter.
+## Instanzen
+Die Installation des Adapters hat im Bereich `Instanzen` eine aktive Instanz des Xbox Adapters angelegt.
+<br/><br/>
+![Instanz](media/instance.png "Instanz")<span style="color:grey">
+*Erste Instanz*</span>
 
-### Channel Info
+Auf einem ioBroker Server können mehrere Xbox Adapter Instanzen angelegt werden. Ebenfalls kann eine mit mehreren
+ioBroker Servern gleichzeitig verbunden sein. Sollen mehrere Geräte von einem ioBroker Server gesteuert werden, sollte
+je Xbox eine Instanz angelegt werden.
+<br/><br/>
+Ob der Adapter aktiviert oder mit der Xbox verbunden ist, wird mit der Farbe des Status-Feldes der
+Instanz verdeutlicht. Zeigt der Mauszeiger auf das Symbol, werden weitere Detailinformationen dargestellt.
+
+## Objekte des Adapters
+Im Bereich `Objekte` werden in einer Baumstruktur alle von der Xbox
+unterstützen Informationen und Aktivitäten aufgelistet. Zusätzlich wird auch noch
+darüber informiert, ob die Kommunikation mit der Xbox reibungslos erfolgt.
+
+
+![Objekte](media/objects.png "Xbox Objekte")<span style="color:grey">
+*Objekte des Xbox Adapters*</span>
+
+Nachfolgend werden die Objekte nach Channel unterteilt.
+Jeder Datenpunkt ist mit seinem zugehörigen Datentyp sowie seinen Berechtigungen aufgehführt. Insofern es sich um einen Button
+handelt, wird auf die Beschreibung des Typs und der Rechte verzichtet.
+Berechtigungen können lesend (R) sowie schreibend (W) sein. Jeder Datenpunkt kann mindestens gelesen (R) werden, während
+andere ebenfalls beschrieben werden können. Zur Suche nach einem bestimmten Datenpunkt empfiehlt sich die Suche mittels
+der Tastenkombination "STRG + F".
+
+### Channel: Info
 
 * info.connection
 
@@ -65,7 +91,7 @@ In this section you can find a description of every state of the adapter.
     |:---:|:---:|
     |boolean|R|
    
-   *Read-only boolean indicator. Is true if adapter is connected to Xbox.*
+   *Nur lesbarer Indikator, der true ist, wenn der ioBroker mit der Xbox verbunden ist.*
 
 * info.currentTitles
 
@@ -128,7 +154,7 @@ In this section you can find a description of every state of the adapter.
     *Boolean value which indicates if you are successfully authenticated on Xbox Live.
     The state is only available when authenticate is activated in the settings.*
    
-### Channel Settings
+### Channel: Settings
 
 * settings.power
 
@@ -175,7 +201,7 @@ In this section you can find a description of every state of the adapter.
     authenticate is turned on in the settings. You have to be logged in on your Xbox with the same account
     as you are authenticated with. A game needs to be in foreground.*
 
-### Channel Gamepad
+### Channel: Gamepad
 
 * gamepad.a
 
@@ -245,7 +271,7 @@ In this section you can find a description of every state of the adapter.
 
    *Emulates the View (Xbox) button of your Xbox.*
    
-### Channel Media
+### Channel: Media
 
 * media.play
 
