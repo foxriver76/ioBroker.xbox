@@ -53,6 +53,7 @@ adapter.on('unload', callback => {
                 adapter.setState('info.activeTitleName', '', true);
                 adapter.setState('info.activeTitleId', '', true);
                 adapter.setState('info.currentTitles', '{}', true);
+                adapter.setState('info.activeTitleType', '', true);
 
                 adapter.log.info('[END] cleaned everything up...');
                 callback();
@@ -178,6 +179,7 @@ function main() {
                           let activeName = '';
                           let activeHex = '';
                           let activeImage = '';
+                          let activeType = '';
                           for (let i in currentTitles) {
                               let titleName = currentTitles[i].name.split('_')[0];
                               let titleHex = parseInt(currentTitles[i].title_id).toString(16);
@@ -186,7 +188,8 @@ function main() {
                                   activeName = titleName;
                                   activeHex = titleHex;
                                   activeImage = currentTitles[i].image || '';
-                              }
+                                  activeType = currentTitles[i].type || '';
+                              } // endIf
                           } // endFor
                           adapter.log.debug('[STATUS] Set ' + JSON.stringify(currentTitlesState));
                           adapter.getState('info.currentTitles', (err, state) => {
@@ -205,6 +208,10 @@ function main() {
                               if (!state || state.val !== activeImage)
                                   adapter.setState('info.activeTitleImage', activeImage, true);
                           });
+                          adapter.getState('info.activeTitleType', (err, state) => {
+                              if (!state || state.val !== activeType)
+                                  adapter.setState('info.activeTitleType', activeType, true);
+                          });
                       });
                     } // endIf
                 });
@@ -216,6 +223,8 @@ function main() {
                         adapter.setState('info.activeTitleName', '', true);
                         adapter.setState('info.activeTitleId', '', true);
                         adapter.setState('info.currentTitles', '{}', true);
+                        adapter.setState('info.activeTitleType', '', true);
+
                         adapter.log.info('[PING] Lost connection to your Xbox (' + ip + ')');
                         firstReconnectAttempt = true;
                     } // endIf
@@ -268,7 +277,8 @@ function connect(ip, cb) {
                     adapter.setState('info.activeTitleName', '', true);
                     adapter.setState('info.activeTitleId', '', true);
                     adapter.setState('info.currentTitles', '{}', true);
-                    adapter.log.info('[CONNECT] Lost connection to your Xbox (' + ip + ')');
+                    adapter.setState('info.activeTitleType', '', true);
+                    adapter.log.info('[CONNECT] <=== Lost connection to your Xbox (' + ip + ')');
                     firstReconnectAttempt = true;
                 } // endIf
             });

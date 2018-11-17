@@ -1,12 +1,11 @@
 ![Logo](admin/xbox.png)
-# ioBroker.xbox
-===========================
 
-[![Build Status Travis](https://travis-ci.org/foxriver76/ioBroker.xbox.svg?branch=master)](https://travis-ci.org/foxriver76/ioBroker.xbox)[![Build status](https://ci.appveyor.com/api/projects/status/s1we3cpcbxm97upp/branch/master?svg=true)](https://ci.appveyor.com/project/foxriver76/iobroker-xbox/branch/master)
-[![NPM version](http://img.shields.io/npm/v/iobroker.xbox.svg)](https://www.npmjs.com/package/iobroker.xbox)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.xbox.svg)](https://www.npmjs.com/package/iobroker.xbox)
+# Xbox One Adapter
 
-[![NPM](https://nodei.co/npm/iobroker.xbox.png?downloads=true)](https://nodei.co/npm/iobroker.xbox/)
+Der Xbox Adapter ermöglicht die Einbindung einer Xbox One bzw. Xbox One X
+Spielekonsole in das ioBroker System.
+
+## Überblick
 
 ## Steps 
 
@@ -37,7 +36,7 @@ You can install the adapter via Admin interface or on your terminal.
 2. Click on Tab "Adapters"
 3. Type "Xbox" in the filter
 4. Click on the three points and then on the "+" symbol of the Xbox adapter <br/>
-![Add Adapter](/docs/en/img/plusAddAdapter.png)
+![Add Adapter](/docs/de/img/plusAddAdapter.png)
 
 ### Terminal
 Navigate into your ioBroker folder and execute the following command (on Linux Root privileges are required to install 
@@ -50,7 +49,7 @@ npm i iobroker.xbox --unsafe-perm
 ### Setup
 1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
 2. Fill in the ip address of your Xbox. <br/>
-![Adapter Configuration](/docs/en/img/adapter-configuration.png)
+![Adapter Configuration](/docs/de/img/adapter-configuration.png)
 3. If you want to use the features which require authentication on Xbox Live,
 you have to enable the authenticate checkbox.
 4. Provide the e-mail address as well as the password of you Xbox Live account.
@@ -62,7 +61,7 @@ In this section you can find a description of every state of the adapter.
 
 * info.connection
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |boolean|R|
    
@@ -70,7 +69,7 @@ In this section you can find a description of every state of the adapter.
 
 * info.currentTitles
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R|
 
@@ -80,7 +79,7 @@ In this section you can find a description of every state of the adapter.
 
 * info.activeTitleName
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R|
 
@@ -88,7 +87,7 @@ In this section you can find a description of every state of the adapter.
 
 * info.activeTitleId
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R|
 
@@ -96,7 +95,7 @@ In this section you can find a description of every state of the adapter.
 
 * info.activeTitleImage
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R|
 
@@ -105,7 +104,7 @@ In this section you can find a description of every state of the adapter.
 
 * info.activeTitleType
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R|
 
@@ -113,7 +112,7 @@ In this section you can find a description of every state of the adapter.
 
 * info.gamertag
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R|
 
@@ -122,7 +121,7 @@ In this section you can find a description of every state of the adapter.
 
 * info.authenticated
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |boolean|R|
 
@@ -133,7 +132,7 @@ In this section you can find a description of every state of the adapter.
 
 * settings.power
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |boolean|R/W|
 
@@ -141,7 +140,7 @@ In this section you can find a description of every state of the adapter.
 
 * settings.launchTitle
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R/W|
 
@@ -157,7 +156,7 @@ In this section you can find a description of every state of the adapter.
 
 * settings.inputText
 
-    |Data type|Permission|
+    |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R/W|
 
@@ -307,137 +306,3 @@ In this section you can find a description of every state of the adapter.
 * media.view
 
    *View button for media content.*
-   
-## Changelog
-
-### 0.3.0
-* (foxriver76) new state activeTitleType added
-* (foxriver76) minor fixes
-
-### 0.2.2
-* (foxriver76) minor fix when currentTitles empty, activeTitle states should be too
-* (foxriver76) dont set info.connection on power off, because will be
-self detected and prevents reconnection on shutdown
-
-### 0.2.1
-* (foxriver76) minor fix on state name
-
-### 0.2.0
-* (foxriver76) Authentication for Xbox Live added
-* (foxriver76) When logged in current titles contains the correct title full name
-* (foxriver76) Added decryption and encryption
-* (foxriver76) minor fixes
-* (foxriver76) Added new states
-
-### 0.1.7
-* (foxriver76) rest-server will now be stopped on windows unload too
-* (foxriver76) enhanced windows debug logging
-
-### 0.1.6
-* (foxriver76) fix rest-server start on win when nopy not in own node_modules folder
-
-### 0.1.5
-* (foxriver76) starting rest-server on windows fixed
-* (foxriver76) stopping rest-server on windows fixed
-
-### 0.1.4
-* (foxriver76) set info.connection and settings.power to false on unload
-* (foxriver76) not only rely on ping to check if xbox is on, use available too
-
-### 0.1.3
-* (foxriver76) minor fix
-* (foxriver76) bump smartglass-rest requirement to 0.9.7
-* (foxriver76) enables pwoer on for not multicastable consoles
-* (foxriver76) only use discovery when Xbox disconnected and online
-
-### 0.1.2
-* (foxriver76) fix when currentTitles is empty
-
-### 0.1.1
-* (foxriver76) minor fixes
-* (foxriver76) explicit require versions of python deps
-* (foxriver76) fix for power on, when Xbox not in broadcast network
-
-### 0.1.0
-* (foxriver76) brought back live id to settings
-* (foxriver76) input text state to enter text in an open text field
-* (foxriver76) ability to find consoles which are not available via broadcast
-* (foxriver76) info state for active titles & launch title state
-
-### 0.0.13
-* (foxriver76) minor fix
-* (foxriver76) restart adapter on rest server error
-* (foxriver76) log when losing connection without ping
-
-### 0.0.12
-* (foxriver76) when console unavailable, also do not connect
-* (foxriver76) debug logging for unavailable console
-* (foxriver76) only set power states on change
-
-### 0.0.11
-* (foxriver76) minor connection fix
-
-### 0.0.10
-* (foxriver76) when status is connecting, don't connect again
-
-### 0.0.9
-* (foxriver76) LiveID is not necessary anymore
-
-### 0.0.8
-* (foxriver76) If reconnect attempts fail often in a row, only log it once
-* (foxriver76) removed unneeded objects from io-package and adjusted title
-
-### 0.0.6
-* (foxriver76) Stop making connect requests when already connected
-* (foxriver76) more user friendly logging
-* (foxriver76) more robustness in nopys path
-
-### 0.0.5
-* (foxriver76) using relative paths for starting server
-* (foxriver76) adding commands for windows
-* (foxriver76) enhanced installation manual
-
-### 0.0.4
-* (foxriver76) automatically install required Debian packages
-* (foxriver76) updated Readme
-* (foxriver76) make installation for Windows possible
-* (foxriver76) improved logging
-* (foxriver76) detect OS
-
-### 0.0.3
-* (foxriver76) fixed state handling
-* (foxriver76) using ping to check consoles power status instead of connection
-* (foxriver76) stop powering on if it is unsuccessful for 15 seconds
-* (foxriver76) restarting adapter when REST snpm erver is down
-
-### 0.0.2
-* (foxriver76) fixed endpoints
-* (foxriver76) automated installation of dependencies
-* (foxriver76) readme updated
-* (foxriver76) code optimized
-
-### 0.0.1
-* (foxriver76) initial release
-
-## License
-The MIT License (MIT)
-
-Copyright (c) 2018 Moritz Heusinger <moritz.heusinger@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.

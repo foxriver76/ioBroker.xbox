@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.2.2",
+        "version": "0.3.0",
         "news": {
+            "0.3.0": {
+                "en": "New state activeTitleType added",
+                "de": "Neuer State activeTitleType hinzugefügt"
+            },
             "0.2.2": {
                 "en": "Minor fix when currentTitles empty, activeTitle states should be too",
                 "de": "Fix, dass in activeTitle states keine Angaben mehr stehen, wenn currenTitles leer ist"
@@ -119,7 +123,10 @@
         "loglevel": "info",
         "type": "multimedia",
         "license": "MIT",
-        "messagebox": false
+        "messagebox": false,
+        "docs": {
+            "de": "docs/de/README.md"
+        }
     },
     "native": {
         "ip": "",
@@ -699,6 +706,19 @@
             "common": {
                 "role": "id.title",
                 "name": "Active title id",
+                "type": "string",
+                "read": true,
+                "write": false
+            },
+            "native": {
+            }
+        },
+        {
+            "_id": "info.activeTitleType",
+            "type": "state",
+            "common": {
+                "role": "name.type",
+                "name": "Active title type",
                 "type": "string",
                 "read": true,
                 "write": false
