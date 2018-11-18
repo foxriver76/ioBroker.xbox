@@ -3,7 +3,7 @@
 'use strict';
 
 systemDictionary = {
-    "Your consoles ip address": {"en": "Your consoles ip adress", "de": "IP-Adresse deiner Xbox"},
+    "Your consoles ip address or hostname": {"en": "Your consoles ip adress", "de": "IP-Adresse oder Hostname der Xbox"},
     "Your consoles live id": {"en": "Your consoles live id", "de": "Live ID deiner Xbox"},
     "Authenticate on Xbox Live": {"en": "Authenticate on Xbox Live", "de": "Authentifizierung bei Xbox Live"},
     "E-mail address": {"en": "E-mail address", "de": "E-Mail Adresse"},
