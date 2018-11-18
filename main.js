@@ -719,9 +719,20 @@ function postRedirectUri(redirectUri, cb) {
 function loadToken(cb) {
     request('http://' + restServerAddress + ':5557/auth/load', (err, response, body) => {
         if (!err) {
-            adapter.log.debug('[TOKEN] Successfully loaded token');
+            adapter.log.debug('[TOKEN] <=== Successfully loaded token');
+            adapter.setState('info.authenticated', true, true);
+            request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
+                if (!err) {
+                    adapter.log.debug('[TOKEN] <=== Successfully retrived gamertag');
+                    adapter.setState('info.gamertag', JSON.parse(body).userinfo.gtg, true);
+                } else {
+                    adapter.log.warn('[TOKEN] <=== Error: ' + body);
+                } // endElse
+            });
+            if (cb && typeof(cb === 'function')) return cb();
         } else {
             adapter.log.warn('[TOKEN] Error loading token: ' + body);
+            if (cb && typeof(cb === 'function')) return cb();
         } // endElse
     });
 } // endLoadToken
