@@ -100,9 +100,9 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R|
 
-   *Read-only JSON string, which consits of key-value pairs. The key is the name of an active title,
-   while the value is the title id converted to hexadecimal. The hex title id can be used to launch a
-   title via the settings.launchTitlte state.*
+   *Nur lesbarer JSON string, welcher aus Key-Value Paaren besteht. Der Key ist der Name eines laufenden Titels,
+   und der Value die ID des Titels konvertiert ins Hexadezimalsystem. Diese ID kann genutzt werden, um mittels dem
+   settings.launchTitle State den gewünschten Titel zu starten.*
 
 * info.activeTitleName
 
@@ -110,7 +110,7 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R|
 
-    *Contains the name of the active title (which is focused) as read-only string.*
+    *Enthält den Namen des aktiven Titel (Titel im Vordergrund), in Form eines Strings.*
 
 * info.activeTitleId
 
@@ -118,7 +118,7 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R|
 
-    *Contains the id (converted to hex) of the active title (which is focused) as read-only string.*
+    *Enthält die ins Hexadezimalsystem konvertierte ID des Titels im Vordergrund als String.*
 
 * info.activeTitleImage
 
@@ -126,8 +126,8 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R|
 
-    *Contains the link to the active title (which is focused) cover image as a string.
-    The state is only available when authenticate is activated in the settings.*
+    *Enthält den Link zum Coverbild des Titels im Vordergrund in Form eines Strings.
+    Der State ist nur vorhanden sowie funktional wenn die Authentifizierung in den Adaptereinstellungen aktiviert wurde.*
 
 * info.activeTitleType
 
@@ -135,7 +135,7 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R|
 
-    *Contains the type of the active title (which is focused) as a read-only string, e.g. 'Game'.*
+    *Enthält die Art des Titels, welcher sich im Vordergrund befindet, in Form eines nur lesbaren Strings, z. B. 'Game'.*
 
 * info.gamertag
 
@@ -143,8 +143,8 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R|
 
-    *String which contains the gamertag of the currently authenticated user.
-    The state is only available when authenticate is activated in the settings.*
+    *String Wert, der den Gamertag des aktuell authentifizierten Accounts enthält.
+    Der State ist nur vorhanden sowie funktional wenn die Authentifizierung in den Adaptereinstellungen aktiviert wurde.*
 
 * info.authenticated
 
@@ -152,8 +152,8 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |boolean|R|
 
-    *Boolean value which indicates if you are successfully authenticated on Xbox Live.
-    The state is only available when authenticate is activated in the settings.*
+    *Boolscher Wert, welcher true ist, wenn die Authentifizierung mit Xbox Live erfolgreich war, ansonsten false.
+    Der State ist nur vorhanden sowie funktional wenn die Authentifizierung in den Adaptereinstellungen aktiviert wurde.*
    
 ### Channel: Settings
 
