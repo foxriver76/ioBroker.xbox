@@ -313,6 +313,7 @@ In this section you can find a description of every state of the adapter.
 ### 0.3.0
 * (foxriver76) new state activeTitleType added
 * (foxriver76) minor fixes
+* (foxriver76) authentication for 2 factor auth added
 
 ### 0.2.2
 * (foxriver76) minor fix when currentTitles empty, activeTitle states should be too

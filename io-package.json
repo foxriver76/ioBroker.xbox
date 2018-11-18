@@ -4,8 +4,8 @@
         "version": "0.3.0",
         "news": {
             "0.3.0": {
-                "en": "New state activeTitleType added",
-                "de": "Neuer State activeTitleType hinzugefügt"
+                "en": "New state activeTitleType added, 2 factor auth fixed",
+                "de": "Neuer State activeTitleType hinzugefügt, 2-Faktor Authentifizierung hinzugefügt"
             },
             "0.2.2": {
                 "en": "Minor fix when currentTitles empty, activeTitle states should be too",

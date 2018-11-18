@@ -640,7 +640,10 @@ function decrypt(key, value) {
 function authenticateOnServer(cb) {
     request.post('http://' + restServerAddress + ':5557/auth/login',
             {form: {email: mail, password: password}}, (err, response, body) => {
-        if (err || JSON.parse(body).success === false) {
+        if (JSON.parse(body).two_factor_required) {
+            adapter.log.debug('[LOGIN] Two factor authentication required');
+            authenticateTwoFactor(cb);
+        } else if (err || JSON.parse(body).success === false) {
             adapter.log.warn('[LOGIN] <=== Error: ' + body);
             adapter.getState('info.authenticated', (err, state) => {
                if (!state || state.val) {
@@ -685,6 +688,43 @@ function logOut(cb) {
         } // endElse
     });
 } // endLogOut
+
+function authenticateTwoFactor(cb) {
+    request('http://' + restServerAddress + ':5557/auth/url', (err, response, body) => {
+        if (!err && JSON.parse(body).authorization_url) {
+            let authUrl = JSON.parse(body).authorization_url;
+            adapter.log.debug('[2FA] <=== Successfully received auth url: ' + authUrl);
+            postRedirectUri(authUrl, cb);
+        } else {
+            adapter.log.warn('[2FA] <=== Error: ' + body);
+        } // endElse
+    });
+} // endAuthenticateTwoFactor
+
+function postRedirectUri(redirectUri, cb) {
+    request.post('http://' + restServerAddress + ':5557/auth/oauth',
+        {form: {redirect_uri: redirectUri}}, (err, response, body) => {
+            if (!err && JSON.parse(body).success) {
+                adapter.log.debug('[2FA] <=== Successfully logged in');
+                if (cb && typeof(cb === 'function')) return cb();
+            } else if (JSON.parse(body).message === 'Login failed, error: \'access_token\'') {
+                adapter.log.debug('[2FA] <=== Access token error, try to load stored token');
+                loadToken(cb);
+            } else {
+                adapter.log.warn('[2FA] <=== Error on redirect uri: ' + body);
+            } // endElse
+        });
+} // endPostRedirectUri
+
+function loadToken(cb) {
+    request('http://' + restServerAddress + ':5557/auth/load', (err, response, body) => {
+        if (!err) {
+            adapter.log.debug('[TOKEN] Successfully loaded token');
+        } else {
+            adapter.log.warn('[TOKEN] Error loading token: ' + body);
+        } // endElse
+    });
+} // endLoadToken
 
 function prepareAuthentication(authenticate, cb) {
     if (authenticate) {
