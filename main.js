@@ -708,7 +708,7 @@ function postRedirectUri(redirectUri, cb) {
                 adapter.log.debug('[2FA] <=== Successfully logged in');
                 adapter.setState('info.authenticated', true, true);
                 request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
-                    if (!err) {
+                    if (!err && JSON.parse(body).authenticated) {
                         adapter.log.debug('[2FA] <=== Successfully retrieved gamertag');
                         adapter.setState('info.gamertag', JSON.parse(body).userinfo.gtg, true);
                     } else {
@@ -727,7 +727,7 @@ function postRedirectUri(redirectUri, cb) {
 
 function loadToken(cb) {
     request('http://' + restServerAddress + ':5557/auth/load', (err, response, body) => {
-        if (!err) {
+        if (!err && response.statusCode !== '500') {
             adapter.log.debug('[TOKEN] <=== Successfully loaded token');
             adapter.setState('info.authenticated', true, true);
             request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
