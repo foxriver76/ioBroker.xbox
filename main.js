@@ -706,6 +706,15 @@ function postRedirectUri(redirectUri, cb) {
         {form: {redirect_uri: redirectUri}}, (err, response, body) => {
             if (!err && JSON.parse(body).success) {
                 adapter.log.debug('[2FA] <=== Successfully logged in');
+                adapter.setState('info.authenticated', true, true);
+                request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
+                    if (!err) {
+                        adapter.log.debug('[2FA] <=== Successfully retrieved gamertag');
+                        adapter.setState('info.gamertag', JSON.parse(body).userinfo.gtg, true);
+                    } else {
+                        adapter.log.warn('[2FA] <=== Error retrieving gamertag: ' + body);
+                    } // endElse
+                });
                 if (cb && typeof(cb === 'function')) return cb();
             } else if (JSON.parse(body).message === 'Login failed, error: \'access_token\'') {
                 adapter.log.debug('[2FA] <=== Access token error, try to load stored token');
@@ -723,10 +732,10 @@ function loadToken(cb) {
             adapter.setState('info.authenticated', true, true);
             request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
                 if (!err) {
-                    adapter.log.debug('[TOKEN] <=== Successfully retrived gamertag');
+                    adapter.log.debug('[TOKEN] <=== Successfully retrieved gamertag');
                     adapter.setState('info.gamertag', JSON.parse(body).userinfo.gtg, true);
                 } else {
-                    adapter.log.warn('[TOKEN] <=== Error: ' + body);
+                    adapter.log.warn('[TOKEN] <=== Error retrieving gamertag: ' + body);
                 } // endElse
             });
             if (cb && typeof(cb === 'function')) return cb();
