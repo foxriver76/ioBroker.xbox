@@ -244,9 +244,17 @@ In this section you can find a description of every state of the adapter.
  
 * gamepad.view
 
-   *Emulates the View (Xbox) button of your Xbox.*
+   *Emulates the View button of your Xbox.*
    
 ### Channel Media
+
+* media.seek
+
+    |Data type|Permission|
+    |:---:|:---:|
+    |number|R/W|
+
+   *Jump to a specific position on media content.*
 
 * media.play
 
@@ -296,10 +304,6 @@ In this section you can find a description of every state of the adapter.
 
    *Rewind button for media content.*
    
-* media.seek
-
-   *Seek button for media content.*
-   
 * media.stop
 
    *Stop button for media content.*
@@ -309,6 +313,9 @@ In this section you can find a description of every state of the adapter.
    *View button for media content.*
    
 ## Changelog
+
+### 0.4.0
+* (foxriver76) Seek converted to number, to jump to specific position
 
 ### 0.3.0
 * (foxriver76) new state activeTitleType added

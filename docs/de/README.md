@@ -163,7 +163,8 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |boolean|R/W|
 
-   *Boolean-value to turn your Xbox on and off. State also indicates current power status of the Xbox.*
+   *Boolscher Wert, mit welchem die Xbox an und ausgeschaltet werden kann. Ebenfalls dient der Wert als Indikator
+   ob die Xbox ein- oder ausgeschaltet ist.*
 
 * settings.launchTitle
 
@@ -171,14 +172,13 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R/W|
 
-   *A writable string, which allows the user to launch a specific title by its title id
-   (converted to hexadecimal). To find out about the hex code of a desired title, you can
-   use the info.currentTitles state. The command is acknowledged when it has arrived at the server,
-   which does not mean, that the command has been executed.*
+   *Durch setzen des String Wertes auf eine hexadezimale Title ID, kann ein Titel auf der Xbox gestartet werden.
+   Die Title ID eines aktiven Spiels kann durch den info.currentTitles State herausgefunden werden.
+   Der State wird bestätigt, sobald er an die Xbox übermittelt wurde, was nicht heißt, dass der Befehl auch ausgeführt wurde.*
 
    *Example:*
     ```javascript
-    setState('settings.launchTitle', '2340236c', false); // Launch Red Dead Redemption 2
+    setState('settings.launchTitle', '2340236c', false); // Starte Red Dead Redemption 2
     ```
 
 * settings.inputText
@@ -187,149 +187,154 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R/W|
 
-   *Writable string, which allows the user to fill text into an active text field, e.g. to send
-   private messages. The command is acknowledged when it has arrived at the server, which does
-   not mean, that the command has been executed.*
+   *Durch beschreiben des String States, kann Text in ein aktives Eingabefeld eingefügt werden, z. B. um eine private
+   Nachricht zu versenden oder einen Code einzugeben.
+   Der State wird bestätigt, sobald er an die Xbox übermittelt wurde, was nicht heißt, dass der Befehl auch ausgeführt wurde.*
 
    *Example:*
    ```javascript
-   setState('settings.inputText', 'H1 M8 h0w d0 u do?', false); // Send a super nerdy text to someone
+   setState('settings.inputText', 'H1 M8 h0w d0 u do?', false); // Versendet einen nerdigen Text
    ```
 
 * settings.gameDvr
 
-    *Button which records the previous minute of gameplay. The button is available when
-    authenticate is turned on in the settings. You have to be logged in on your Xbox with the same account
-    as you are authenticated with. A game needs to be in foreground.*
+    *Button, welcher bei Druck die vergangene Minute eines Spiels aufzeichnet. Der Button ist
+    verfügbar, wenn die Authentifizierung in den Einstellungen vorgenommen wurde.
+    Ebenfalls muss der authentifizierte Account auf der Xbox angemeldet sein und ein Spiel
+    muss sich im Vordergrund befinden.
 
 ### Channel: Gamepad
 
 * gamepad.a
 
-   *Emulates the A button of your gamepad.*
+   *Emuliert den A Button des Controllers.*
 
 * gamepad.b
 
-   *Emulates the B button of your gamepad.*
+   *Emuliert den B Button des Controllers.*
 
 * gamepad.x
 
-   *Emulates the X button of your gamepad.*
+   *Emuliert den X Button des Controllers.*
    
 * gamepad.y
 
-   *Emulates the Y button of your gamepad.*
+   *Emuliert den Y Button des Controllers.*
    
 * gamepad.clear
 
-   *Emulates the Clear button of your Xbox.*
+   *Emuliert den 'Clear' Button des Controllers.*
    
 * gamepad.dPadDown
 
-   *Emulates the DPad Down button of your Xbox.*
+   *Emuliert den DPAD runter Button des Controllers.*
    
 * gamepad.dPadUp
 
-   *Emulates the DPad Up button of your Xbox.*
+   *Emuliert den DPAD hoch Button des Controllers.*
    
 * gamepad.dPadRight
 
-   *Emulates the DPad Right button of your Xbox.*
+   *Emuliert den DPAD rechts Button des Controllers.*
    
 * gamepad.dPadLeft
 
-   *Emulates the DPad Left button of your Xbox.*
+   *Emuliert den DPAD links Button des Controllers.*
    
 * gamepad.enroll
 
-   *Emulates the Enroll button of your Xbox.*
+   *Emuliert den 'Enroll' Button des Controllers.*
    
 * gamepad.leftShoulder
 
-   *Emulates the Left Shoulder button of your Xbox.*
+   *Emuliert ein drücken des linken Schulter Buttons des Controllers.*
    
 * gamepad.rightShoulder
 
-   *Emulates the Right Shoulder button of your Xbox.*
+   *Emuliert ein drücken des rechten Schulter Buttons des Controllers.*
    
 * gamepad.leftThumbstick
 
-   *Emulates the Left Thumbstick button of your Xbox.*
+   *Emuliert ein drücken des linken Sticks des Controllers.*
    
 * gamepad.rightThumbstick
 
-   *Emulates the Right Thumbstick button of your Xbox.*
+   *Emuliert ein drücken des rechten Sticks des Controllers.*
    
 * gamepad.menu
 
-   *Emulates the Menu button of your Xbox.*
+   *Emuliert die Menü Taste des Controllers.*
    
 * gamepad.nexus
 
-   *Emulates the Nexus (Xbox) button of your Xbox.*
+   *Emuliert die Nexus (Xbox) Taste des Controllers.*
  
 * gamepad.view
 
-   *Emulates the View (Xbox) button of your Xbox.*
+   *Emuliert die 'View' Taste des Controllers.*
    
 ### Channel: Media
 
+* media.seek
+
+    |Datentyp|Berechtigung|
+    |:---:|:---:|
+    |number|R/W|
+
+   *Number-Wert um zu einer bestimmten Stelle von Medieninhalten zu springen.*
+
 * media.play
 
-   *Play button for media content.*
+   *Button zur Wiedergabe von Medieninhalten.*
    
 * media.pause
 
-   *Pause button for media content.*
+   *Button zum Pausieren von Medieninhalten.*
    
 * media.playPause
 
-   *Combined Play and Pause button for media content.*
+   *Kombinierter Wiedergabe/Pause Button für Medieninhalte.*
    
 * media.back
 
-   *Back button for media content.*
+   *Zurück-Taste für Medieninhalte.*
    
 * media.channelDown
 
-   *Channel Down button for media content.*
+   *Button der den Kanal für Medieninhalte nach unten schaltet.*
    
 * media.channelUp
 
-   *Channel Up button for media content.*
+   *Button der den Kanal für Medieninhalte nach oben schaltet.*
    
 * media.fastForward
 
-   *Fast Forward button for media content.*
+   *Button zum vorspulen von Medieninhalten.*
    
 * media.menu
 
-   *Menu button for media content.*
+   *Menü Button für Medieninhalte.*
    
 * media.nextTrack
 
-   *Next Track button for media content.*
+   *Button der bei Wiedergabe von Medieninhalten zum nächsten Titel springt.*
    
 * media.previousTrack
 
-   *Previous Track button for media content.*
+   *Button der bei Wiedergabe von Medieninhalten zum vorherigen Titel springt.*
    
 * media.record
 
-   *Record button for media content.*
+   *Aufnahmeknopf für Medieninhalte.*
    
 * media.rewind
 
-   *Rewind button for media content.*
-   
-* media.seek
-
-   *Seek button for media content.*
+   *Button zum Zurückspulen von Medieninhalten.*
    
 * media.stop
 
-   *Stop button for media content.*
+   *Stop-Button für Medieninhalte.*
    
 * media.view
 
-   *View button for media content.*
+   *View Button für Medieninhalte.*

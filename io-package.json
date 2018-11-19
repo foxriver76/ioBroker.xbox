@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "news": {
+            "0.4.0": {
+                "en": "Seek state fixed to a number to jump to positions on media content",
+                "de": "Seek state zu Number transformiert um zu einer bestimmten Stelle zu springen"
+            },
             "0.3.0": {
                 "en": "New state activeTitleType added, 2 factor auth fixed",
                 "de": "Neuer State activeTitleType hinzugefügt, 2-Faktor Authentifizierung hinzugefügt"
@@ -512,9 +516,9 @@
             "_id": "media.seek",
             "type": "state",
             "common": {
-                "role": "button",
+                "role": "number.position",
                 "name": "Seek",
-                "type": "boolean",
+                "type": "number",
                 "read": true,
                 "write": true,
                 "def": false

@@ -498,7 +498,8 @@ function handleStateChange(state, id, cb) {
             sendMediaCmd('prev_track');
             break;
         case 'media.seek':
-            sendMediaCmd('seek');
+            sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/media/seek/' + state,
+                () => adapter.setState(id, state, true));
             break;
         case 'media.channelUp':
             sendMediaCmd('channel_up');
@@ -577,7 +578,7 @@ function sendCustomCommand(endpoint, cb) {
     // Returns cb on success
     request(endpoint, (error, response, body) => {
         if (error) adapter.log.error('[REQUEST] <=== Custom request error: ' + error.message);
-        else if (JSON.parse(body).success) {
+        else if (response.statusCode === 200 && JSON.parse(body).success) {
             adapter.log.debug('[REQUEST] <=== Custom Command ' + endpoint + ' acknowledged by REST-Server');
             if (cb && typeof(cb) === "function") return cb();
         } else
