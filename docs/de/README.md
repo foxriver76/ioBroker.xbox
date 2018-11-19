@@ -281,7 +281,9 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |number|R/W|
 
-   *Number-Wert um zu einer bestimmten Stelle von Medieninhalten zu springen.*
+   *Number-Wert um zu einer bestimmten Stelle von Medieninhalten zu springen. Der State
+   wird bestätigt, sobald er beim Server angekommen ist, was nicht heißt, dass dieser auch
+   ausgeführt wurde.*
 
 * media.play
 

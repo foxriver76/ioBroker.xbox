@@ -254,7 +254,9 @@ In this section you can find a description of every state of the adapter.
     |:---:|:---:|
     |number|R/W|
 
-   *Jump to a specific position on media content.*
+   *Jump to a specific position on media content. The state will be
+   acknowledged when it has been arrived at the REST server, which not means, that it has been
+   executed.*
 
 * media.play
 
