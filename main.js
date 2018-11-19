@@ -5,6 +5,7 @@
 // you have to require the utils module and call adapter function
 const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
 const adapter = new utils.Adapter('xbox');
+const IO_HOST_IP = require(__dirname + '/lib/network').getIP();
 const {exec} = require('child_process');
 const request = require('request');
 const ping = require('ping');
@@ -158,6 +159,7 @@ function main() {
 
     let checkOnline = setInterval(() => {
         ping.sys.probe(ip, (isAlive) => {
+            checkLoggedIn().catch(() =>  adapter.log.debug('[CHECK] Auth is not established'));
             if (isAlive || xboxAvailable) {
 
                 adapter.getState('settings.power', (err, state) => {
@@ -641,8 +643,12 @@ function authenticateOnServer(cb) {
     request.post('http://' + restServerAddress + ':5557/auth/login',
             {form: {email: mail, password: password}}, (err, response, body) => {
         if (JSON.parse(body).two_factor_required) {
-            adapter.log.debug('[LOGIN] Two factor authentication required');
-            authenticateTwoFactor(cb);
+            adapter.log.debug('[LOGIN] Two factor authentication required, try to load token');
+            loadToken().then(() => {
+                if (cb && typeof(cb) === 'function') return cb();
+            }).catch(() => {
+                adapter.log.warn('[LOGIN] Failed to load Token, log in at http://' + IO_HOST_IP + ':5557/auth/oauth');
+            });
         } else if (err || JSON.parse(body).success === false) {
             adapter.log.warn('[LOGIN] <=== Error: ' + body);
             adapter.getState('info.authenticated', (err, state) => {
@@ -689,60 +695,61 @@ function logOut(cb) {
     });
 } // endLogOut
 
-function authenticateTwoFactor(cb) {
-    request('http://' + restServerAddress + ':5557/auth/url', (err, response, body) => {
-        if (!err && JSON.parse(body).authorization_url) {
-            let authUrl = JSON.parse(body).authorization_url;
-            adapter.log.debug('[2FA] <=== Successfully received auth url: ' + authUrl);
-            postRedirectUri(authUrl, cb);
-        } else {
-            adapter.log.warn('[2FA] <=== Error: ' + body);
-        } // endElse
+function checkLoggedIn() {
+    return new Promise((resolve, reject) => {
+        request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
+            if (response.statusCode === 200 && JSON.parse(body).authenticated) {
+                adapter.getState('info.authenticated', (err, state) => {
+                    if (!state || !state.val) {
+                        adapter.setState('info.authenticated', true, true);
+                        adapter.log.debug('[CHECK] Successfully logged in');
+                    } // endIf
+                });
+                adapter.getState('info.gamertag', (err, state) => {
+                    if (state && state.val !== JSON.parse(body).userinfo.gtg) {
+                        adapter.setState('info.gamertag', JSON.parse(body).userinfo.gtg, true);
+                    } // endIf
+                });
+                resolve();
+            } else {
+                adapter.getState('info.authenticated', (err, state) => {
+                    if (!state || state.val) {
+                        adapter.setState('info.authenticated', false, true);
+                        adapter.log.debug('[CHECK] Auth is broken or logged out');
+                    } // endIf
+                });
+                adapter.getState('info.gamertag', (err, state) => {
+                    if (state && state.val !== '') {
+                        adapter.setState('info.gamertag', '', true);
+                    } // endIf
+                });
+                reject();
+            } // endElse
+        });
     });
-} // endAuthenticateTwoFactor
+} // endCheckLoggedIn
 
-function postRedirectUri(redirectUri, cb) {
-    request.post('http://' + restServerAddress + ':5557/auth/oauth',
-        {form: {redirect_uri: redirectUri}}, (err, response, body) => {
-            if (!err && JSON.parse(body).success) {
-                adapter.log.debug('[2FA] <=== Successfully logged in');
+function loadToken() {
+    return new Promise((resolve, reject) => {
+        request('http://' + restServerAddress + ':5557/auth/load', (err, response, body) => {
+            if (!err && response.statusCode === 200) {
+                adapter.log.debug('[TOKEN] <=== Successfully loaded token');
                 adapter.setState('info.authenticated', true, true);
                 request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
                     if (!err && JSON.parse(body).authenticated) {
-                        adapter.log.debug('[2FA] <=== Successfully retrieved gamertag');
+                        adapter.log.debug('[TOKEN] <=== Successfully retrieved gamertag');
                         adapter.setState('info.gamertag', JSON.parse(body).userinfo.gtg, true);
+                        resolve();
                     } else {
-                        adapter.log.warn('[2FA] <=== Error retrieving gamertag: ' + body);
+                        adapter.log.warn('[TOKEN] <=== Error retrieving gamertag: ' + body);
+                        reject();
                     } // endElse
                 });
-                if (cb && typeof(cb === 'function')) return cb();
-            } else if (JSON.parse(body).message === 'Login failed, error: \'access_token\'') {
-                adapter.log.debug('[2FA] <=== Access token error, try to load stored token');
-                loadToken(cb);
             } else {
-                adapter.log.warn('[2FA] <=== Error on redirect uri: ' + body);
+                adapter.log.warn('[TOKEN] Error loading token: ' + body);
+                reject();
             } // endElse
         });
-} // endPostRedirectUri
-
-function loadToken(cb) {
-    request('http://' + restServerAddress + ':5557/auth/load', (err, response, body) => {
-        if (!err && response.statusCode !== '500') {
-            adapter.log.debug('[TOKEN] <=== Successfully loaded token');
-            adapter.setState('info.authenticated', true, true);
-            request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
-                if (!err) {
-                    adapter.log.debug('[TOKEN] <=== Successfully retrieved gamertag');
-                    adapter.setState('info.gamertag', JSON.parse(body).userinfo.gtg, true);
-                } else {
-                    adapter.log.warn('[TOKEN] <=== Error retrieving gamertag: ' + body);
-                } // endElse
-            });
-            if (cb && typeof(cb === 'function')) return cb();
-        } else {
-            adapter.log.warn('[TOKEN] Error loading token: ' + body);
-            if (cb && typeof(cb === 'function')) return cb();
-        } // endElse
     });
 } // endLoadToken
 
