@@ -643,7 +643,7 @@ function decrypt(key, value) {
 function authenticateOnServer(cb) {
     request.post('http://' + restServerAddress + ':5557/auth/login',
             {form: {email: mail, password: password}}, (err, response, body) => {
-        if (JSON.parse(body).two_factor_required) {
+        if (!err && JSON.parse(body).two_factor_required) {
             adapter.log.debug('[LOGIN] Two factor authentication required, try to load token');
             loadToken().then(() => {
                 if (cb && typeof(cb) === 'function') return cb();
@@ -651,7 +651,7 @@ function authenticateOnServer(cb) {
                 adapter.log.warn('[LOGIN] Failed to load Token, log in at http://' + IO_HOST_IP + ':5557/auth/oauth');
             });
         } else if (err || JSON.parse(body).success === false) {
-            adapter.log.warn('[LOGIN] <=== Error: ' + body);
+            adapter.log.warn('[LOGIN] <=== Error: ' + err);
             adapter.getState('info.authenticated', (err, state) => {
                if (!state || state.val) {
                    adapter.setState('info.authenticated', false, true);
