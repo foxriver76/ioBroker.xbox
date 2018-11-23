@@ -159,7 +159,10 @@ function main() {
 
     let checkOnline = setInterval(() => {
         ping.sys.probe(ip, (isAlive) => {
-            checkLoggedIn().catch(() =>  adapter.log.debug('[CHECK] Auth is not established'));
+            checkLoggedIn().catch((err) =>  {
+                if (err) authenticateOnServer();
+                else adapter.log.debug('[CHECK] Auth is not established');
+            });
             if (isAlive || xboxAvailable) {
 
                 adapter.getState('settings.power', (err, state) => {
@@ -716,18 +719,19 @@ function checkLoggedIn() {
                 });
                 resolve();
             } else {
-                adapter.getState('info.authenticated', (err, state) => {
-                    if (!state || state.val) {
-                        adapter.setState('info.authenticated', false, true);
-                        adapter.log.debug('[CHECK] Auth is broken or logged out');
-                    } // endIf
-                });
                 adapter.getState('info.gamertag', (err, state) => {
                     if (state && state.val !== '') {
                         adapter.setState('info.gamertag', '', true);
                     } // endIf
                 });
-                reject();
+
+                adapter.getState('info.authenticated', (err, state) => {
+                    if (!state || state.val) {
+                        adapter.setState('info.authenticated', false, true);
+                        adapter.log.debug('[CHECK] Auth is broken or logged out');
+                        reject('BROKEN');
+                    } else reject();
+                });
             } // endElse
         });
     });
