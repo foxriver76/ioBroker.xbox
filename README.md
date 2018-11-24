@@ -318,6 +318,7 @@ In this section you can find a description of every state of the adapter.
 
 ### 0.4.0
 * (foxriver76) Seek converted to number, to jump to specific position
+* (foxriver76) try reauthentication when auth gets lost
 
 ### 0.3.0
 * (foxriver76) new state activeTitleType added

@@ -4,8 +4,8 @@
         "version": "0.4.0",
         "news": {
             "0.4.0": {
-                "en": "Seek state fixed to a number to jump to positions on media content",
-                "de": "Seek state zu Number transformiert um zu einer bestimmten Stelle zu springen"
+                "en": "Seek state fixed to a number to jump to positions on media content, try reauth when losing auth",
+                "de": "Seek state zu Number transformiert um zu einer bestimmten Stelle zu springen, versuche erneute Authentifizierung bei Verlust"
             },
             "0.3.0": {
                 "en": "New state activeTitleType added, 2 factor auth fixed",

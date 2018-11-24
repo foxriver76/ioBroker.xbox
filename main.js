@@ -160,7 +160,7 @@ function main() {
     let checkOnline = setInterval(() => {
         ping.sys.probe(ip, (isAlive) => {
             checkLoggedIn().catch((err) =>  {
-                if (err) authenticateOnServer();
+                if (err) authenticateOnServer(); // err is only true when, lost auth recently, so try one reauthentication
                 else adapter.log.debug('[CHECK] Auth is not established');
             });
             if (isAlive || xboxAvailable) {
