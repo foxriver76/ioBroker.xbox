@@ -653,7 +653,7 @@ function authenticateOnServer(cb) {
             }).catch(() => {
                 adapter.log.warn('[LOGIN] Failed to load Token, log in at http://' + IO_HOST_IP + ':5557/auth/oauth');
             });
-        } else if (err && err.includes('ECONNREFUSED')) {
+        } else if (err && err.toString().includes('ECONNREFUSED')) {
             adapter.log.warn('[LOGIN] Connection refused, will try again');
             setTimeout(() => authenticateOnServer(cb), 1000);
         } else if (err || JSON.parse(body).success === false) {

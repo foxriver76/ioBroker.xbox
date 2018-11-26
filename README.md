@@ -316,6 +316,9 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.4.1
+* (foxriver76) minor type fix
+
 ### 0.4.0
 * (foxriver76) Seek converted to number, to jump to specific position
 * (foxriver76) try reauthentication when auth gets lost

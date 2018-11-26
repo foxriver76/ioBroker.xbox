@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.4.0",
+        "version": "0.4.1",
         "news": {
+            "0.4.1": {
+                "en": "Minor type fix",
+                "de": "Minimaler Typ fix"
+            },
             "0.4.0": {
                 "en": "Seek state fixed to a number to jump to positions on media content, try reauth when losing auth",
                 "de": "Seek state zu Number transformiert um zu einer bestimmten Stelle zu springen, versuche erneute Authentifizierung bei Verlust"
