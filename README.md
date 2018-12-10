@@ -316,6 +316,9 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.4.2
+* (foxriver76) use adapter-core module
+
 ### 0.4.1
 * (foxriver76) minor type fix
 

@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.4.1",
+        "version": "0.4.2",
         "news": {
+            "0.4.2": {
+                "en": "use adapter-core",
+                "de": "Nutzung von Adapter-Core"
+            },
             "0.4.1": {
                 "en": "Minor type fix",
                 "de": "Minimaler Typ fix"
