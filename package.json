@@ -1,6 +1,6 @@
 {
   "name": "iobroker.xbox",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "engines": {
     "node": ">=6.0.0"
   },
@@ -28,7 +28,7 @@
     "url": "https://github.com/foxriver76/ioBroker.xbox"
   },
   "dependencies": {
-    "request": "^2.87.0",
+    "request": "^2.88.0",
     "ping": "^0.2.2",
     "nopy": "^0.2.6",
     "@iobroker/adapter-core": "^1.0.1"

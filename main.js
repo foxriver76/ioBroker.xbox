@@ -6,6 +6,7 @@ const utils = require('@iobroker/adapter-core'); // Get common adapter utils
 const adapter = new utils.Adapter('xbox');
 const IO_HOST_IP = require(__dirname + '/lib/network').getIP();
 const {exec} = require('child_process');
+const helper = require(__dirname + '/lib/utils');
 const request = require('request');
 const ping = require('ping');
 const os = require('os').platform();
@@ -21,7 +22,6 @@ let tryPowerOn = false;
 let xboxPingable = false;
 let firstReconnectAttempt = true;
 let xboxAvailable = false;
-let restServerProcess;
 let winPath;
 let restServerPid;
 
@@ -48,15 +48,18 @@ adapter.on('unload', callback => {
                     adapter.log.info('[END] REST server stopped ' + stderr);
                 } // endElse
 
-                adapter.setState('info.connection', false, true);
-                adapter.setState('info.activeTitleImage', '', true);
-                adapter.setState('info.activeTitleName', '', true);
-                adapter.setState('info.activeTitleId', '', true);
-                adapter.setState('info.currentTitles', '{}', true);
-                adapter.setState('info.activeTitleType', '', true);
+                const promises = [];
+                promises.push(adapter.setStateAsync('info.connection', false, true));
+                promises.push(adapter.setState('info.activeTitleImage', '', true));
+                promises.push(adapter.setState('info.activeTitleName', '', true));
+                promises.push(adapter.setState('info.activeTitleId', '', true));
+                promises.push(adapter.setState('info.currentTitles', '{}', true));
+                promises.push(adapter.setState('info.activeTitleType', '', true));
 
-                adapter.log.info('[END] cleaned everything up...');
-                callback();
+                Promise.all(promises).then(() => {
+                    adapter.log.info('[END] cleaned everything up...');
+                    callback();
+                });
             });
         });
     } catch (e) {
@@ -117,26 +120,22 @@ adapter.on('ready', () => {
         // Get correct python directory for windows
         exec('dir /B ' + __dirname + '\\python_modules\\Python3', (err, stdout, stderr) => {
             winPath = stdout.replace(/[^ -~]+/g, '') || 'Python36';
-            startRestServer((started, err) => {
-                if (!started) {
-                    adapter.log.error('[START] Failed starting REST server: ' + err);
-                    adapter.log.error('[START] Restarting adapter in 30 seconds');
-                    const restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
-                } // endIf
+            helper.startRestServer().catch(() => {
+                adapter.log.error('[START] Failed starting REST server: ' + err);
+                adapter.log.error('[START] Restarting adapter in 30 seconds');
+                setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
             });
         });
 
     } else {
-        startRestServer((started, err) => {
-            if (!started) {
-                adapter.log.error('[START] Failed starting REST server: ' + err);
-                adapter.log.error('[START] Restarting adapter in 30 seconds');
-                const restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
-            } // endIf
+        helper.startRestServer().catch((err) => {
+            adapter.log.error('[START] Failed starting REST server: ' + err);
+            adapter.log.error('[START] Restarting adapter in 30 seconds');
+            setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
         });
     } // endElse
 
-    prepareAuthentication(authenticate, () => setTimeout(() => main(), 6500)); // Server needs time to start
+    prepareAuthentication(authenticate).then(() => setTimeout(() => main(), 6500)); // Server needs time to start
 });
 
 function main() {
@@ -156,7 +155,7 @@ function main() {
         });
     } // endIf
 
-    const checkOnline = setInterval(() => {
+    setInterval(() => { // check online
         ping.sys.probe(ip, (isAlive) => {
             checkLoggedIn().catch((err) => {
                 if (err) authenticateOnServer(); // err is only true when, lost auth recently, so try one reauthentication
@@ -271,7 +270,7 @@ function connect(ip, cb) {
                     adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + device.address + ')');
                 } // endIf
 
-                if (cb && typeof(cb) === 'function') return cb(connectionState);
+                if (cb && typeof (cb) === 'function') return cb(connectionState);
             });
         } else {
             adapter.getState('info.connection', (err, state) => {
@@ -311,15 +310,14 @@ function connect(ip, cb) {
                             restartAdapter();
                         } // endIf
                     } // endElse
-                    if (cb && typeof(cb) === 'function') return cb(connectionState);
+                    if (cb && typeof (cb) === 'function') return cb(connectionState);
                 });
             } else if (device && device.device_status === 'Unavailable') {
                 adapter.log.debug('[CONNECT] Console currently unavailable');
             } else if (firstReconnectAttempt) {
                 adapter.log.warn('[CONNECT] No LiveID discovered until now');
                 firstReconnectAttempt = false;
-            }
-            else
+            } else
                 adapter.log.debug('[CONNECT] No LiveID discovered until now');
         } // endElse
     });
@@ -340,7 +338,7 @@ function powerOff(liveId, cb) {
         } else {
             adapter.log.error('[POWEROFF] <=== ' + error.message);
         } // endElse
-        if (cb && typeof(cb) === 'function') return cb();
+        if (cb && typeof (cb) === 'function') return cb();
     });
 
 } // endPowerOff
@@ -389,7 +387,7 @@ function discoverAndUpdateConsole(ip, cb) { // is used by connect
                 adapter.log.error('[DISCOVER] <=== ' + error.message);
                 adapter.setState('info.connection', false, true);
             }
-            if (cb && typeof(cb) === 'function') return cb(connectionState, discovered, device);
+            if (cb && typeof (cb) === 'function') return cb(connectionState, discovered, device);
         });
     });
 
@@ -415,7 +413,7 @@ function powerOn(cb) {
             } // endElse
         } else blockXbox = false; // unblock Box because on
 
-        if (cb && typeof(cb) === 'function') return cb();
+        if (cb && typeof (cb) === 'function') return cb();
     });
 
 } // endPowerOn
@@ -544,7 +542,7 @@ function handleStateChange(state, id, cb) {
         default:
             adapter.log.warn('[COMMAND] ===> Not a valid id: ' + id);
     } // endSwitch
-    if (cb && typeof(cb) === 'function') return cb();
+    if (cb && typeof (cb) === 'function') return cb();
 } // endHandleStateChange
 
 function sendButton(button, cb) {
@@ -559,7 +557,7 @@ function sendButton(button, cb) {
         } else
             adapter.log.warn('[REQUEST] <=== Button ' + button + ' not acknowledged by REST-Server');
 
-        if (cb && typeof(cb) === 'function') return cb(success);
+        if (cb && typeof (cb) === 'function') return cb(success);
     });
 } // endSendButton
 
@@ -572,7 +570,7 @@ function sendMediaCmd(cmd, cb) {
             adapter.log.debug('[REQUEST] <=== Media command ' + cmd + ' acknowledged by REST-Server');
         else
             adapter.log.warn('[REQUEST] <=== Media command ' + cmd + ' not acknowledged by REST-Server');
-        if (cb && typeof(cb) === 'function') return cb();
+        if (cb && typeof (cb) === 'function') return cb();
     });
 } // endSendMediaCmd
 
@@ -582,7 +580,7 @@ function sendCustomCommand(endpoint, cb) {
         if (error) adapter.log.error('[REQUEST] <=== Custom request error: ' + error.message);
         else if (response.statusCode === 200 && JSON.parse(body).success) {
             adapter.log.debug('[REQUEST] <=== Custom Command ' + endpoint + ' acknowledged by REST-Server');
-            if (cb && typeof(cb) === 'function') return cb();
+            if (cb && typeof (cb) === 'function') return cb();
         } else
             adapter.log.warn('[REQUEST] <=== Custom command ' + endpoint + ' not acknowledged by REST-Server');
     });
@@ -598,34 +596,6 @@ adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device nam
         });
     } // endIf
 });
-
-function startRestServer(cb) {
-
-    let startCmd;
-    let started;
-
-    if (os.startsWith('win')) {
-        // Windows
-        startCmd = 'node ' + __dirname + '\\node_modules\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\' + winPath + '\\Scripts\\xbox-rest-server.exe' +
-            ' || ' + 'node ' + __dirname + '\\..\\nopy\\src\\nopy.js ' + __dirname + '\\python_modules\\' + winPath + '\\Scripts\\xbox-rest-server.exe';
-    } else
-    // Linux and MAC -- if not found in node_modules try root project
-        startCmd = __dirname + '/node_modules/nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server' +
-            ' || ' + __dirname + '/../nopy/src/nopy.js ' + __dirname + '/python_modules/bin/xbox-rest-server';
-
-    restServerProcess = exec(startCmd, (error, stdout, stderr) => {
-        let err = false;
-        if (error && !stderr.includes('REST server started')) {
-            started = false;
-            err = stderr;
-        } else {
-            started = true;
-        } // endElse
-        // Callback is only executed when program is finished/goes on
-        if (cb && typeof(cb) === 'function') return cb(started, err);
-    });
-
-} // endStartRestServer
 
 function restartAdapter() {
     adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) => {
@@ -648,7 +618,7 @@ function authenticateOnServer(cb) {
             if (!err && JSON.parse(body).two_factor_required) {
                 adapter.log.debug('[LOGIN] Two factor authentication required, try to load token');
                 loadToken().then(() => {
-                    if (cb && typeof(cb) === 'function') return cb();
+                    if (cb && typeof (cb) === 'function') return cb();
                 }).catch(() => {
                     adapter.log.warn('[LOGIN] Failed to load Token, log in at http://' + IO_HOST_IP + ':5557/auth/oauth');
                 });
@@ -681,7 +651,7 @@ function authenticateOnServer(cb) {
                 });
             } // endElse
 
-            if (cb && typeof(cb === 'function')) return cb();
+            if (cb && typeof (cb === 'function')) return cb();
         });
 } // endAuthenticateOnServer
 
@@ -692,11 +662,11 @@ function logOut(cb) {
             adapter.log.debug('[LOGOUT] <=== Successfully logged out');
             adapter.setState('info.authenticated', false, true);
             adapter.setState('info.gamertag', '', true, () => {
-                if (cb && typeof(cb === 'function')) return cb();
+                if (cb && typeof (cb === 'function')) return cb();
             });
         } else {
             adapter.log.debug('[LOGOUT] <=== Failed to logout: ' + body);
-            if (cb && typeof(cb === 'function')) return cb();
+            if (cb && typeof (cb === 'function')) return cb();
         } // endElse
     });
 } // endLogOut
@@ -760,58 +730,61 @@ function loadToken() {
     });
 } // endLoadToken
 
-function prepareAuthentication(authenticate, cb) {
-    if (authenticate) {
-        // create Auth-Only Objects
-        adapter.setObjectNotExists('info.authenticated', {
-            type: 'state',
-            common: {
-                name: 'Xbox Live authenticated',
-                role: 'indicator.authenticated',
-                type: 'boolean',
-                read: true,
-                write: false,
-                def: false
-            },
-            native: {}
-        });
+function prepareAuthentication(authenticate) {
+    return new Promise(resolve => {
+        if (authenticate) {
+            const promises = [];
+            // create Auth-Only Objects
+            promises.push(adapter.setObjectNotExistsAsync('info.authenticated', {
+                type: 'state',
+                common: {
+                    name: 'Xbox Live authenticated',
+                    role: 'indicator.authenticated',
+                    type: 'boolean',
+                    read: true,
+                    write: false,
+                    def: false
+                },
+                native: {}
+            }));
 
-        adapter.setObjectNotExists('info.activeTitleImage', {
-            type: 'state',
-            common: {
-                name: 'Active title image',
-                role: 'icon',
-                type: 'string',
-                read: true,
-                write: false
-            },
-            native: {}
-        });
+            promises.push(adapter.setObjectNotExistsAsync('info.activeTitleImage', {
+                type: 'state',
+                common: {
+                    name: 'Active title image',
+                    role: 'icon',
+                    type: 'string',
+                    read: true,
+                    write: false
+                },
+                native: {}
+            }));
 
-        adapter.setObjectNotExists('info.gamertag', {
-            type: 'state',
-            common: {
-                name: 'Authenticated Gamertag',
-                role: 'name.user',
-                type: 'string',
-                read: true,
-                write: false
-            },
-            native: {}
-        });
+            promises.push(adapter.setObjectNotExistsAsync('info.gamertag', {
+                type: 'state',
+                common: {
+                    name: 'Authenticated Gamertag',
+                    role: 'name.user',
+                    type: 'string',
+                    read: true,
+                    write: false
+                },
+                native: {}
+            }));
 
-        adapter.setObjectNotExists('settings.gameDvr', {
-            type: 'state',
-            common: {
-                name: 'Game Recorder',
-                role: 'button',
-                type: 'boolean',
-                read: true,
-                write: true
-            },
-            native: {}
-        }, () => {
-            adapter.getForeignObject('system.config', (err, obj) => {
+            promises.push(adapter.setObjectNotExistsAsync('settings.gameDvr', {
+                type: 'state',
+                common: {
+                    name: 'Game Recorder',
+                    role: 'button',
+                    type: 'boolean',
+                    read: true,
+                    write: true
+                },
+                native: {}
+            }));
+
+            promises.push(adapter.getForeignObjectAsync('system.config').then(obj => {
                 if (obj && obj.native && obj.native.secret) {
                     password = decrypt(obj.native.secret, password);
                     mail = decrypt(obj.native.secret, mail);
@@ -819,17 +792,16 @@ function prepareAuthentication(authenticate, cb) {
                     password = decrypt('Zgfr56gFe87jJOM', password);
                     mail = decrypt('Zgfr56gFe87jJOM', mail);
                 } // endElse
-                if (cb && typeof(cb) === 'function') return cb();
-            });
-        });
-    } else {
-        // del Objects
-        adapter.delObject('info.authenticated');
-        adapter.delObject('info.gamertag');
-        adapter.delObject('info.activeTitleImage');
-        adapter.delObject('info.gameDvr', () => {
-            if (cb && typeof(cb) === 'function') return cb();
-        });
-    } // endElse
+            }));
 
-}
+            Promise.all(promises).then(() => resolve());
+        } else {
+            // del Objects
+            adapter.delObject('info.authenticated');
+            adapter.delObject('info.gamertag');
+            adapter.delObject('info.activeTitleImage');
+            adapter.delObject('info.gameDvr');
+            resolve();
+        } // endElse
+    });
+} // endPrepareAuthentication
