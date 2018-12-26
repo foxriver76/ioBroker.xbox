@@ -50,11 +50,11 @@ adapter.on('unload', callback => {
 
                 const promises = [];
                 promises.push(adapter.setStateAsync('info.connection', false, true));
-                promises.push(adapter.setState('info.activeTitleImage', '', true));
-                promises.push(adapter.setState('info.activeTitleName', '', true));
-                promises.push(adapter.setState('info.activeTitleId', '', true));
-                promises.push(adapter.setState('info.currentTitles', '{}', true));
-                promises.push(adapter.setState('info.activeTitleType', '', true));
+                promises.push(adapter.setStateAsync('info.activeTitleImage', '', true));
+                promises.push(adapter.setStateAsync('info.activeTitleName', '', true));
+                promises.push(adapter.setStateAsync('info.activeTitleId', '', true));
+                promises.push(adapter.setStateAsync('info.currentTitles', '{}', true));
+                promises.push(adapter.setStateAsync('info.activeTitleType', '', true));
 
                 Promise.all(promises).then(() => {
                     adapter.log.info('[END] cleaned everything up...');
