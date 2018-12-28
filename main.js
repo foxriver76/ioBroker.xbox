@@ -420,8 +420,7 @@ function powerOn(cb) {
 
 function handleStateChange(state, id, cb) {
     if (blockXbox) return adapter.log.warn('[STATE] ' + id + ' change to ' + state.val + ' dropped, because Xbox blocked');
-    blockXbox = true;
-    const unblockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
+    blockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
 
     switch (id) {
         case 'settings.power':
@@ -784,14 +783,18 @@ function prepareAuthentication(authenticate) {
                 native: {}
             }));
 
-            promises.push(adapter.getForeignObjectAsync('system.config').then(obj => {
-                if (obj && obj.native && obj.native.secret) {
-                    password = decrypt(obj.native.secret, password);
-                    mail = decrypt(obj.native.secret, mail);
-                } else {
-                    password = decrypt('Zgfr56gFe87jJOM', password);
-                    mail = decrypt('Zgfr56gFe87jJOM', mail);
-                } // endElse
+            promises.push(new Promise(resolve => {
+                adapter.getForeignObjectAsync('system.config').then(obj => {
+                    if (obj && obj.native && obj.native.secret) {
+                        password = decrypt(obj.native.secret, password);
+                        mail = decrypt(obj.native.secret, mail);
+                        resolve();
+                    } else {
+                        password = decrypt('Zgfr56gFe87jJOM', password);
+                        mail = decrypt('Zgfr56gFe87jJOM', mail);
+                        resolve();
+                    } // endElse
+                });
             }));
 
             Promise.all(promises).then(() => resolve());

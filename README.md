@@ -316,7 +316,7 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
-### 0.4.3
+### 0.4.4
 * (foxriver76) small fixes and optimizations
 
 ### 0.4.2
