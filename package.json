@@ -1,6 +1,6 @@
 {
   "name": "iobroker.xbox",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "engines": {
     "node": ">=6.0.0"
   },
@@ -31,7 +31,7 @@
     "request": "^2.88.0",
     "ping": "^0.2.2",
     "nopy": "^0.2.6",
-    "@iobroker/adapter-core": "^1.0.1"
+    "@iobroker/adapter-core": "^1.0.2"
   },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --exit",
@@ -41,11 +41,13 @@
     "npip": "npip"
   },
   "python": {
-  	"execPath": [
+    "execPath": [
       "python3",
       "python"
-      ],
-  	"path": ["."],
+    ],
+    "path": [
+      "."
+    ],
     "dependencies": {
       "xbox-smartglass-rest": ">=0.9.8"
     }

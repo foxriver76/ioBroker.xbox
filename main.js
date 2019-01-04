@@ -22,7 +22,6 @@ let tryPowerOn = false;
 let xboxPingable = false;
 let firstReconnectAttempt = true;
 let xboxAvailable = false;
-let winPath;
 let restServerPid;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
@@ -116,24 +115,11 @@ adapter.on('ready', () => {
         adapter.log.info('[START] Starting REST server');
     } // endElse
 
-    if (os.startsWith('win')) {
-        // Get correct python directory for windows
-        exec('dir /B ' + __dirname + '\\python_modules\\Python3', (err, stdout, stderr) => {
-            winPath = stdout.replace(/[^ -~]+/g, '') || 'Python36';
-            helper.startRestServer().catch(() => {
-                adapter.log.error('[START] Failed starting REST server: ' + err);
-                adapter.log.error('[START] Restarting adapter in 30 seconds');
-                setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
-            });
-        });
-
-    } else {
-        helper.startRestServer().catch((err) => {
-            adapter.log.error('[START] Failed starting REST server: ' + err);
-            adapter.log.error('[START] Restarting adapter in 30 seconds');
-            setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
-        });
-    } // endElse
+    helper.startRestServer().catch((err) => {
+        adapter.log.error('[START] Failed starting REST server: ' + err);
+        adapter.log.error('[START] Restarting adapter in 30 seconds');
+        setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
+    });
 
     prepareAuthentication(authenticate).then(() => setTimeout(() => main(), 6500)); // Server needs time to start
 });
@@ -259,11 +245,11 @@ function connect(ip, cb) {
         if (device && device.device_status === 'Available') xboxAvailable = true;
         else xboxAvailable = false;
 
-        if (connectionState && connectionState != 'Disconnected') {
+        if (connectionState && connectionState !== 'Disconnected') {
             adapter.getState('info.connection', (err, state) => {
-                if (state.val && connectionState == 'Connected') {
+                if (state.val && connectionState === 'Connected') {
                     adapter.log.debug('[CONNECT] Still connected');
-                } else if (connectionState == 'Connecting') {
+                } else if (connectionState === 'Connecting') {
                     adapter.log.debug('[CONNECT] Currently connecting');
                 } else {
                     adapter.setState('info.connection', true, true);
