@@ -161,6 +161,7 @@
         "mail",
         "password"
     ],
+    "compact": true,
     "objects": [],
     "instanceObjects": [
         {
