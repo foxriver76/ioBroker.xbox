@@ -3,7 +3,6 @@
 'use strict';
 
 const utils = require('@iobroker/adapter-core'); // Get common adapter utils
-const adapter = new utils.Adapter('xbox');
 const IO_HOST_IP = require(__dirname + '/lib/network').getIP();
 const {exec} = require('child_process');
 const helper = require(__dirname + '/lib/utils');
@@ -23,106 +22,130 @@ let xboxPingable = false;
 let firstReconnectAttempt = true;
 let xboxAvailable = false;
 let restServerPid;
+let adapter;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
-adapter.on('unload', callback => {
-    try {
-        let killCmd;
-
-        adapter.setState('info.connection', false, true);
-        adapter.setState('power.settings', false, true);
-        if (os.startsWith('win')) {
-            // Windows
-            killCmd = 'taskkill /F /PID ' + restServerPid;
-        } else {
-            // Linux and Mac
-            killCmd = 'pkill -f xbox-rest-server';
-        } // endElse
-
-        logOut(() => {
-            exec(killCmd, (error, stdout, stderr) => {
-                if (!error) {
-                    adapter.log.info('[END] REST server stopped');
-                } else {
-                    adapter.log.info('[END] REST server stopped ' + stderr);
-                } // endElse
-
-                const promises = [];
-                promises.push(adapter.setStateAsync('info.connection', false, true));
-                promises.push(adapter.setStateAsync('info.activeTitleImage', '', true));
-                promises.push(adapter.setStateAsync('info.activeTitleName', '', true));
-                promises.push(adapter.setStateAsync('info.activeTitleId', '', true));
-                promises.push(adapter.setStateAsync('info.currentTitles', '{}', true));
-                promises.push(adapter.setStateAsync('info.activeTitleType', '', true));
-
-                Promise.all(promises).then(() => {
-                    adapter.log.info('[END] cleaned everything up...');
-                    callback();
-                });
-            });
-        });
-    } catch (e) {
-        callback();
-    } // endTryCatch
-});
-
-adapter.on('stateChange', (id, state) => {
-    if (!id || !state || state.ack) return; // Ignore acknowledged state changes or error states
-
-    adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state.val);
-
-    const stateVal = state.val;
-    id = id.substring(adapter.namespace.length + 1); // remove instance name and id
-
-    if (stateVal && id === 'settings.power') {
-        handleStateChange(state, id);
-    } else {
-        adapter.getState('info.connection', (err, state) => {
-            if (state.val)
-                handleStateChange(stateVal, id);
-            else
-                adapter.log.warn('[COMMAND] ===> Can not handle id change ' + id + ' with value ' + stateVal + ' because not connected');
-        });
-    } // endElse
-});
-
-// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-adapter.on('message', obj => {
-    if (typeof obj === 'object' && obj.message) {
-        if (obj.command === 'browse') {
-            // e.g. send email or pushover or whatever
-            adapter.log.info('[BROWSE] Start browsing');
-
-            // Send response in callback if required
-            if (obj.callback) adapter.sendTo(obj.from, obj.command, 'Message received', obj.callback);
-        } // endIf
-    } // endIf
-});
-
-adapter.on('ready', () => {
-
-    ip = adapter.config.ip;
-    liveId = adapter.config.liveId;
-    authenticate = adapter.config.authenticate || false;
-    mail = adapter.config.mail || '';
-    password = adapter.config.password || '';
-
-    if (!ip || !liveId) {
-        adapter.log.warn('Please provide the ip address and the Live ID of your console');
-        return;
-    } else {
-        adapter.log.debug('[START] IP address is ' + ip);
-        adapter.log.info('[START] Starting REST server');
-    } // endElse
-
-    helper.startRestServer().catch((err) => {
-        adapter.log.error('[START] Failed starting REST server: ' + err);
-        adapter.log.error('[START] Restarting adapter in 30 seconds');
-        setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
+function startAdapter(options) {
+    options = options || {};
+    Object.assign(options, {
+        name: 'xbox'
     });
 
-    prepareAuthentication(authenticate).then(() => setTimeout(() => main(), 6500)); // Server needs time to start
-});
+    adapter = new utils.Adapter(options);
+
+    adapter.on('unload', callback => {
+        try {
+            let killCmd;
+
+            adapter.setState('info.connection', false, true);
+            adapter.setState('power.settings', false, true);
+            if (os.startsWith('win')) {
+                // Windows
+                killCmd = 'taskkill /F /PID ' + restServerPid;
+            } else {
+                // Linux and Mac
+                killCmd = 'pkill -f xbox-rest-server';
+            } // endElse
+
+            logOut(() => {
+                exec(killCmd, (error, stdout, stderr) => {
+                    if (!error) {
+                        adapter.log.info('[END] REST server stopped');
+                    } else {
+                        adapter.log.info('[END] REST server stopped ' + stderr);
+                    } // endElse
+
+                    const promises = [];
+                    promises.push(adapter.setStateAsync('info.connection', false, true));
+                    promises.push(adapter.setStateAsync('info.activeTitleImage', '', true));
+                    promises.push(adapter.setStateAsync('info.activeTitleName', '', true));
+                    promises.push(adapter.setStateAsync('info.activeTitleId', '', true));
+                    promises.push(adapter.setStateAsync('info.currentTitles', '{}', true));
+                    promises.push(adapter.setStateAsync('info.activeTitleType', '', true));
+
+                    Promise.all(promises).then(() => {
+                        adapter.log.info('[END] cleaned everything up...');
+                        callback();
+                    });
+                });
+            });
+        } catch (e) {
+            callback();
+        } // endTryCatch
+    });
+
+    adapter.on('stateChange', (id, state) => {
+        if (!id || !state || state.ack) return; // Ignore acknowledged state changes or error states
+
+        adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state.val);
+
+        const stateVal = state.val;
+        id = id.substring(adapter.namespace.length + 1); // remove instance name and id
+
+        if (stateVal && id === 'settings.power') {
+            handleStateChange(state, id);
+        } else {
+            adapter.getState('info.connection', (err, state) => {
+                if (state.val)
+                    handleStateChange(stateVal, id);
+                else
+                    adapter.log.warn('[COMMAND] ===> Can not handle id change ' + id + ' with value ' + stateVal + ' because not connected');
+            });
+        } // endElse
+    });
+
+    // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
+    adapter.on('message', obj => {
+        if (typeof obj === 'object' && obj.message) {
+            if (obj.command === 'browse') {
+                // e.g. send email or pushover or whatever
+                adapter.log.info('[BROWSE] Start browsing');
+
+                // Send response in callback if required
+                if (obj.callback) adapter.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+            } // endIf
+        } // endIf
+    });
+
+    adapter.on('ready', () => {
+
+        ip = adapter.config.ip;
+        liveId = adapter.config.liveId;
+        authenticate = adapter.config.authenticate || false;
+        mail = adapter.config.mail || '';
+        password = adapter.config.password || '';
+
+        if (!ip || !liveId) {
+            adapter.log.warn('Please provide the ip address and the Live ID of your console');
+            return;
+        } else {
+            adapter.log.debug('[START] IP address is ' + ip);
+            adapter.log.info('[START] Starting REST server');
+        } // endElse
+
+        helper.startRestServer().catch((err) => {
+            adapter.log.error('[START] Failed starting REST server: ' + err);
+            adapter.log.error('[START] Restarting adapter in 30 seconds');
+            setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
+        });
+
+        adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
+            if (!obj) {
+                adapter.setForeignObject(adapter.namespace, {
+                    type: 'device',
+                    common: {
+                        name: 'Xbox device'
+                    }
+                });
+            } // endIf
+        });
+
+        prepareAuthentication(authenticate).then(() => setTimeout(() => main(), 6500)); // Server needs time to start
+    });
+
+    return adapter;
+}
+
 
 function main() {
 
@@ -571,17 +594,6 @@ function sendCustomCommand(endpoint, cb) {
     });
 } // endSendCustomCommand
 
-adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
-    if (!obj) {
-        adapter.setForeignObject(adapter.namespace, {
-            type: 'device',
-            common: {
-                name: 'Xbox device'
-            }
-        });
-    } // endIf
-});
-
 function restartAdapter() {
     adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) => {
         if (obj) adapter.setForeignObject('system.adapter.' + adapter.namespace, obj);
@@ -794,3 +806,11 @@ function prepareAuthentication(authenticate) {
         } // endElse
     });
 } // endPrepareAuthentication
+
+// If started as allInOne/compact mode => return function to create instance
+if (typeof module !== 'undefined' && module.parent) {
+    module.exports = startAdapter;
+} else {
+    // or start the instance directly
+    startAdapter();
+}

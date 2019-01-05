@@ -1,18 +1,18 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.4.5",
+        "version": "0.5.0",
         "news": {
-            "0.4.5": {
-                "en": "small fixes and optimizations",
-                "de": "kleine Korrekturen und Optimierungen",
-                "ru": "небольшие исправления и оптимизации",
-                "pt": "pequenas correções e otimizações",
-                "nl": "kleine fixes en optimalisaties",
-                "fr": "petites corrections et optimisations",
-                "it": "piccole correzioni e ottimizzazioni",
-                "es": "Pequeñas correcciones y optimizaciones.",
-                "pl": "małe poprawki i optymalizacje"
+            "0.5.0": {
+                "en": "support of compact mode and small fixes and optimizations",
+                "de": "Unterstützung des Kompaktmodus und kleiner Korrekturen und Optimierungen",
+                "ru": "поддержка компактного режима и небольших исправлений и оптимизаций",
+                "pt": "suporte de modo compacto e pequenas correções e otimizações",
+                "nl": "ondersteuning van compacte modus en kleine fixes en optimalisaties",
+                "fr": "support du mode compact et de petites corrections et optimisations",
+                "it": "supporto della modalità compatta e piccole correzioni e ottimizzazioni",
+                "es": "Soporte de modo compacto y pequeñas correcciones y optimizaciones.",
+                "pl": "obsługa trybu kompaktowego oraz małych poprawek i optymalizacji"
             },
             "0.4.2": {
                 "en": "use adapter-core",
@@ -157,6 +157,10 @@
         "mail": "",
         "password": ""
     },
+    "protectedNative": [
+        "mail",
+        "password"
+    ],
     "objects": [],
     "instanceObjects": [
         {
