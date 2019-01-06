@@ -324,10 +324,10 @@ function connect(ip, cb) {
             } else if (device && device.device_status === 'Unavailable') {
                 adapter.log.debug('[CONNECT] Console currently unavailable');
             } else if (firstReconnectAttempt) {
-                adapter.log.warn('[CONNECT] No LiveID discovered until now');
+                adapter.log.warn('[CONNECT] Ping response, but provided LiveID has not been discovered until now');
                 firstReconnectAttempt = false;
             } else
-                adapter.log.debug('[CONNECT] No LiveID discovered until now');
+                adapter.log.debug('[CONNECT] Ping response, but provided LiveID has not been discovered until now');
         } // endElse
     });
 } // endConnect
