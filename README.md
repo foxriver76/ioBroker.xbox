@@ -316,6 +316,10 @@ In this section you can find a description of every state of the adapter.
    
 ## Changelog
 
+### 0.5.1
+* (foxriver76) improve log message quality
+* (foxriver76) more promisification
+
 ### 0.5.0
 * (foxriver76) support of compact mode
 * (foxriver76) fixes and optimizations

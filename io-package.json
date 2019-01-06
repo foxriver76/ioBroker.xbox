@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.5.0",
+        "version": "0.5.1",
         "news": {
+            "0.5.1": {
+                "en": "improve log message quality, more promisification",
+                "de": "Verbesserung der Protokollnachrichtenqualität, mehr Promisifications",
+                "ru": "улучшить качество сообщений журнала, больше обещаний",
+                "pt": "melhorar a qualidade da mensagem de log, mais promisification",
+                "nl": "verbetering van de kwaliteit van het logbericht, meer belofte",
+                "fr": "améliorer la qualité des messages de log, plus de promisification",
+                "it": "migliorare la qualità dei messaggi di registro, maggiore promessa",
+                "es": "mejorar la calidad de los mensajes de registro, más promisificación",
+                "pl": "popraw jakość logu, więcej promisyfikacji"
+            },
             "0.5.0": {
                 "en": "support of compact mode and small fixes and optimizations",
                 "de": "Unterstützung des Kompaktmodus und kleiner Korrekturen und Optimierungen",

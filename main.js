@@ -47,7 +47,7 @@ function startAdapter(options) {
                 killCmd = 'pkill -f xbox-rest-server';
             } // endElse
 
-            logOut(() => {
+            logOut().then(() => {
                 exec(killCmd, (error, stdout, stderr) => {
                     if (!error) {
                         adapter.log.info('[END] REST server stopped');
@@ -85,7 +85,7 @@ function startAdapter(options) {
         if (stateVal && id === 'settings.power') {
             handleStateChange(state, id);
         } else {
-            adapter.getState('info.connection', (err, state) => {
+            adapter.getStateAsync('info.connection').then(state => {
                 if (state.val)
                     handleStateChange(stateVal, id);
                 else
@@ -129,7 +129,7 @@ function startAdapter(options) {
             setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
         });
 
-        adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
+        adapter.getForeignObjectAsync(adapter.namespace).then(obj => { // create device namespace
             if (!obj) {
                 adapter.setForeignObject(adapter.namespace, {
                     type: 'device',
@@ -144,7 +144,7 @@ function startAdapter(options) {
     });
 
     return adapter;
-}
+} // endStartAdapter
 
 
 function main() {
@@ -153,7 +153,7 @@ function main() {
 
     // Authenticate on Xbox Live, make sure to be logged out first
     if (authenticate) {
-        logOut(() => authenticateOnServer());
+        logOut().then(() => authenticateOnServer());
     } // endIf
 
     // Get Rest Server PID once for killing on windows
@@ -180,7 +180,7 @@ function main() {
                 xboxPingable = true;
                 if (isAlive) adapter.log.debug('[PING] Xbox online');
                 else adapter.log.debug('[PING] Xbox offline, but marked available');
-                connect(ip, connectionState => { // check if connection is (still) established
+                connect(ip).then(connectionState => { // check if connection is (still) established
                     if (connectionState === 'Connected') {
                         request('http://' + restServerAddress + ':5557/device/' + liveId + '/console_status', (error, response, body) => {
                             if (error)
@@ -228,7 +228,7 @@ function main() {
                     } // endIf
                 });
             } else {
-                adapter.getState('info.connection', (err, state) => {
+                adapter.getStateAsync('info.connection').then(state => {
                     if ((!state || state.val) && !xboxAvailable) {
                         adapter.setState('info.connection', false, true);
                         adapter.setState('info.activeTitleImage', '', true);
@@ -241,7 +241,7 @@ function main() {
                         firstReconnectAttempt = true;
                     } // endIf
                 });
-                adapter.getState('settings.power', (err, state) => {
+                adapter.getStateAsync('settings.power').then(state => {
                     if (!state || (state.val && !xboxAvailable))
                         adapter.setState('settings.power', false, true);
                 });
@@ -254,348 +254,358 @@ function main() {
 } // endMain
 
 function connect(ip, cb) {
-    discoverAndUpdateConsole(ip, (connectionState, discovered, device) => {
-        const statusURL = 'http://' + restServerAddress + ':5557/device/' + liveId + '/connect';
+    return new Promise(resolve => {
+        discoverAndUpdateConsole(ip).then(result => {
+            const statusURL = 'http://' + restServerAddress + ':5557/device/' + liveId + '/connect';
 
-        adapter.log.debug('[CONNECT] Check connection');
+            adapter.log.debug('[CONNECT] Check connection');
 
-        if (connectionState === 'Error') {
-            adapter.log.warn('[CONNECT] Error with rest server, restarting adapter');
-            return restartAdapter();
-        } // endIf
+            if (result.connectionState === 'Error') {
+                adapter.log.warn('[CONNECT] Error with rest server, restarting adapter');
+                return restartAdapter();
+            } // endIf
 
-        // Set device status to var to not only rely on ping to check if Xbox is online
-        if (device && device.device_status === 'Available') xboxAvailable = true;
-        else xboxAvailable = false;
+            // Set device status to var to not only rely on ping to check if Xbox is online
+            if (result.device && result.device.device_status === 'Available') xboxAvailable = true;
+            else xboxAvailable = false;
 
-        if (connectionState && connectionState !== 'Disconnected') {
-            adapter.getState('info.connection', (err, state) => {
-                if (state.val && connectionState === 'Connected') {
-                    adapter.log.debug('[CONNECT] Still connected');
-                } else if (connectionState === 'Connecting') {
-                    adapter.log.debug('[CONNECT] Currently connecting');
-                } else {
-                    adapter.setState('info.connection', true, true);
-                    adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + device.address + ')');
-                } // endIf
-
-                if (cb && typeof (cb) === 'function') return cb(connectionState);
-            });
-        } else {
-            adapter.getState('info.connection', (err, state) => {
-                if (!state || state.val) {
-                    adapter.setState('info.connection', false, true);
-                    adapter.setState('info.activeTitleImage', '', true);
-                    adapter.setState('info.activeTitleName', '', true);
-                    adapter.setState('info.activeTitleId', '', true);
-                    adapter.setState('info.currentTitles', '{}', true);
-                    adapter.setState('info.activeTitleType', '', true);
-                    adapter.log.info('[CONNECT] <=== Lost connection to your Xbox (' + ip + ')');
-                    firstReconnectAttempt = true;
-                } // endIf
-            });
-
-            if (liveId && device && device.device_status === 'Available') {
-                request(statusURL, (error, response, body) => {
-                    if (!error) {
-                        if (JSON.parse(body).success) {
-                            adapter.setState('info.connection', true, true);
-                            adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + device.address + ')');
-                            connectionState = true;
-                        } else {
-                            if (firstReconnectAttempt)
-                                adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
-                            else
-                                adapter.log.debug('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
-                            adapter.setState('info.connection', false, true);
-                            connectionState = false;
-                        } //endElse
+            if (result.connectionState && result.connectionState !== 'Disconnected') {
+                adapter.getStateAsync('info.connection').then(state => {
+                    if (state.val && result.connectionState === 'Connected') {
+                        adapter.log.debug('[CONNECT] Still connected');
+                    } else if (result.connectionState === 'Connecting') {
+                        adapter.log.debug('[CONNECT] Currently connecting');
                     } else {
-                        adapter.log.error('[CONNECT] <=== ' + error.message);
-                        adapter.setState('info.connection', false, true);
-                        connectionState = false;
-                        if (error.message.includes('ECONNREFUSED')) {
-                            adapter.log.error('[CONNECT] REST server seems to be down, adapter will be restarted');
-                            restartAdapter();
-                        } // endIf
-                    } // endElse
-                    if (cb && typeof (cb) === 'function') return cb(connectionState);
+                        adapter.setState('info.connection', true, true);
+                        adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + result.device.address + ')');
+                    } // endIf
+
+                    if (cb && typeof (cb) === 'function') return cb(result.connectionState);
                 });
-            } else if (device && device.device_status === 'Unavailable') {
-                adapter.log.debug('[CONNECT] Console currently unavailable');
-            } else if (firstReconnectAttempt) {
-                adapter.log.warn('[CONNECT] Ping response, but provided LiveID has not been discovered until now');
-                firstReconnectAttempt = false;
-            } else
-                adapter.log.debug('[CONNECT] Ping response, but provided LiveID has not been discovered until now');
-        } // endElse
+            } else {
+                adapter.getStateAsync('info.connection').then(state => {
+                    if (!state || state.val) {
+                        adapter.setState('info.connection', false, true);
+                        adapter.setState('info.activeTitleImage', '', true);
+                        adapter.setState('info.activeTitleName', '', true);
+                        adapter.setState('info.activeTitleId', '', true);
+                        adapter.setState('info.currentTitles', '{}', true);
+                        adapter.setState('info.activeTitleType', '', true);
+                        adapter.log.info('[CONNECT] <=== Lost connection to your Xbox (' + ip + ')');
+                        firstReconnectAttempt = true;
+                    } // endIf
+                });
+
+                if (liveId && result.device && result.device.device_status === 'Available') {
+                    request(statusURL, (error, response, body) => {
+                        if (!error) {
+                            if (JSON.parse(body).success) {
+                                adapter.setState('info.connection', true, true);
+                                adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + result.device.address + ')');
+                                result.connectionState = true;
+                            } else {
+                                if (firstReconnectAttempt)
+                                    adapter.log.warn('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
+                                else
+                                    adapter.log.debug('[CONNECT] <=== Connection to your Xbox failed: ' + JSON.parse(body).message);
+                                adapter.setState('info.connection', false, true);
+                                result.connectionState = false;
+                            } //endElse
+                        } else {
+                            adapter.log.error('[CONNECT] <=== ' + error.message);
+                            adapter.setState('info.connection', false, true);
+                            result.connectionState = false;
+                            if (error.message.includes('ECONNREFUSED')) {
+                                adapter.log.error('[CONNECT] REST server seems to be down, adapter will be restarted');
+                                restartAdapter();
+                            } // endIf
+                        } // endElse
+                        resolve(result.connectionState);
+                    });
+                } else if (result.device && result.device.device_status === 'Unavailable') {
+                    adapter.log.debug('[CONNECT] Console currently unavailable');
+                } else if (firstReconnectAttempt) {
+                    adapter.log.warn('[CONNECT] Ping response, but provided LiveID has not been discovered until now');
+                    firstReconnectAttempt = false;
+                } else
+                    adapter.log.debug('[CONNECT] Ping response, but provided LiveID has not been discovered until now');
+            } // endElse
+        });
     });
 } // endConnect
 
-function powerOff(liveId, cb) {
-
-    const endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/poweroff';
-    adapter.log.debug('[POWEROFF] Powering off Xbox' + ip + ')');
-
-    request(endpoint, (error, response, body) => {
-        if (!error) {
-            if (JSON.parse(body).success) {
-                adapter.log.debug('[POWEROFF] <=== ' + body);
-            } else {
-                adapter.log.warn('[POWEROFF] <=== ' + body);
-            } //endElse
-        } else {
-            adapter.log.error('[POWEROFF] <=== ' + error.message);
-        } // endElse
-        if (cb && typeof (cb) === 'function') return cb();
-    });
-
-} // endPowerOff
-
-function discoverAndUpdateConsole(ip, cb) { // is used by connect
-    adapter.getState('info.connection', (err, state) => {
-        let endpoint;
-        if (!state || !state.val) {
-            endpoint = 'http://' + restServerAddress + ':5557/device?addr=' + ip;
-            adapter.log.debug('[DISCOVER] Searching for consoles');
-        } else {
-            endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId;
-            adapter.log.debug('[UPDATE] Check console status');
-        } // endElse
-        let connectionState = false;
-        let discovered = false;
+function powerOff(liveId) {
+    return new Promise(resolve => {
+        const endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/poweroff';
+        adapter.log.debug('[POWEROFF] Powering off Xbox' + ip + ')');
 
         request(endpoint, (error, response, body) => {
-            let device;
             if (!error) {
-                const jsonBody = JSON.parse(body);
-                if (state && state.val) {
-                    try {
-                        device = jsonBody.device;
-                        liveId = jsonBody.device.liveid;
-                        connectionState = jsonBody.device.connection_state;
-                        adapter.log.debug('[UPDATE] <=== ' + body);
-                    } catch (e) {
-                        adapter.log.debug('[UPDATE] <=== ' + body);
-                    }
-                } else try {
-                    for (const i in jsonBody.devices) {
-                        if (jsonBody.devices[i].address === ip) {
-                            liveId = jsonBody.devices[i].liveid;
-                            discovered = true;
-                        } // endIf
-                    } // endFor
-                    if (jsonBody.devices[liveId].connection_state)
-                        connectionState = jsonBody.devices[liveId].connection_state;
-                    device = jsonBody.devices[liveId];
-                    adapter.log.debug('[DISCOVER] <=== ' + JSON.stringify(jsonBody.devices));
-                } catch (e) {
-                    adapter.log.debug('[DISCOVER] <=== ' + body);
-                }
+                if (JSON.parse(body).success) {
+                    adapter.log.debug('[POWEROFF] <=== ' + body);
+                } else {
+                    adapter.log.warn('[POWEROFF] <=== ' + body);
+                } //endElse
             } else {
-                adapter.log.error('[DISCOVER] <=== ' + error.message);
-                adapter.setState('info.connection', false, true);
-            }
-            if (cb && typeof (cb) === 'function') return cb(connectionState, discovered, device);
+                adapter.log.error('[POWEROFF] <=== ' + error.message);
+            } // endElse
+            resolve();
         });
     });
+} // endPowerOff
 
+function discoverAndUpdateConsole(ip) { // is used by connect
+    return new Promise(resolve => {
+        adapter.getStateAsync('info.connection').then((state) => {
+            let endpoint;
+            if (!state || !state.val) {
+                endpoint = 'http://' + restServerAddress + ':5557/device?addr=' + ip;
+                adapter.log.debug('[DISCOVER] Searching for consoles');
+            } else {
+                endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId;
+                adapter.log.debug('[UPDATE] Check console status');
+            } // endElse
+            let connectionState = false;
+            let discovered = false;
+
+            request(endpoint, (error, response, body) => {
+                let device;
+                if (!error) {
+                    const jsonBody = JSON.parse(body);
+                    if (state && state.val) {
+                        try {
+                            device = jsonBody.device;
+                            liveId = jsonBody.device.liveid;
+                            connectionState = jsonBody.device.connection_state;
+                            adapter.log.debug('[UPDATE] <=== ' + body);
+                        } catch (e) {
+                            adapter.log.debug('[UPDATE] <=== ' + body);
+                        }
+                    } else try {
+                        for (const i in jsonBody.devices) {
+                            if (jsonBody.devices[i].address === ip) {
+                                liveId = jsonBody.devices[i].liveid;
+                                discovered = true;
+                            } // endIf
+                        } // endFor
+                        if (jsonBody.devices[liveId].connection_state)
+                            connectionState = jsonBody.devices[liveId].connection_state;
+                        device = jsonBody.devices[liveId];
+                        adapter.log.debug('[DISCOVER] <=== ' + JSON.stringify(jsonBody.devices));
+                    } catch (e) {
+                        adapter.log.debug('[DISCOVER] <=== ' + body);
+                    }
+                } else {
+                    adapter.log.error('[DISCOVER] <=== ' + error.message);
+                    adapter.setState('info.connection', false, true);
+                } // endElse
+                resolve({connectionState, discovered, device});
+            });
+        });
+    });
 } // endDiscover
 
-function powerOn(cb) {
-    const endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/poweron?addr=' + ip;
-    if (!tryPowerOn) { // if Xbox isn't on after 17.5 seconds, stop trying
-        tryPowerOn = setTimeout(() => tryPowerOn = false, 17500);
-    } // endIf
-    adapter.log.debug('[POWERON] Powering on console');
-    blockXbox = true;
+function powerOn() {
+    return new Promise(resolve => {
+        const endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/poweron?addr=' + ip;
+        if (!tryPowerOn) { // if Xbox isn't on after 17.5 seconds, stop trying
+            tryPowerOn = setTimeout(() => tryPowerOn = false, 17500);
+        } // endIf
+        adapter.log.debug('[POWERON] Powering on console');
+        blockXbox = true;
 
-    request(endpoint, (error, response, body) => {
-        if (error) adapter.log.error('[REQUEST] <=== ' + error.message);
+        request(endpoint, (error, response, body) => {
+            if (error) adapter.log.error('[REQUEST] <=== ' + error.message);
 
-        if (!xboxPingable) {
-            if (tryPowerOn)
-                powerOn();
-            else {
-                adapter.log.warn('[REQUEST] <=== Could not turn on Xbox');
-                blockXbox = false;
-            } // endElse
-        } else blockXbox = false; // unblock Box because on
+            if (!xboxPingable) {
+                if (tryPowerOn)
+                    powerOn();
+                else {
+                    adapter.log.warn('[REQUEST] <=== Could not turn on Xbox');
+                    blockXbox = false;
+                } // endElse
+            } else blockXbox = false; // unblock Box because on
 
-        if (cb && typeof (cb) === 'function') return cb();
+            resolve();
+        });
     });
-
 } // endPowerOn
 
-function handleStateChange(state, id, cb) {
-    if (blockXbox) return adapter.log.warn('[STATE] ' + id + ' change to ' + state.val + ' dropped, because Xbox blocked');
-    blockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
+function handleStateChange(state, id) {
+    return new Promise(resolve => {
+        if (blockXbox) return adapter.log.warn('[STATE] ' + id + ' change to ' + state.val + ' dropped, because Xbox blocked');
+        blockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
 
-    switch (id) {
-        case 'settings.power':
-            if (state) {
-                powerOn();
-            } else {
-                powerOff(liveId);
-            } // endElse
-            break;
-        case 'gamepad.rightShoulder':
-            sendButton('right_shoulder');
-            break;
-        case 'gamepad.leftShoulder':
-            sendButton('left_shoulder');
-            break;
-        case 'gamepad.leftThumbstick':
-            sendButton('left_thumbstick');
-            break;
-        case 'gamepad.rightThumbstick':
-            sendButton('left_thumbstick');
-            break;
-        case 'gamepad.enroll':
-            sendButton('enroll');
-            break;
-        case 'gamepad.view':
-            sendButton('view');
-            break;
-        case 'gamepad.menu':
-            sendButton('menu');
-            break;
-        case 'gamepad.nexus':
-            sendButton('nexus');
-            break;
-        case 'gamepad.a':
-            sendButton('a');
-            break;
-        case 'gamepad.b':
-            sendButton('b');
-            break;
-        case 'gamepad.y':
-            sendButton('y');
-            break;
-        case 'gamepad.x':
-            sendButton('x');
-            break;
-        case 'gamepad.dpadUp':
-            sendButton('dpad_up');
-            break;
-        case 'gamepad.dpadDown':
-            sendButton('dpad_down');
-            break;
-        case 'gamepad.dpadLeft':
-            sendButton('dpad_left');
-            break;
-        case 'gamepad.dpadRight':
-            sendButton('dpad_right');
-            break;
-        case 'gamepad.clear':
-            sendButton('clear');
-            break;
-        case 'media.play':
-            sendMediaCmd('play');
-            break;
-        case 'media.pause':
-            sendMediaCmd('pause');
-            break;
-        case 'media.record':
-            sendMediaCmd('record');
-            break;
-        case 'media.playPause':
-            sendMediaCmd('play_pause');
-            break;
-        case 'media.previousTrack':
-            sendMediaCmd('prev_track');
-            break;
-        case 'media.seek':
-            sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/media/seek/' + state,
-                () => adapter.setState(id, state, true));
-            break;
-        case 'media.channelUp':
-            sendMediaCmd('channel_up');
-            break;
-        case 'media.nextTrack':
-            sendMediaCmd('next_track');
-            break;
-        case 'media.channelDown':
-            sendMediaCmd('channel_down');
-            break;
-        case 'media.menu':
-            sendMediaCmd('menu');
-            break;
-        case 'media.back':
-            sendMediaCmd('back');
-            break;
-        case 'media.rewind':
-            sendMediaCmd('rewind');
-            break;
-        case 'media.view':
-            sendMediaCmd('view');
-            break;
-        case 'media.fastForward':
-            sendMediaCmd('fast_forward');
-            break;
-        case 'media.stop':
-            sendMediaCmd('stop');
-            break;
-        case 'settings.inputText':
-            sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/text/' + state,
-                () => adapter.setState(id, state, true));
-            break;
-        case 'settings.launchTitle':
-            sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/launch/ms-xbl-' + state + '://',
-                () => adapter.setState(id, state, true));
-            break;
-        case 'settings.gameDvr':
-            sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/gamedvr');
-            break;
-        default:
-            adapter.log.warn('[COMMAND] ===> Not a valid id: ' + id);
-    } // endSwitch
-    if (cb && typeof (cb) === 'function') return cb();
+        switch (id) {
+            case 'settings.power':
+                if (state) {
+                    powerOn();
+                } else {
+                    powerOff(liveId);
+                } // endElse
+                break;
+            case 'gamepad.rightShoulder':
+                sendButton('right_shoulder');
+                break;
+            case 'gamepad.leftShoulder':
+                sendButton('left_shoulder');
+                break;
+            case 'gamepad.leftThumbstick':
+                sendButton('left_thumbstick');
+                break;
+            case 'gamepad.rightThumbstick':
+                sendButton('left_thumbstick');
+                break;
+            case 'gamepad.enroll':
+                sendButton('enroll');
+                break;
+            case 'gamepad.view':
+                sendButton('view');
+                break;
+            case 'gamepad.menu':
+                sendButton('menu');
+                break;
+            case 'gamepad.nexus':
+                sendButton('nexus');
+                break;
+            case 'gamepad.a':
+                sendButton('a');
+                break;
+            case 'gamepad.b':
+                sendButton('b');
+                break;
+            case 'gamepad.y':
+                sendButton('y');
+                break;
+            case 'gamepad.x':
+                sendButton('x');
+                break;
+            case 'gamepad.dpadUp':
+                sendButton('dpad_up');
+                break;
+            case 'gamepad.dpadDown':
+                sendButton('dpad_down');
+                break;
+            case 'gamepad.dpadLeft':
+                sendButton('dpad_left');
+                break;
+            case 'gamepad.dpadRight':
+                sendButton('dpad_right');
+                break;
+            case 'gamepad.clear':
+                sendButton('clear');
+                break;
+            case 'media.play':
+                sendMediaCmd('play');
+                break;
+            case 'media.pause':
+                sendMediaCmd('pause');
+                break;
+            case 'media.record':
+                sendMediaCmd('record');
+                break;
+            case 'media.playPause':
+                sendMediaCmd('play_pause');
+                break;
+            case 'media.previousTrack':
+                sendMediaCmd('prev_track');
+                break;
+            case 'media.seek':
+                sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/media/seek/' + state)
+                    .then(() => adapter.setState(id, state, true));
+                break;
+            case 'media.channelUp':
+                sendMediaCmd('channel_up');
+                break;
+            case 'media.nextTrack':
+                sendMediaCmd('next_track');
+                break;
+            case 'media.channelDown':
+                sendMediaCmd('channel_down');
+                break;
+            case 'media.menu':
+                sendMediaCmd('menu');
+                break;
+            case 'media.back':
+                sendMediaCmd('back');
+                break;
+            case 'media.rewind':
+                sendMediaCmd('rewind');
+                break;
+            case 'media.view':
+                sendMediaCmd('view');
+                break;
+            case 'media.fastForward':
+                sendMediaCmd('fast_forward');
+                break;
+            case 'media.stop':
+                sendMediaCmd('stop');
+                break;
+            case 'settings.inputText':
+                sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/text/' + state)
+                    .then(() => adapter.setState(id, state, true));
+                break;
+            case 'settings.launchTitle':
+                sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/launch/ms-xbl-' + state + '://')
+                    .then(() => adapter.setState(id, state, true));
+                break;
+            case 'settings.gameDvr':
+                sendCustomCommand('http://' + restServerAddress + ':5557/device/' + liveId + '/gamedvr');
+                break;
+            default:
+                adapter.log.warn('[COMMAND] ===> Not a valid id: ' + id);
+        } // endSwitch
+        resolve();
+    });
 } // endHandleStateChange
 
-function sendButton(button, cb) {
-    const endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/input/' + button;
-    let success = false;
+function sendButton(button) {
+    return new Promise(resolve => {
+        const endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/input/' + button;
 
-    request(endpoint, (error, response, body) => {
-        if (error) adapter.log.error('[REQUEST] <=== ' + error.message);
-        else if (JSON.parse(body).success) {
-            adapter.log.debug('[REQUEST] <=== Button ' + button + ' acknowledged by REST-Server');
-            success = true;
-        } else
-            adapter.log.warn('[REQUEST] <=== Button ' + button + ' not acknowledged by REST-Server');
-
-        if (cb && typeof (cb) === 'function') return cb(success);
+        request(endpoint, (error, response, body) => {
+            if (error) adapter.log.error('[REQUEST] <=== ' + error.message);
+            else if (JSON.parse(body).success) {
+                adapter.log.debug('[REQUEST] <=== Button ' + button + ' acknowledged by REST-Server');
+                resolve();
+            } else {
+                adapter.log.warn('[REQUEST] <=== Button ' + button + ' not acknowledged by REST-Server');
+            } // endElse
+        });
     });
 } // endSendButton
 
-function sendMediaCmd(cmd, cb) {
-    const endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/media/' + cmd;
+function sendMediaCmd(cmd) {
+    return new Promise(resolve => {
+        const endpoint = 'http://' + restServerAddress + ':5557/device/' + liveId + '/media/' + cmd;
 
-    request(endpoint, (error, response, body) => {
-        if (error) adapter.log.error('[REQUEST] <=== ' + error.message);
-        else if (JSON.parse(body).success)
-            adapter.log.debug('[REQUEST] <=== Media command ' + cmd + ' acknowledged by REST-Server');
-        else
-            adapter.log.warn('[REQUEST] <=== Media command ' + cmd + ' not acknowledged by REST-Server');
-        if (cb && typeof (cb) === 'function') return cb();
+        request(endpoint, (error, response, body) => {
+            if (error) adapter.log.error('[REQUEST] <=== ' + error.message);
+            else if (JSON.parse(body).success)
+                adapter.log.debug('[REQUEST] <=== Media command ' + cmd + ' acknowledged by REST-Server');
+            else
+                adapter.log.warn('[REQUEST] <=== Media command ' + cmd + ' not acknowledged by REST-Server');
+            resolve();
+        });
     });
 } // endSendMediaCmd
 
-function sendCustomCommand(endpoint, cb) {
-    // Returns cb on success
-    request(endpoint, (error, response, body) => {
-        if (error) adapter.log.error('[REQUEST] <=== Custom request error: ' + error.message);
-        else if (response.statusCode === 200 && JSON.parse(body).success) {
-            adapter.log.debug('[REQUEST] <=== Custom Command ' + endpoint + ' acknowledged by REST-Server');
-            if (cb && typeof (cb) === 'function') return cb();
-        } else
-            adapter.log.warn('[REQUEST] <=== Custom command ' + endpoint + ' not acknowledged by REST-Server');
+function sendCustomCommand(endpoint) {
+    return new Promise(resolve => {
+        request(endpoint, (error, response, body) => {
+            if (error) adapter.log.error('[REQUEST] <=== Custom request error: ' + error.message);
+            else if (response.statusCode === 200 && JSON.parse(body).success) {
+                adapter.log.debug('[REQUEST] <=== Custom Command ' + endpoint + ' acknowledged by REST-Server');
+                resolve();
+            } else {
+                adapter.log.warn('[REQUEST] <=== Custom command ' + endpoint + ' not acknowledged by REST-Server');
+            } // endElse
+        });
     });
 } // endSendCustomCommand
 
 function restartAdapter() {
-    adapter.getForeignObject('system.adapter.' + adapter.namespace, (err, obj) => {
+    adapter.getForeignObjectAsync('system.adapter.' + adapter.namespace).then((obj) => {
         if (obj) adapter.setForeignObject('system.adapter.' + adapter.namespace, obj);
     });
 } // endFunctionRestartAdapter
@@ -609,89 +619,93 @@ function decrypt(key, value) {
     return result;
 } // endDecrypt
 
-function authenticateOnServer(cb) {
-    request.post('http://' + restServerAddress + ':5557/auth/login',
-        {form: {email: mail, password: password}}, (err, response, body) => {
-            if (!err && JSON.parse(body).two_factor_required) {
-                adapter.log.debug('[LOGIN] Two factor authentication required, try to load token');
-                loadToken().then(() => {
-                    if (cb && typeof (cb) === 'function') return cb();
-                }).catch(() => {
-                    adapter.log.warn('[LOGIN] Failed to load Token, log in at http://' + IO_HOST_IP + ':5557/auth/oauth');
-                });
-            } else if (err && err.toString().includes('ECONNREFUSED')) {
-                adapter.log.warn('[LOGIN] Connection refused, will try again');
-                setTimeout(() => authenticateOnServer(cb), 1000);
-            } else if (err || JSON.parse(body).success === false) {
-                adapter.log.warn('[LOGIN] <=== Error: ' + err);
-                adapter.getState('info.authenticated', (err, state) => {
-                    if (!state || state.val) {
-                        adapter.setState('info.authenticated', false, true);
-                    } // endIf
-                });
-                adapter.getState('info.gamertag', (err, state) => {
-                    if (state && state.val !== '') {
-                        adapter.setState('info.gamertag', '', true);
-                    } // endIf
-                });
-            } else {
-                adapter.log.debug('[LOGIN] <=== Successfully logged in: ' + body);
-                adapter.getState('info.authenticated', (err, state) => {
-                    if (!state || !state.val) {
-                        adapter.setState('info.authenticated', true, true);
-                    } // endIf
-                });
-                adapter.getState('info.gamertag', (err, state) => {
-                    if (state && state.val !== JSON.parse(body).gamertag) {
-                        adapter.setState('info.gamertag', JSON.parse(body).gamertag, true);
-                    } // endIf
-                });
-            } // endElse
+function authenticateOnServer() {
+    return new Promise(resolve => {
+        request.post('http://' + restServerAddress + ':5557/auth/login',
+            {form: {email: mail, password: password}}, (err, response, body) => {
+                if (!err && JSON.parse(body).two_factor_required) {
+                    adapter.log.debug('[LOGIN] Two factor authentication required, try to load token');
+                    loadToken().then(() => {
+                        resolve();
+                    }).catch(() => {
+                        adapter.log.warn('[LOGIN] Failed to load Token, log in at http://' + IO_HOST_IP + ':5557/auth/oauth');
+                    });
+                } else if (err && err.toString().includes('ECONNREFUSED')) {
+                    adapter.log.warn('[LOGIN] Connection refused, will try again');
+                    setTimeout(() => authenticateOnServer(), 1000);
+                } else if (err || JSON.parse(body).success === false) {
+                    adapter.log.warn('[LOGIN] <=== Error: ' + err);
+                    adapter.getState('info.authenticated', (err, state) => {
+                        if (!state || state.val) {
+                            adapter.setState('info.authenticated', false, true);
+                        } // endIf
+                    });
+                    adapter.getState('info.gamertag', (err, state) => {
+                        if (state && state.val !== '') {
+                            adapter.setState('info.gamertag', '', true);
+                        } // endIf
+                    });
+                } else {
+                    adapter.log.debug('[LOGIN] <=== Successfully logged in: ' + body);
+                    adapter.getState('info.authenticated', (err, state) => {
+                        if (!state || !state.val) {
+                            adapter.setState('info.authenticated', true, true);
+                        } // endIf
+                    });
+                    adapter.getState('info.gamertag', (err, state) => {
+                        if (state && state.val !== JSON.parse(body).gamertag) {
+                            adapter.setState('info.gamertag', JSON.parse(body).gamertag, true);
+                        } // endIf
+                    });
+                } // endElse
 
-            if (cb && typeof (cb === 'function')) return cb();
-        });
+                resolve();
+            });
+    });
 } // endAuthenticateOnServer
 
-function logOut(cb) {
-    request.post('http://' + restServerAddress + ':5557/auth/logout', (err, response, body) => {
+function logOut() {
+    return new Promise(resolve => {
+        request.post('http://' + restServerAddress + ':5557/auth/logout', (err, response, body) => {
 
-        if (!err && JSON.parse(body).success) {
-            adapter.log.debug('[LOGOUT] <=== Successfully logged out');
-            adapter.setState('info.authenticated', false, true);
-            adapter.setState('info.gamertag', '', true, () => {
-                if (cb && typeof (cb === 'function')) return cb();
-            });
-        } else {
-            adapter.log.debug('[LOGOUT] <=== Failed to logout: ' + body);
-            if (cb && typeof (cb === 'function')) return cb();
-        } // endElse
+            if (!err && JSON.parse(body).success) {
+                const promises = [];
+                adapter.log.debug('[LOGOUT] <=== Successfully logged out');
+                promises.push(adapter.setStateAsync('info.authenticated', false, true));
+                promises.push(adapter.setStateAsync('info.gamertag', '', true));
+                Promise.all(promises).then(() => resolve());
+            } else {
+                adapter.log.debug('[LOGOUT] <=== Failed to logout: ' + body);
+                resolve();
+            } // endElse
+        });
     });
 } // endLogOut
 
 function checkLoggedIn() {
     return new Promise((resolve, reject) => {
         request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
-            if (response.statusCode === 200 && JSON.parse(body).authenticated) {
+            if (response && response.statusCode === 200 && JSON.parse(body).authenticated) {
                 adapter.getState('info.authenticated', (err, state) => {
                     if (!state || !state.val) {
                         adapter.setState('info.authenticated', true, true);
                         adapter.log.debug('[CHECK] Successfully logged in');
                     } // endIf
                 });
-                adapter.getState('info.gamertag', (err, state) => {
+                adapter.getStateAsync('info.gamertag').then(state => {
                     if (state && state.val !== JSON.parse(body).userinfo.gtg) {
                         adapter.setState('info.gamertag', JSON.parse(body).userinfo.gtg, true);
                     } // endIf
                 });
                 resolve();
             } else {
-                adapter.getState('info.gamertag', (err, state) => {
+                adapter.getStateAsync('info.gamertag').then(state => {
                     if (state && state.val !== '') {
                         adapter.setState('info.gamertag', '', true);
                     } // endIf
                 });
 
-                adapter.getState('info.authenticated', (err, state) => {
+                adapter.getStateAsync('info.authenticated').then(state => {
                     if (!state || state.val) {
                         adapter.setState('info.authenticated', false, true);
                         adapter.log.debug('[CHECK] Auth is broken or logged out');
@@ -813,4 +827,4 @@ if (typeof module !== 'undefined' && module.parent) {
 } else {
     // or start the instance directly
     startAdapter();
-}
+} // endElse
