@@ -172,7 +172,7 @@ function main() {
             });
             if (isAlive || xboxAvailable) {
 
-                adapter.getState('settings.power', (err, state) => {
+                adapter.getStateAsync('settings.power').then(state => {
                     if (((!state || !state.val) || (state.val && !state.ack)) && xboxAvailable)
                         adapter.setState('settings.power', true, true);
                 });
@@ -204,23 +204,24 @@ function main() {
                                 } // endIf
                             } // endFor
                             adapter.log.debug('[STATUS] Set ' + JSON.stringify(currentTitlesState));
-                            adapter.getState('info.currentTitles', (err, state) => {
+
+                            adapter.getStateAsync('info.currentTitles').then(state => {
                                 if (!state || state.val !== JSON.stringify(currentTitlesState))
                                     adapter.setState('info.currentTitles', JSON.stringify(currentTitlesState), true);
                             });
-                            adapter.getState('info.activeTitleName', (err, state) => {
+                            adapter.getStateAsync('info.activeTitleName').then(state => {
                                 if (!state || state.val !== activeName)
                                     adapter.setState('info.activeTitleName', activeName, true);
                             });
-                            adapter.getState('info.activeTitleId', (err, state) => {
+                            adapter.getStateAsync('info.activeTitleId').then(state => {
                                 if (!state || state.val !== activeHex)
                                     adapter.setState('info.activeTitleId', activeHex, true);
                             });
-                            adapter.getState('info.activeTitleImage', (err, state) => {
+                            adapter.getStateAsync('info.activeTitleImage').then(state => {
                                 if (!state || state.val !== activeImage)
                                     adapter.setState('info.activeTitleImage', activeImage, true);
                             });
-                            adapter.getState('info.activeTitleType', (err, state) => {
+                            adapter.getStateAsync('info.activeTitleType').then(state => {
                                 if (!state || state.val !== activeType)
                                     adapter.setState('info.activeTitleType', activeType, true);
                             });
@@ -253,7 +254,7 @@ function main() {
 
 } // endMain
 
-function connect(ip, cb) {
+function connect(ip) {
     return new Promise(resolve => {
         discoverAndUpdateConsole(ip).then(result => {
             const statusURL = 'http://' + restServerAddress + ':5557/device/' + liveId + '/connect';
@@ -280,7 +281,7 @@ function connect(ip, cb) {
                         adapter.log.info('[CONNECT] <=== Successfully connected to ' + liveId + ' (' + result.device.address + ')');
                     } // endIf
 
-                    if (cb && typeof (cb) === 'function') return cb(result.connectionState);
+                    resolve(result.connectionState);
                 });
             } else {
                 adapter.getStateAsync('info.connection').then(state => {
@@ -635,24 +636,24 @@ function authenticateOnServer() {
                     setTimeout(() => authenticateOnServer(), 1000);
                 } else if (err || JSON.parse(body).success === false) {
                     adapter.log.warn('[LOGIN] <=== Error: ' + err);
-                    adapter.getState('info.authenticated', (err, state) => {
+                    adapter.getStateAsync('info.authenticated').then(state => {
                         if (!state || state.val) {
                             adapter.setState('info.authenticated', false, true);
                         } // endIf
                     });
-                    adapter.getState('info.gamertag', (err, state) => {
+                    adapter.getStateAsync('info.gamertag').then(state => {
                         if (state && state.val !== '') {
                             adapter.setState('info.gamertag', '', true);
                         } // endIf
                     });
                 } else {
                     adapter.log.debug('[LOGIN] <=== Successfully logged in: ' + body);
-                    adapter.getState('info.authenticated', (err, state) => {
+                    adapter.getStateAsync('info.authenticated').then(state => {
                         if (!state || !state.val) {
                             adapter.setState('info.authenticated', true, true);
                         } // endIf
                     });
-                    adapter.getState('info.gamertag', (err, state) => {
+                    adapter.getStateAsync('info.gamertag').then(state => {
                         if (state && state.val !== JSON.parse(body).gamertag) {
                             adapter.setState('info.gamertag', JSON.parse(body).gamertag, true);
                         } // endIf
@@ -686,7 +687,7 @@ function checkLoggedIn() {
     return new Promise((resolve, reject) => {
         request('http://' + restServerAddress + ':5557/auth', (err, response, body) => {
             if (response && response.statusCode === 200 && JSON.parse(body).authenticated) {
-                adapter.getState('info.authenticated', (err, state) => {
+                adapter.getStateAsync('info.authenticated').then(state => {
                     if (!state || !state.val) {
                         adapter.setState('info.authenticated', true, true);
                         adapter.log.debug('[CHECK] Successfully logged in');
