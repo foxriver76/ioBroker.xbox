@@ -2,7 +2,6 @@
     "common": {
         "name": "xbox",
         "version": "0.5.3",
-        "compact": true,
         "news": {
             "0.5.3": {
                 "en": "improve log message quality, more promisification",
@@ -148,6 +147,7 @@
         "icon": "xbox.png",
         "materialize": true,
         "enabled": true,
+        "compact": true,
         "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",
         "keywords": [
             "xbox",
