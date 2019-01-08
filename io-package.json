@@ -1,9 +1,10 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.5.2",
+        "version": "0.5.3",
+        "compact": true,
         "news": {
-            "0.5.2": {
+            "0.5.3": {
                 "en": "improve log message quality, more promisification",
                 "de": "Verbesserung der Protokollnachrichtenqualität, mehr Promisifications",
                 "ru": "улучшить качество сообщений журнала, больше обещаний",
@@ -172,7 +173,6 @@
         "mail",
         "password"
     ],
-    "compact": true,
     "objects": [],
     "instanceObjects": [
         {
