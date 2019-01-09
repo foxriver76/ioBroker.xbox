@@ -2,6 +2,7 @@ gulpfile.js
 admin/i18n
 tasks
 node_modules
+python_modules
 .idea
 .git
 /node_modules
