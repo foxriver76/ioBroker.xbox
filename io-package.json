@@ -181,8 +181,7 @@
             "common": {
                 "name": "Information"
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "info.connection",
@@ -195,8 +194,7 @@
                 "write": false,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media",
@@ -204,8 +202,7 @@
             "common": {
                 "name": "Media"
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad",
@@ -213,8 +210,7 @@
             "common": {
                 "name": "Gamepad"
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "settings",
@@ -222,8 +218,7 @@
             "common": {
                 "name": "Settings and device commands"
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "settings.power",
@@ -236,8 +231,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.rightShoulder",
@@ -250,8 +244,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.leftShoulder",
@@ -264,8 +257,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.leftThumbstick",
@@ -278,8 +270,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.rightThumbstick",
@@ -292,8 +283,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.enroll",
@@ -306,8 +296,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.view",
@@ -320,8 +309,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.menu",
@@ -334,8 +322,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.nexus",
@@ -348,8 +335,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.a",
@@ -362,8 +348,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.b",
@@ -376,8 +361,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.x",
@@ -390,8 +374,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.y",
@@ -404,8 +387,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.dpadUp",
@@ -418,8 +400,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.clear",
@@ -432,8 +413,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.dpadRight",
@@ -446,8 +426,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.dpadLeft",
@@ -460,8 +439,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "gamepad.dpadDown",
@@ -474,8 +452,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.play",
@@ -488,8 +465,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.pause",
@@ -502,8 +478,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.record",
@@ -516,8 +491,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.previousTrack",
@@ -530,8 +504,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.playPause",
@@ -544,8 +517,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.seek",
@@ -558,8 +530,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.channelUp",
@@ -572,8 +543,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.nextTrack",
@@ -586,8 +556,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.channelDown",
@@ -600,8 +569,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.menu",
@@ -614,8 +582,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.back",
@@ -628,8 +595,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.rewind",
@@ -642,8 +608,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.view",
@@ -656,8 +621,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.fastForward",
@@ -670,8 +634,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "media.stop",
@@ -684,8 +647,7 @@
                 "write": true,
                 "def": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "settings.inputText",
@@ -697,8 +659,7 @@
                 "read": true,
                 "write": true
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "settings.launchTitle",
@@ -710,8 +671,7 @@
                 "read": true,
                 "write": true
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "info.currentTitles",
@@ -723,8 +683,7 @@
                 "read": true,
                 "write": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "info.activeTitleName",
@@ -736,8 +695,7 @@
                 "read": true,
                 "write": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "info.activeTitleId",
@@ -749,8 +707,7 @@
                 "read": true,
                 "write": false
             },
-            "native": {
-            }
+            "native": {}
         },
         {
             "_id": "info.activeTitleType",
@@ -762,8 +719,7 @@
                 "read": true,
                 "write": false
             },
-            "native": {
-            }
+            "native": {}
         }
     ]
 }
