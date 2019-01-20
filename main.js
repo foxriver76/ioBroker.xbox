@@ -24,7 +24,6 @@ let xboxAvailable = false;
 let restServerPid;
 let adapter;
 
-// is called when adapter shuts down - callback has to be called under any circumstances!
 function startAdapter(options) {
     options = options || {};
     Object.assign(options, {
@@ -166,7 +165,7 @@ function main() {
 
     setInterval(() => { // check online
         ping.sys.probe(ip, (isAlive) => {
-            checkLoggedIn().catch((err) => {
+            checkLoggedIn().catch(err => {
                 if (err) authenticateOnServer(); // err is only true when, lost auth recently, so try one reauthentication
                 else adapter.log.debug('[CHECK] Auth is not established');
             });
@@ -635,7 +634,7 @@ function authenticateOnServer() {
                     adapter.log.warn('[LOGIN] Connection refused, will try again');
                     setTimeout(() => authenticateOnServer(), 1000);
                 } else if (err || JSON.parse(body).success === false) {
-                    adapter.log.warn('[LOGIN] <=== Error: ' + err);
+                    adapter.log.warn('[LOGIN] <=== Error: ' + err ? err : body);
                     adapter.getStateAsync('info.authenticated').then(state => {
                         if (!state || state.val) {
                             adapter.setState('info.authenticated', false, true);
@@ -647,15 +646,16 @@ function authenticateOnServer() {
                         } // endIf
                     });
                 } else {
-                    adapter.log.debug('[LOGIN] <=== Successfully logged in: ' + body);
+                    body = JSON.parse(body);
+                    adapter.log.info('[LOGIN] <=== Successfully logged in as: ' + body.gamertag);
                     adapter.getStateAsync('info.authenticated').then(state => {
                         if (!state || !state.val) {
                             adapter.setState('info.authenticated', true, true);
                         } // endIf
                     });
                     adapter.getStateAsync('info.gamertag').then(state => {
-                        if (state && state.val !== JSON.parse(body).gamertag) {
-                            adapter.setState('info.gamertag', JSON.parse(body).gamertag, true);
+                        if (state && state.val !== body.gamertag) {
+                            adapter.setState('info.gamertag', body.gamertag, true);
                         } // endIf
                     });
                 } // endElse

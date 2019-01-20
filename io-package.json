@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.5.3",
+        "version": "0.5.4",
         "news": {
+            "0.5.4": {
+                "en": "minor optimizations",
+                "de": "kleinere Optimierungen",
+                "ru": "незначительные оптимизации",
+                "pt": "pequenas otimizações",
+                "nl": "kleine optimalisaties",
+                "fr": "optimisations mineures",
+                "it": "ottimizzazioni minori",
+                "es": "optimizaciones menores",
+                "pl": "drobne optymalizacje",
+                "zh-cn": "小优化"
+            },
             "0.5.3": {
                 "en": "improve log message quality, more promisification",
                 "de": "Verbesserung der Protokollnachrichtenqualität, mehr Promisifications",
