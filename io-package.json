@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.5.4",
+        "version": "0.5.5",
         "news": {
-            "0.5.4": {
+            "0.5.5": {
                 "en": "minor optimizations",
                 "de": "kleinere Optimierungen",
                 "ru": "незначительные оптимизации",

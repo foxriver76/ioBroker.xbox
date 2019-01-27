@@ -634,7 +634,7 @@ function authenticateOnServer() {
                     adapter.log.warn('[LOGIN] Connection refused, will try again');
                     setTimeout(() => authenticateOnServer(), 1000);
                 } else if (err || JSON.parse(body).success === false) {
-                    adapter.log.warn('[LOGIN] <=== Error: ' + err ? err : body);
+                    adapter.log.warn('[LOGIN] <=== Error: ' + (err ? err : body));
                     adapter.getStateAsync('info.authenticated').then(state => {
                         if (!state || state.val) {
                             adapter.setState('info.authenticated', false, true);
