@@ -34,7 +34,9 @@
     "@iobroker/adapter-core": "^1.0.3"
   },
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha --exit",
+    "test:unit": "node_modules/.bin/mocha test/unitAdapter --exit",
+    "test:package": "node_modules/.bin/mocha test/packageFiles --exit",
+    "test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit",
     "preinstall": "apt install -y build-essential libssl-dev libffi-dev python3-dev || echo -e '[INFO] Cant install build-essential libssl-dev libffi-dev python3-dev Debian packages. If you are on a Linux system, try installing the package via: sudo npm i iobroker.xbox --unsafe-perm, otherwise you have to manage to install the packages by yourself. If you are not running on Linux, you can ignore this INFO.'",
     "install": "npip install",
     "nopy": "nopy",
