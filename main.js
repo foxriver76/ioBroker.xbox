@@ -623,7 +623,15 @@ function authenticateOnServer() {
     return new Promise(resolve => {
         request.post('http://' + restServerAddress + ':5557/auth/login',
             {form: {email: mail, password: password}}, (err, response, body) => {
-                if (!err && JSON.parse(body).two_factor_required) {
+                let jsonBody;
+
+                try {
+                    jsonBody = JSON.parse(body);
+                } catch (e) {
+                    adapter.log.debug('Could not parse body');
+                }
+
+                if (!err && jsonBody.two_factor_required) {
                     adapter.log.debug('[LOGIN] Two factor authentication required, try to load token');
                     loadToken().then(() => {
                         resolve();
@@ -633,21 +641,17 @@ function authenticateOnServer() {
                 } else if (err && err.toString().includes('ECONNREFUSED')) {
                     adapter.log.warn('[LOGIN] Connection refused, will try again');
                     setTimeout(() => authenticateOnServer(), 1000);
-                } else if (err || JSON.parse(body).success === false) {
+                } else if (err || (jsonBody.success === false && !jsonBody.message.includes('An account is already signed in'))) {
                     adapter.log.warn('[LOGIN] <=== Error: ' + (err ? err : body));
                     adapter.getStateAsync('info.authenticated').then(state => {
                         if (!state || state.val) {
                             adapter.setState('info.authenticated', false, true);
                         } // endIf
                     });
-                    adapter.getStateAsync('info.gamertag').then(state => {
-                        if (state && state.val !== '') {
-                            adapter.setState('info.gamertag', '', true);
-                        } // endIf
-                    });
+                } else if (jsonBody.message.includes('An account is already signed in')) {
+                    adapter.log.info('[LOGIN] An account is still logged in');
                 } else {
-                    body = JSON.parse(body);
-                    adapter.log.info('[LOGIN] <=== Successfully logged in as: ' + body.gamertag);
+                    adapter.log.info('[LOGIN] <=== Successfully logged in as: ' + jsonBody.gamertag);
                     adapter.getStateAsync('info.authenticated').then(state => {
                         if (!state || !state.val) {
                             adapter.setState('info.authenticated', true, true);
@@ -655,11 +659,10 @@ function authenticateOnServer() {
                     });
                     adapter.getStateAsync('info.gamertag').then(state => {
                         if (state && state.val !== body.gamertag) {
-                            adapter.setState('info.gamertag', body.gamertag, true);
+                            adapter.setState('info.gamertag', jsonBody.gamertag, true);
                         } // endIf
                     });
                 } // endElse
-
                 resolve();
             });
     });
@@ -670,11 +673,8 @@ function logOut() {
         request.post('http://' + restServerAddress + ':5557/auth/logout', (err, response, body) => {
 
             if (!err && JSON.parse(body).success) {
-                const promises = [];
                 adapter.log.debug('[LOGOUT] <=== Successfully logged out');
-                promises.push(adapter.setStateAsync('info.authenticated', false, true));
-                promises.push(adapter.setStateAsync('info.gamertag', '', true));
-                Promise.all(promises).then(() => resolve());
+                adapter.setStateAsync('info.authenticated', false, true).then(() => resolve());
             } else {
                 adapter.log.debug('[LOGOUT] <=== Failed to logout: ' + body);
                 resolve();
@@ -700,12 +700,6 @@ function checkLoggedIn() {
                 });
                 resolve();
             } else {
-                adapter.getStateAsync('info.gamertag').then(state => {
-                    if (state && state.val !== '') {
-                        adapter.setState('info.gamertag', '', true);
-                    } // endIf
-                });
-
                 adapter.getStateAsync('info.authenticated').then(state => {
                     if (!state || state.val) {
                         adapter.setState('info.authenticated', false, true);

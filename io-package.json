@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.5.5",
+        "version": "0.5.6",
         "news": {
+            "0.5.6": {
+                "en": "if still logged in, it is not handled as a warning/problem anymore",
+                "de": "Wenn Account noch angemeldet, wird es nicht mehr als Warnung / Problem behandelt",
+                "ru": "если все еще вошли в систему, это больше не рассматривается как предупреждение / проблема",
+                "pt": "se ainda estiver logado, não será mais tratado como aviso / problema",
+                "nl": "als het nog steeds is ingelogd, wordt het niet meer als waarschuwing / probleem behandeld",
+                "fr": "si toujours connecté, il n'est plus traité comme un avertissement / problème",
+                "it": "se è ancora connesso, non viene più gestito come avvertimento / problema",
+                "es": "Si aún está conectado, ya no se trata como una advertencia / problema",
+                "pl": "jeśli nadal jest zalogowany, nie jest już traktowany jako ostrzeżenie / problem",
+                "zh-cn": "如果仍然登录，则不再将其作为警告/问题处理"
+            },
             "0.5.5": {
                 "en": "minor optimizations",
                 "de": "kleinere Optimierungen",
