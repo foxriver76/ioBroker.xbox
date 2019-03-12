@@ -650,6 +650,11 @@ function authenticateOnServer() {
                     });
                 } else if (jsonBody.message.includes('An account is already signed in')) {
                     adapter.log.info('[LOGIN] An account is still logged in');
+                    adapter.getStateAsync('info.authenticated').then(state => {
+                        if (!state || !state.val) {
+                            adapter.setState('info.authenticated', true, true);
+                        } // endIf
+                    });
                 } else {
                     adapter.log.info('[LOGIN] <=== Successfully logged in as: ' + jsonBody.gamertag);
                     adapter.getStateAsync('info.authenticated').then(state => {
