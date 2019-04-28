@@ -1,7 +1,7 @@
 'use strict';
 
-const path = require('path');
-const {tests} = require('@iobroker/testing');
+const path = require(`path`);
+const {tests} = require(`@iobroker/testing`);
 
 // Run tests
-tests.unit(path.join(__dirname, '..'));
+tests.unit(path.join(__dirname, `..`));
