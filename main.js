@@ -656,14 +656,14 @@ function authenticateOnServer() {
                         } // endIf
                     });
                 } else {
-                    adapter.log.info(`[LOGIN] <=== Successfully logged in as: ` + jsonBody.gamertag);
+                    adapter.log.info(`[LOGIN] <=== Successfully logged in as: ${jsonBody.gamertag}`);
                     adapter.getStateAsync(`info.authenticated`).then(state => {
                         if (!state || !state.val) {
                             adapter.setState(`info.authenticated`, true, true);
                         } // endIf
                     });
                     adapter.getStateAsync(`info.gamertag`).then(state => {
-                        if (state && state.val !== body.gamertag) {
+                        if (!state || state.val !== body.gamertag) {
                             adapter.setState(`info.gamertag`, jsonBody.gamertag, true);
                         } // endIf
                     });
@@ -699,7 +699,7 @@ function checkLoggedIn() {
                     } // endIf
                 });
                 adapter.getStateAsync(`info.gamertag`).then(state => {
-                    if (state && state.val !== JSON.parse(body).userinfo.gtg) {
+                    if (!state || state.val !== JSON.parse(body).userinfo.gtg) {
                         adapter.setState(`info.gamertag`, JSON.parse(body).userinfo.gtg, true);
                     } // endIf
                 });
