@@ -41,7 +41,7 @@ install:
   - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
   - python --version
   - python -c "import struct; print(struct.calcsize('P') * 8)"
-  - ps: 'Install-Product node $env:nodejs_version $env:platform'
+  - ps: 'Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) $env:platform'
   - ps: '$NpmVersion = (npm -v).Substring(0,1)'
   - ps: 'if($NpmVersion -eq 5) { npm install -g npm@5 }'
   - ps: npm --version
