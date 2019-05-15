@@ -4,43 +4,53 @@ environment:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
-    CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
+    CMD_IN_ENV: 'cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd'
   matrix:
     - platform: x86
       nodejs_version: '6'
-      PYTHON: "C:\\Python36"
-      PYTHON_VERSION: "3.6.5"
-      PYTHON_ARCH: "32"
+      PYTHON: 'C:\\Python36'
+      PYTHON_VERSION: '3.6.5'
+      PYTHON_ARCH: '32'
     - platform: x64
       nodejs_version: '6'
-      PYTHON: "C:\\Python36-x64"
-      PYTHON_VERSION: "3.6.5"
-      PYTHON_ARCH: "64"
+      PYTHON: 'C:\\Python36-x64'
+      PYTHON_VERSION: '3.6.5'
+      PYTHON_ARCH: '64'
     - platform: x86
       nodejs_version: '8'
-      PYTHON: "C:\\Python36"
-      PYTHON_VERSION: "3.6.5"
-      PYTHON_ARCH: "32"
+      PYTHON: 'C:\\Python36'
+      PYTHON_VERSION: '3.6.5'
+      PYTHON_ARCH: '32'
     - platform: x64
       nodejs_version: '8'
-      PYTHON: "C:\\Python36-x64"
-      PYTHON_VERSION: "3.6.5"
-      PYTHON_ARCH: "64"
+      PYTHON: 'C:\\Python36-x64'
+      PYTHON_VERSION: '3.6.5'
+      PYTHON_ARCH: '64'
     - platform: x86
       nodejs_version: '10'
-      PYTHON: "C:\\Python36"
-      PYTHON_VERSION: "3.6.5"
-      PYTHON_ARCH: "32"
+      PYTHON: 'C:\\Python36'
+      PYTHON_VERSION: '3.6.5'
+      PYTHON_ARCH: '32'
     - platform: x64
       nodejs_version: '10'
-      PYTHON: "C:\\Python36-x64"
-      PYTHON_VERSION: "3.6.5"
-      PYTHON_ARCH: "64"
+      PYTHON: 'C:\\Python36-x64'
+      PYTHON_VERSION: '3.6.5'
+      PYTHON_ARCH: '64'
+    - platform: x86
+      nodejs_version: '12'
+      PYTHON: 'C:\\Python36'
+      PYTHON_VERSION: '3.6.5'
+      PYTHON_ARCH: '32'
+    - platform: x64
+      nodejs_version: '12'
+      PYTHON: 'C:\\Python36-x64'
+      PYTHON_VERSION: '3.6.5'
+      PYTHON_ARCH: '64'
 
 clone_folder: 'c:\projects\%APPVEYOR_PROJECT_NAME%'
 install:
   # We need wheel installed to build wheels
-  - "%PYTHON%\\python.exe -m pip install wheel nose"
+  - '%PYTHON%\\python.exe -m pip install wheel nose'
 
   # Install Python (from the official .msi of http://python.org) and pip when
   # not already installed.
@@ -49,12 +59,12 @@ install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
   # the parent CMD process).
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - 'SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%'
 
   # Check that we have the expected version and architecture for Python
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
-  - ps: 'Install-Product node $env:nodejs_version $env:platform'
+  - python --version
+  - python -c "import struct; print(struct.calcsize('P') * 8)"
+  - ps: 'Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) $env:platform'
   - ps: '$NpmVersion = (npm -v).Substring(0,1)'
   - ps: 'if($NpmVersion -eq 5) { npm install -g npm@5 }'
   - ps: npm --version
