@@ -191,15 +191,15 @@ function main() {
                             let activeHex = ``;
                             let activeImage = ``;
                             let activeType = ``;
-                            for (const i in currentTitles) {
-                                const titleName = currentTitles[i].name.split(`_`)[0];
-                                const titleHex = parseInt(currentTitles[i].title_id).toString(16);
+                            for (const title of currentTitles) {
+                                const titleName = title.name.split(`_`)[0];
+                                const titleHex = parseInt(title.title_id).toString(16);
                                 currentTitlesState[titleName] = titleHex;
-                                if (currentTitles[i].has_focus) {
+                                if (title.has_focus) {
                                     activeName = titleName;
                                     activeHex = titleHex;
-                                    activeImage = currentTitles[i].image || ``;
-                                    activeType = currentTitles[i].type || ``;
+                                    activeImage = title.image || ``;
+                                    activeType = title.type || ``;
                                 } // endIf
                             } // endFor
                             adapter.log.debug(`[STATUS] Set ${JSON.stringify(currentTitlesState)}`);
@@ -237,7 +237,7 @@ function main() {
                         adapter.setState(`info.currentTitles`, `{}`, true);
                         adapter.setState(`info.activeTitleType`, ``, true);
 
-                        adapter.log.info(`[PING] Lost connection to your Xbox (` + ip + `)`);
+                        adapter.log.info(`[PING] Lost connection to your Xbox (${ip})`);
                         firstReconnectAttempt = true;
                     } // endIf
                 });
@@ -382,9 +382,9 @@ function discoverAndUpdateConsole(ip) { // is used by connect
                             adapter.log.debug(`[UPDATE] <=== ${body}`);
                         }
                     } else try {
-                        for (const i in jsonBody.devices) {
-                            if (jsonBody.devices[i].address === ip) {
-                                liveId = jsonBody.devices[i].liveid;
+                        for (const device of jsonBody.devices) {
+                            if (device.address === ip) {
+                                liveId = device.liveid;
                                 discovered = true;
                             } // endIf
                         } // endFor
@@ -580,7 +580,7 @@ function sendMediaCmd(cmd) {
         const endpoint = `http://${restServerAddress}:5557/device/${liveId}/media/${cmd}`;
 
         request(endpoint, (error, response, body) => {
-            if (error) adapter.log.error(`[REQUEST] <=== ` + error.message);
+            if (error) adapter.log.error(`[REQUEST] <=== ${error.message}`);
             else if (JSON.parse(body).success)
                 adapter.log.debug(`[REQUEST] <=== Media command ${cmd} acknowledged by REST-Server`);
             else
@@ -593,7 +593,7 @@ function sendMediaCmd(cmd) {
 function sendCustomCommand(endpoint) {
     return new Promise(resolve => {
         request(endpoint, (error, response, body) => {
-            if (error) adapter.log.error(`[REQUEST] <=== Custom request error: ` + error.message);
+            if (error) adapter.log.error(`[REQUEST] <=== Custom request error: ${error.message}`);
             else if (response.statusCode === 200 && JSON.parse(body).success) {
                 adapter.log.debug(`[REQUEST] <=== Custom Command ${endpoint} acknowledged by REST-Server`);
                 resolve();
@@ -605,8 +605,8 @@ function sendCustomCommand(endpoint) {
 } // endSendCustomCommand
 
 function restartAdapter() {
-    adapter.getForeignObjectAsync(`system.adapter.` + adapter.namespace).then((obj) => {
-        if (obj) adapter.setForeignObject(`system.adapter.` + adapter.namespace, obj);
+    adapter.getForeignObjectAsync(`system.adapter.${adapter.namespace}`).then((obj) => {
+        if (obj) adapter.setForeignObject(`system.adapter.${adapter.namespace}`, obj);
     });
 } // endFunctionRestartAdapter
 
@@ -642,7 +642,7 @@ function authenticateOnServer() {
                     adapter.log.warn(`[LOGIN] Connection refused, will try again`);
                     setTimeout(() => authenticateOnServer(), 1000);
                 } else if (err || (jsonBody.success === false && !jsonBody.message.includes(`An account is already signed in`))) {
-                    adapter.log.warn(`[LOGIN] <=== Error: ` + (err ? err : body));
+                    adapter.log.warn(`[LOGIN] <=== Error: ${(err ? err : body)}`);
                     adapter.getStateAsync(`info.authenticated`).then(state => {
                         if (!state || state.val) {
                             adapter.setState(`info.authenticated`, false, true);
@@ -681,7 +681,7 @@ function logOut() {
                 adapter.log.debug(`[LOGOUT] <=== Successfully logged out`);
                 adapter.setStateAsync(`info.authenticated`, false, true).then(() => resolve());
             } else {
-                adapter.log.debug(`[LOGOUT] <=== Failed to logout: ` + body);
+                adapter.log.debug(`[LOGOUT] <=== Failed to logout: ${body}`);
                 resolve();
             } // endElse
         });
@@ -729,12 +729,12 @@ function loadToken() {
                         adapter.setState(`info.gamertag`, JSON.parse(body).userinfo.gtg, true);
                         resolve();
                     } else {
-                        adapter.log.warn(`[TOKEN] <=== Error retrieving gamertag: ` + body);
+                        adapter.log.warn(`[TOKEN] <=== Error retrieving gamertag: ${body}`);
                         reject();
                     } // endElse
                 });
             } else {
-                adapter.log.warn(`[TOKEN] Error loading token: ` + body);
+                adapter.log.warn(`[TOKEN] Error loading token: ${body}`);
                 reject();
             } // endElse
         });
