@@ -382,9 +382,9 @@ function discoverAndUpdateConsole(ip) { // is used by connect
                             adapter.log.debug(`[UPDATE] <=== ${body}`);
                         }
                     } else try {
-                        for (const device of jsonBody.devices) {
-                            if (device.address === ip) {
-                                liveId = device.liveid;
+                        for (const i in jsonBody.devices) {
+                            if (jsonBody.devices[i].address === ip) {
+                                liveId = jsonBody.devices[i].liveid;
                                 discovered = true;
                             } // endIf
                         } // endFor
