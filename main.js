@@ -157,7 +157,7 @@ function main() {
 
     // Get Rest Server PID once for killing on windows
     if (os.startsWith(`win`)) {
-        exec(`wmic process get processid, commandline | findstr "^py *xbox-rest-server.exe>"`, (err, stdout, stderr) => {
+        exec(`wmic process get processid, commandline | findstr "^py *xbox-rest-server.exe>"`, (err, stdout/*, stderr*/) => {
             restServerPid = stdout.split(`.exe`)[1].replace(/\s+/g, ``);
             adapter.log.debug(`[START] REST-Server is running as ${restServerPid}`);
         });
@@ -171,10 +171,7 @@ function main() {
             });
             if (isAlive || xboxAvailable) {
 
-                adapter.getStateAsync(`settings.power`).then(state => {
-                    if (((!state || !state.val) || (state.val && !state.ack)) && xboxAvailable)
-                        adapter.setState(`settings.power`, true, true);
-                });
+                if (xboxAvailable) adapter.setStateChanged(`settings.power`, true, true);
 
                 xboxPingable = true;
                 if (isAlive) adapter.log.debug(`[PING] Xbox online`);
@@ -204,26 +201,11 @@ function main() {
                             } // endFor
                             adapter.log.debug(`[STATUS] Set ${JSON.stringify(currentTitlesState)}`);
 
-                            adapter.getStateAsync(`info.currentTitles`).then(state => {
-                                if (!state || state.val !== JSON.stringify(currentTitlesState))
-                                    adapter.setState(`info.currentTitles`, JSON.stringify(currentTitlesState), true);
-                            });
-                            adapter.getStateAsync(`info.activeTitleName`).then(state => {
-                                if (!state || state.val !== activeName)
-                                    adapter.setState(`info.activeTitleName`, activeName, true);
-                            });
-                            adapter.getStateAsync(`info.activeTitleId`).then(state => {
-                                if (!state || state.val !== activeHex)
-                                    adapter.setState(`info.activeTitleId`, activeHex, true);
-                            });
-                            adapter.getStateAsync(`info.activeTitleImage`).then(state => {
-                                if (!state || state.val !== activeImage)
-                                    adapter.setState(`info.activeTitleImage`, activeImage, true);
-                            });
-                            adapter.getStateAsync(`info.activeTitleType`).then(state => {
-                                if (!state || state.val !== activeType)
-                                    adapter.setState(`info.activeTitleType`, activeType, true);
-                            });
+                            adapter.setStateChanged(`info.currentTitles`, JSON.stringify(currentTitlesState), true);
+                            adapter.setStateChanged(`info.activeTitleName`, activeName, true);
+                            adapter.setStateChanged(`info.activeTitleId`, activeHex, true);
+                            adapter.setStateChanged(`info.activeTitleImage`, activeImage, true);
+                            adapter.setStateChanged(`info.activeTitleType`, activeType, true);
                         });
                     } // endIf
                 });
@@ -266,8 +248,7 @@ function connect(ip) {
             } // endIf
 
             // Set device status to var to not only rely on ping to check if Xbox is online
-            if (result.device && result.device.device_status === `Available`) xboxAvailable = true;
-            else xboxAvailable = false;
+            xboxAvailable = result.device && result.device.device_status === `Available` ? true : false;
 
             if (result.connectionState && result.connectionState !== `Disconnected`) {
                 adapter.getStateAsync(`info.connection`).then(state => {
@@ -414,7 +395,7 @@ function powerOn() {
         adapter.log.debug(`[POWERON] Powering on console`);
         blockXbox = true;
 
-        request(endpoint, (error, response, body) => {
+        request(endpoint, (error/*, response, body*/) => {
             if (error) adapter.log.error(`[REQUEST] <=== ${error.message}`);
 
             if (!xboxPingable) {
