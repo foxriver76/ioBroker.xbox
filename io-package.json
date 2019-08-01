@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.5.7",
+        "version": "0.5.8",
         "news": {
+            "0.5.8": {
+                "en": "increased stopTimeout to successfully shut down adapter on windows based systems",
+                "de": "StopTimeout wurde erhöht, um den Adapter auf Windows-basierten Systemen erfolgreich herunterzufahren",
+                "ru": "увеличено значение stopTimeout для успешного выключения адаптера в системах на базе Windows",
+                "pt": "aumento de stopTimeout para desligar com sucesso o adaptador em sistemas baseados em Windows",
+                "nl": "verhoogde stopTimeout om adapter op Windows-gebaseerde systemen succesvol af te sluiten",
+                "fr": "stopTimeout augmenté pour arrêter l'adaptateur avec succès sur les systèmes Windows",
+                "it": "stopTimeout aumentato per chiudere correttamente l'adattatore su sistemi basati su Windows",
+                "es": "Incremento de stopTimeout para apagar con éxito el adaptador en sistemas basados en Windows",
+                "pl": "zwiększono stopTimeout, aby pomyślnie zamknąć adapter w systemach opartych na systemie Windows",
+                "zh-cn": "增加stopTimeout以成功关闭基于Windows的系统上的适配器"
+            },
             "0.5.7": {
                 "en": "fixed gamertag not set if no state on the object exists yet",
                 "de": "Fixed Gamertag nicht gesetzt, wenn noch kein Status für das Objekt existiert",
@@ -76,6 +88,7 @@
         "type": "multimedia",
         "license": "MIT",
         "messagebox": false,
+        "stopTimeout": 1000,
         "docs": {
             "de": "docs/de/README.md"
         }
