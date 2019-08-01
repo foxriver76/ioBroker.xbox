@@ -88,7 +88,7 @@
         "type": "multimedia",
         "license": "MIT",
         "messagebox": false,
-        "stopTimeout": 1000,
+        "stopTimeout": 2000,
         "docs": {
             "de": "docs/de/README.md"
         }
