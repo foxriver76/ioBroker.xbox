@@ -7,16 +7,6 @@ environment:
     CMD_IN_ENV: 'cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd'
   matrix:
     - platform: x86
-      nodejs_version: '6'
-      PYTHON: 'C:\\Python36'
-      PYTHON_VERSION: '3.6.5'
-      PYTHON_ARCH: '32'
-    - platform: x64
-      nodejs_version: '6'
-      PYTHON: 'C:\\Python36-x64'
-      PYTHON_VERSION: '3.6.5'
-      PYTHON_ARCH: '64'
-    - platform: x86
       nodejs_version: '8'
       PYTHON: 'C:\\Python36'
       PYTHON_VERSION: '3.6.5'
