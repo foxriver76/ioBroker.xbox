@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.5.10",
+    "version": "0.5.11",
     "news": {
-      "0.5.10": {
+      "0.5.11": {
         "en": "we not try to install apt packages any longer if already installed",
         "de": "Wir versuchen nicht mehr, apt-Pakete zu installieren, wenn diese bereits installiert sind",
         "ru": "мы больше не пытаемся устанавливать пакеты apt, если они уже установлены",
