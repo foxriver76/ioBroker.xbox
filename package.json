@@ -31,7 +31,7 @@
     "request": "^2.88.0",
     "ping": "^0.2.2",
     "nopy": "^0.2.6",
-    "@iobroker/adapter-core": "^1.0.3"
+    "@iobroker/adapter-core": "^2.0.0"
   },
   "scripts": {
     "test:unit": "node_modules/.bin/mocha test/unitAdapter --exit",
