@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.5.11",
+    "version": "0.5.12",
     "news": {
+      "0.5.12": {
+        "en": "we let js-controller know which apt packages are required",
+        "de": "wir teilen js-controller mit, welche apt-pakete benötigt werden",
+        "ru": "мы сообщаем js-controller, какие пакеты apt требуются",
+        "pt": "nós informamos ao js-controller quais pacotes apt são necessários",
+        "nl": "we laten js-controller weten welke apt-pakketten nodig zijn",
+        "fr": "nous informons js-controller des packages apt requis",
+        "it": "facciamo sapere a js-controller quali pacchetti apt sono richiesti",
+        "es": "le informamos a js-controller qué paquetes apt son necesarios",
+        "pl": "informujemy sterownik js, które pakiety apt są wymagane",
+        "zh-cn": "我们让js-controller知道需要哪些apt软件包"
+      },
       "0.5.11": {
         "en": "we not try to install apt packages any longer if already installed",
         "de": "Wir versuchen nicht mehr, apt-Pakete zu installieren, wenn diese bereits installiert sind",
@@ -84,6 +96,9 @@
       "gaming",
       "playstation"
     ],
+    "osDependencies": {
+      "linux": ["build-essential", "libssl-dev", "libffi-dev", "python3-dev"]
+    },
     "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
     "loglevel": "info",
     "type": "multimedia",
