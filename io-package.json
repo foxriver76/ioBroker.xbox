@@ -102,6 +102,8 @@
     "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
     "loglevel": "info",
     "type": "multimedia",
+    "connectionType": "local",
+    "dataSource": "poll",
     "license": "MIT",
     "messagebox": false,
     "stopTimeout": 2000,
