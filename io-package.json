@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.5.12",
+    "version": "0.6.0",
     "news": {
+      "0.6.0": {
+        "en": "dependency upgrade, python 3.6 required",
+        "de": "Abhängigkeits-Upgrade, Python 3.6 erforderlich",
+        "ru": "обновление зависимостей, требуется Python 3.6",
+        "pt": "atualização de dependência, requer python 3.6",
+        "nl": "afhankelijkheid upgrade, python 3.6 vereist",
+        "fr": "mise à niveau des dépendances, python 3.6 requis",
+        "it": "aggiornamento delle dipendenze, richiesto python 3.6",
+        "es": "actualización de dependencia, requiere Python 3.6",
+        "pl": "aktualizacja zależności, wymagany Python 3.6",
+        "zh-cn": "依赖项升级，需要python 3.6"
+      },
       "0.5.12": {
         "en": "we let js-controller know which apt packages are required",
         "de": "wir teilen js-controller mit, welche apt-pakete benötigt werden",
@@ -62,18 +74,6 @@
         "es": "Si aún está conectado, ya no se trata como una advertencia / problema",
         "pl": "jeśli nadal jest zalogowany, nie jest już traktowany jako ostrzeżenie / problem",
         "zh-cn": "如果仍然登录，则不再将其作为警告/问题处理"
-      },
-      "0.5.5": {
-        "en": "minor optimizations",
-        "de": "kleinere Optimierungen",
-        "ru": "незначительные оптимизации",
-        "pt": "pequenas otimizações",
-        "nl": "kleine optimalisaties",
-        "fr": "optimisations mineures",
-        "it": "ottimizzazioni minori",
-        "es": "optimizaciones menores",
-        "pl": "drobne optymalizacje",
-        "zh-cn": "小优化"
       }
     },
     "title": "Xbox",
