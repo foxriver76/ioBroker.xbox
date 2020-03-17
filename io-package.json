@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "news": {
+      "0.6.1": {
+        "en": "fixes for compact mode, improved error handling, translations",
+        "de": "Korrekturen für den kompakten Modus, verbesserte Fehlerbehandlung, Übersetzungen",
+        "ru": "исправления для компактного режима, улучшенная обработка ошибок, переводы",
+        "pt": "correções para o modo compacto, manipulação aprimorada de erros, traduções",
+        "nl": "oplossingen voor compacte modus, verbeterde foutafhandeling, vertalingen",
+        "fr": "corrections pour le mode compact, gestion améliorée des erreurs, traductions",
+        "it": "correzioni per la modalità compatta, una migliore gestione degli errori, traduzioni",
+        "es": "correcciones para el modo compacto, manejo mejorado de errores, traducciones",
+        "pl": "poprawki trybu kompaktowego, ulepszona obsługa błędów, tłumaczenia",
+        "zh-cn": "修复了紧凑模式，改进的错误处理，翻译"
+      },
       "0.6.0": {
         "en": "dependency upgrade, python 3.6 required",
         "de": "Abhängigkeits-Upgrade, Python 3.6 erforderlich",
@@ -62,18 +74,6 @@
         "es": "no se ha establecido el gamertag fijo si aún no existe un estado en el objeto",
         "pl": "naprawiony tag gracza nie jest ustawiony, jeśli nie istnieje jeszcze żaden stan obiektu",
         "zh-cn": "如果对象上还没有状态，则不设置固定的gamertag"
-      },
-      "0.5.6": {
-        "en": "if still logged in, it is not handled as a warning/problem anymore",
-        "de": "Wenn Account noch angemeldet, wird es nicht mehr als Warnung / Problem behandelt",
-        "ru": "если все еще вошли в систему, это больше не рассматривается как предупреждение / проблема",
-        "pt": "se ainda estiver logado, não será mais tratado como aviso / problema",
-        "nl": "als het nog steeds is ingelogd, wordt het niet meer als waarschuwing / probleem behandeld",
-        "fr": "si toujours connecté, il n'est plus traité comme un avertissement / problème",
-        "it": "se è ancora connesso, non viene più gestito come avvertimento / problema",
-        "es": "Si aún está conectado, ya no se trata como una advertencia / problema",
-        "pl": "jeśli nadal jest zalogowany, nie jest już traktowany jako ostrzeżenie / problem",
-        "zh-cn": "如果仍然登录，则不再将其作为警告/问题处理"
       }
     },
     "title": "Xbox",

@@ -23,6 +23,9 @@ let firstReconnectAttempt = true;
 let xboxAvailable = false;
 let restServerPid;
 let adapter;
+let onlineInterval;
+let restartTimer;
+let startTimer;
 
 function startAdapter(options) {
     options = options || {};
@@ -35,6 +38,11 @@ function startAdapter(options) {
     adapter.on(`unload`, callback => {
         try {
             let killCmd;
+
+            // clear intervals and timers on unload
+            if (onlineInterval) clearInterval(onlineInterval);
+            if (restartTimer) clearTimeout(restartTimer);
+            if (startTimer) clearTimeout(startTimer);
 
             adapter.setState(`info.connection`, false, true);
             adapter.setState(`power.settings`, false, true);
@@ -125,7 +133,12 @@ function startAdapter(options) {
         helper.startRestServer().catch((err) => {
             adapter.log.error(`[START] Failed starting REST server: ${err}`);
             adapter.log.error(`[START] Restarting adapter in 30 seconds`);
-            setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
+            // clear the checking interval
+            if (onlineInterval) {
+                clearInterval(onlineInterval);
+                onlineInterval = null;
+            } // endIf
+            restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
         });
 
         adapter.getForeignObjectAsync(adapter.namespace).then(obj => { // create device namespace
@@ -139,7 +152,7 @@ function startAdapter(options) {
             } // endIf
         });
 
-        prepareAuthentication(authenticate).then(() => setTimeout(() => main(), 6500)); // Server needs time to start
+        prepareAuthentication(authenticate).then(() => startTimer = setTimeout(() => main(), 6500)); // Server needs time to start
     });
 
     return adapter;
@@ -147,7 +160,10 @@ function startAdapter(options) {
 
 
 function main() {
-
+    if (startTimer) {
+        clearTimeout(startTimer);
+        startTimer = null;
+    }
     adapter.subscribeStates(`*`);
 
     // Authenticate on Xbox Live, make sure to be logged out first
@@ -163,7 +179,7 @@ function main() {
         });
     } // endIf
 
-    setInterval(() => { // check online
+    onlineInterval = setInterval(() => { // check online
         ping.sys.probe(ip, (isAlive) => {
             checkLoggedIn().catch(err => {
                 if (err) authenticateOnServer(); // err is only true when, lost auth recently, so try one reauthentication
@@ -248,7 +264,7 @@ function connect(ip) {
             } // endIf
 
             // Set device status to var to not only rely on ping to check if Xbox is online
-            xboxAvailable = result.device && result.device.device_status === `Available` ? true : false;
+            xboxAvailable = result.device && result.device.device_status === `Available`;
 
             if (result.connectionState && result.connectionState !== `Disconnected`) {
                 adapter.getStateAsync(`info.connection`).then(state => {
