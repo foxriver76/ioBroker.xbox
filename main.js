@@ -637,7 +637,7 @@ function authenticateOnServer() {
                     });
                 } else if (err && err.toString().includes(`ECONNREFUSED`)) {
                     adapter.log.warn(`[LOGIN] Connection refused, will try again`);
-                    setTimeout(() => authenticateOnServer(), 1000);
+                    setTimeout(() => authenticateOnServer(), 2500);
                 } else if (err || (jsonBody.success === false && !jsonBody.message.includes(`An account is already signed in`))) {
                     adapter.log.warn(`[LOGIN] <=== Error: ${(err ? err : body)}`);
                     adapter.getStateAsync(`info.authenticated`).then(state => {

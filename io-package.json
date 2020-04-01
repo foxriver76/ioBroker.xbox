@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "news": {
+      "0.6.2": {
+        "en": "we now try specific python versions first on install",
+        "de": "Wir versuchen jetzt zuerst bestimmte Python-Versionen bei der Installation",
+        "ru": "Теперь мы сначала попробуем установить конкретные версии Python.",
+        "pt": "agora tentamos versões específicas do python primeiro na instalação",
+        "nl": "we proberen nu eerst specifieke python-versies bij de installatie",
+        "fr": "nous essayons maintenant des versions spécifiques de python d'abord lors de l'installation",
+        "it": "ora proviamo prima versioni specifiche di Python all'installazione",
+        "es": "ahora intentamos versiones específicas de Python primero en la instalación",
+        "pl": "teraz podczas instalacji wypróbowujemy określone wersje Python",
+        "zh-cn": "我们现在首先在安装时尝试特定的python版本"
+      },
       "0.6.1": {
         "en": "fixes for compact mode, improved error handling, translations",
         "de": "Korrekturen für den kompakten Modus, verbesserte Fehlerbehandlung, Übersetzungen",
@@ -62,18 +74,6 @@
         "es": "Incremento de stopTimeout para apagar con éxito el adaptador en sistemas basados en Windows",
         "pl": "zwiększono stopTimeout, aby pomyślnie zamknąć adapter w systemach opartych na systemie Windows",
         "zh-cn": "增加stopTimeout以成功关闭基于Windows的系统上的适配器"
-      },
-      "0.5.7": {
-        "en": "fixed gamertag not set if no state on the object exists yet",
-        "de": "Fixed Gamertag nicht gesetzt, wenn noch kein Status für das Objekt existiert",
-        "ru": "фиксированный тег игрока не установлен, если на объекте еще нет состояния",
-        "pt": "gamertag fixo não definido se ainda não existir nenhum estado no objeto",
-        "nl": "vaste gamertag niet ingesteld als er nog geen status op het object bestaat",
-        "fr": "gamertag fixe non défini si aucun état sur l'objet n'existe encore",
-        "it": "gamertag fisso non impostato se non esiste ancora alcun stato sull'oggetto",
-        "es": "no se ha establecido el gamertag fijo si aún no existe un estado en el objeto",
-        "pl": "naprawiony tag gracza nie jest ustawiony, jeśli nie istnieje jeszcze żaden stan obiektu",
-        "zh-cn": "如果对象上还没有状态，则不设置固定的gamertag"
       }
     },
     "title": "Xbox",
