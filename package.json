@@ -1,6 +1,6 @@
 {
   "name": "iobroker.xbox",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "engines": {
     "node": ">=6.0.0"
   },
@@ -37,7 +37,6 @@
     "test:unit": "node_modules/.bin/mocha test/unitAdapter --exit",
     "test:package": "node_modules/.bin/mocha test/packageFiles --exit",
     "test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit",
-    "preinstall": "dpkg --help > /dev/null && dpkg -s build-essential | grep -q '' && dpkg -s libssl-dev | grep -q '' && dpkg -s libffi-dev | grep -q '' && dpkg -s python3-dev | grep -q '' && echo -e '[INFO] Required Debian packages are already installed!' || apt install -y build-essential libssl-dev libffi-dev python3-dev || echo -e '[INFO] Cannot install build-essential libssl-dev libffi-dev python3-dev Debian packages. If you are on a Linux system, try installing the package via: sudo npm i iobroker.xbox --unsafe-perm, otherwise you have to manage package installation by yourself. If you are not running on Linux, you can ignore this INFO.\n'",
     "install": "npip install",
     "nopy": "nopy",
     "npip": "npip",
@@ -55,7 +54,7 @@
       "."
     ],
     "dependencies": {
-      "xbox-smartglass-core": ">=1.2.1"
+      "xbox-smartglass-core": ">=1.2.2"
     }
   },
   "devDependencies": {
