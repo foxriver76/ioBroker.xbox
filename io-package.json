@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "news": {
+      "0.6.4": {
+        "en": "js-controller v3 compatibility",
+        "de": "Kompatibilität mit js-controller v3",
+        "ru": "совместимость с js-контроллером v3",
+        "pt": "Compatibilidade com js-controller v3",
+        "nl": "js-controller v3 compatibiliteit",
+        "fr": "compatibilité js-controller v3",
+        "it": "Compatibilità js-controller v3",
+        "es": "Compatibilidad con js-controller v3",
+        "pl": "Kompatybilność z js-controller v3",
+        "zh-cn": "js-controller v3兼容性"
+      },
       "0.6.3": {
         "en": "we now try specific python versions first on install and auth fixed",
         "de": "Wir versuchen jetzt bestimmte Python-Versionen zuerst bei der Installation und Authentifizierung behoben",
