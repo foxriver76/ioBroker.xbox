@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.6.4",
+    "version": "0.6.5",
     "news": {
+      "0.6.5": {
+        "en": "fixed problem with auth only states",
+        "de": "Problem mit nur Auth-Zuständen behoben",
+        "ru": "исправлена проблема с аутентификацией только состояний",
+        "pt": "problema corrigido com estados somente de autenticação",
+        "nl": "opgelost probleem met alleen auth staten",
+        "fr": "problème fixe avec les états d'authentification uniquement",
+        "it": "risolto problema con stati di solo autenticazione",
+        "es": "problema solucionado con estados solo de autenticación",
+        "pl": "naprawiono problem ze stanami tylko autoryzacji",
+        "zh-cn": "修复了仅授权状态的问题"
+      },
       "0.6.4": {
         "en": "js-controller v3 compatibility",
         "de": "Kompatibilität mit js-controller v3",

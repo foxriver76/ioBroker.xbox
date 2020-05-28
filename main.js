@@ -159,7 +159,7 @@ function startAdapter(options) {
             }
         });
 
-        await prepareAuthentication();
+        await prepareAuthentication(authenticate);
 
         // Server needs time to start
         startTimer = setTimeout(main, 5000);
@@ -168,7 +168,7 @@ function startAdapter(options) {
     return adapter;
 } // endStartAdapter
 
-function main() {
+async function main() {
     if (startTimer) {
         clearTimeout(startTimer);
         startTimer = null;
@@ -177,7 +177,8 @@ function main() {
 
     // Authenticate on Xbox Live, make sure to be logged out first
     if (authenticate) {
-        logOut().then(() => authenticateOnServer());
+        await logOut();
+        await authenticateOnServer();
     } // endIf
 
     // Get Rest Server PID once for killing on windows
@@ -658,7 +659,7 @@ function decrypt(key, value) {
 function authenticateOnServer() {
     return new Promise(resolve => {
         request.post(`http://${restServerAddress}:5557/auth/login`,
-            {form: {email: mail, password: password}}, (err, response, body) => {
+            {form: {email: mail, password: password}}, async (err, response, body) => {
                 let jsonBody;
 
                 try {
@@ -669,40 +670,25 @@ function authenticateOnServer() {
 
                 if (!err && jsonBody.two_factor_required) {
                     adapter.log.debug(`[LOGIN] Two factor authentication required, try to load token`);
-                    loadToken().then(() => {
-                        resolve();
-                    }).catch(() => {
+                    try {
+                        await loadToken();
+                    } catch {
                         adapter.log.warn(`[LOGIN] Failed to load Token, log in at http://${IO_HOST_IP}:5557/auth/oauth`);
-                    });
+                    }
+                    return resolve();
                 } else if (err && err.toString().includes(`ECONNREFUSED`)) {
                     adapter.log.warn(`[LOGIN] Connection refused, will try again`);
                     setTimeout(() => authenticateOnServer(), 2500);
                 } else if (err || (jsonBody.success === false && !jsonBody.message.includes(`An account is already signed in`))) {
                     adapter.log.warn(`[LOGIN] <=== Error: ${(err ? err : body)}`);
-                    adapter.getStateAsync(`info.authenticated`).then(state => {
-                        if (!state || state.val) {
-                            adapter.setState(`info.authenticated`, false, true);
-                        } // endIf
-                    });
+                    adapter.setStateChanged(`info.authenticated`, false, true);
                 } else if (jsonBody.message.includes(`An account is already signed in`)) {
                     adapter.log.info(`[LOGIN] An account is still logged in`);
-                    adapter.getStateAsync(`info.authenticated`).then(state => {
-                        if (!state || !state.val) {
-                            adapter.setState(`info.authenticated`, true, true);
-                        } // endIf
-                    });
+                    adapter.setStateChanged(`info.authenticated`, true, true);
                 } else {
                     adapter.log.info(`[LOGIN] <=== Successfully logged in as: ${jsonBody.gamertag}`);
-                    adapter.getStateAsync(`info.authenticated`).then(state => {
-                        if (!state || !state.val) {
-                            adapter.setState(`info.authenticated`, true, true);
-                        } // endIf
-                    });
-                    adapter.getStateAsync(`info.gamertag`).then(state => {
-                        if (!state || state.val !== body.gamertag) {
-                            adapter.setState(`info.gamertag`, jsonBody.gamertag, true);
-                        } // endIf
-                    });
+                    adapter.setStateChanged(`info.authenticated`, true, true);
+                    adapter.setStateChanged(`info.gamertag`, jsonBody.gamertag, true);
                 } // endElse
                 resolve();
             });
@@ -711,11 +697,11 @@ function authenticateOnServer() {
 
 function logOut() {
     return new Promise(resolve => {
-        request.post(`http://${restServerAddress}:5557/auth/logout`, (err, response, body) => {
-
+        request.post(`http://${restServerAddress}:5557/auth/logout`, async (err, response, body) => {
             if (!err && JSON.parse(body).success) {
                 adapter.log.debug(`[LOGOUT] <=== Successfully logged out`);
-                adapter.setStateAsync(`info.authenticated`, false, true).then(() => resolve());
+                await adapter.setStateAsync(`info.authenticated`, false, true);
+                resolve();
             } else {
                 adapter.log.debug(`[LOGOUT] <=== Failed to logout: ${body}`);
                 resolve();
@@ -734,11 +720,7 @@ function checkLoggedIn() {
                         adapter.log.debug(`[CHECK] Successfully logged in`);
                     } // endIf
                 });
-                adapter.getStateAsync(`info.gamertag`).then(state => {
-                    if (!state || state.val !== JSON.parse(body).userinfo.gtg) {
-                        adapter.setState(`info.gamertag`, JSON.parse(body).userinfo.gtg, true);
-                    } // endIf
-                });
+                adapter.setStateChanged(`info.gamertag`, JSON.parse(body).userinfo.gtg, true);
                 resolve();
             } else {
                 adapter.getStateAsync(`info.authenticated`).then(state => {
@@ -779,84 +761,89 @@ function loadToken() {
     });
 } // endLoadToken
 
-function prepareAuthentication(authenticate) {
-    return new Promise(resolve => {
-        if (authenticate) {
-            const promises = [];
-            // create Auth-Only Objects
-            promises.push(adapter.setObjectNotExistsAsync(`info.authenticated`, {
-                type: `state`,
-                common: {
-                    name: `Xbox Live authenticated`,
-                    role: `indicator.authenticated`,
-                    type: `boolean`,
-                    read: true,
-                    write: false,
-                    def: false
-                },
-                native: {}
-            }));
+/**
+ * Prepares authentication by creating states or deleting states depending on passed authentication flag
+ *
+ * @param {boolean} authenticate - if true creates auth states, else deletes them
+ * @return {Promise<void>}
+ */
+async function prepareAuthentication(authenticate) {
+    if (authenticate) {
+        const promises = [];
+        // create Auth-Only Objects
+        promises.push(adapter.setObjectNotExistsAsync(`info.authenticated`, {
+            type: `state`,
+            common: {
+                name: `Xbox Live authenticated`,
+                role: `indicator.authenticated`,
+                type: `boolean`,
+                read: true,
+                write: false,
+                def: false
+            },
+            native: {}
+        }));
 
-            promises.push(adapter.setObjectNotExistsAsync(`info.activeTitleImage`, {
-                type: `state`,
-                common: {
-                    name: `Active title image`,
-                    role: `icon`,
-                    type: `string`,
-                    read: true,
-                    write: false
-                },
-                native: {}
-            }));
+        promises.push(adapter.setObjectNotExistsAsync(`info.activeTitleImage`, {
+            type: `state`,
+            common: {
+                name: `Active title image`,
+                role: `icon`,
+                type: `string`,
+                read: true,
+                write: false
+            },
+            native: {}
+        }));
 
-            promises.push(adapter.setObjectNotExistsAsync(`info.gamertag`, {
-                type: `state`,
-                common: {
-                    name: `Authenticated Gamertag`,
-                    role: `name.user`,
-                    type: `string`,
-                    read: true,
-                    write: false
-                },
-                native: {}
-            }));
+        promises.push(adapter.setObjectNotExistsAsync(`info.gamertag`, {
+            type: `state`,
+            common: {
+                name: `Authenticated Gamertag`,
+                role: `name.user`,
+                type: `string`,
+                read: true,
+                write: false
+            },
+            native: {}
+        }));
 
-            promises.push(adapter.setObjectNotExistsAsync(`settings.gameDvr`, {
-                type: `state`,
-                common: {
-                    name: `Game Recorder`,
-                    role: `button`,
-                    type: `boolean`,
-                    read: true,
-                    write: true
-                },
-                native: {}
-            }));
+        promises.push(adapter.setObjectNotExistsAsync(`settings.gameDvr`, {
+            type: `state`,
+            common: {
+                name: `Game Recorder`,
+                role: `button`,
+                type: `boolean`,
+                read: true,
+                write: true
+            },
+            native: {}
+        }));
 
-            promises.push(new Promise(resolve => {
-                adapter.getForeignObjectAsync(`system.config`).then(obj => {
-                    if (obj && obj.native && obj.native.secret) {
-                        password = decrypt(obj.native.secret, password);
-                        mail = decrypt(obj.native.secret, mail);
-                        resolve();
-                    } else {
-                        password = decrypt(`Zgfr56gFe87jJOM`, password);
-                        mail = decrypt(`Zgfr56gFe87jJOM`, mail);
-                        resolve();
-                    } // endElse
-                });
-            }));
+        promises.push(new Promise(resolve => {
+            adapter.getForeignObjectAsync(`system.config`).then(obj => {
+                if (obj && obj.native && obj.native.secret) {
+                    password = decrypt(obj.native.secret, password);
+                    mail = decrypt(obj.native.secret, mail);
+                    resolve();
+                } else {
+                    password = decrypt(`Zgfr56gFe87jJOM`, password);
+                    mail = decrypt(`Zgfr56gFe87jJOM`, mail);
+                    resolve();
+                } // endElse
+            });
+        }));
 
-            Promise.all(promises).then(() => resolve());
-        } else {
-            // del Objects
-            adapter.delObject(`info.authenticated`);
-            adapter.delObject(`info.gamertag`);
-            adapter.delObject(`info.activeTitleImage`);
-            adapter.delObject(`info.gameDvr`);
-            resolve();
-        } // endElse
-    });
+        await Promise.all(promises);
+        return Promise.resolve();
+    } else {
+        // del Objects
+        adapter.delObject(`info.authenticated`);
+        adapter.delObject(`info.gamertag`);
+        adapter.delObject(`info.activeTitleImage`);
+        adapter.delObject(`info.gameDvr`);
+        return Promise.resolve();
+    } // endElse
 } // endPrepareAuthentication
 
 // If started as allInOne/compact mode => return function to create instance
