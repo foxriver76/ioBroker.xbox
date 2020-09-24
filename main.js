@@ -35,7 +35,7 @@ function startAdapter(options) {
 
     adapter = new utils.Adapter(options);
 
-    adapter.on(`unload`, callback => {
+    adapter.on(`unload`, async callback => {
         try {
             let killCmd;
 
@@ -60,29 +60,29 @@ function startAdapter(options) {
                 killCmd = `pkill -f xbox-rest-server`;
             } // endElse
 
-            logOut().then(() => {
-                exec(killCmd, (error, stdout, stderr) => {
-                    if (!error) {
-                        adapter.log.info(`[END] REST server stopped`);
-                    } else {
-                        adapter.log.info(`[END] REST server stopped ${stderr}`);
-                    } // endElse
+            await logOut();
 
-                    const promises = [];
-                    promises.push(adapter.setStateAsync(`info.connection`, false, true));
-                    promises.push(adapter.setStateAsync(`info.activeTitleImage`, ``, true));
-                    promises.push(adapter.setStateAsync(`info.activeTitleName`, ``, true));
-                    promises.push(adapter.setStateAsync(`info.activeTitleId`, ``, true));
-                    promises.push(adapter.setStateAsync(`info.currentTitles`, `{}`, true));
-                    promises.push(adapter.setStateAsync(`info.activeTitleType`, ``, true));
+            exec(killCmd, async (error, stdout, stderr) => {
+                if (!error) {
+                    adapter.log.info(`[END] REST server stopped`);
+                } else {
+                    adapter.log.info(`[END] REST server stopped ${stderr}`);
+                } // endElse
 
-                    Promise.all(promises).then(() => {
-                        adapter.log.info(`[END] cleaned everything up...`);
-                        callback();
-                    });
-                });
+                const promises = [];
+                promises.push(adapter.setStateAsync(`info.connection`, false, true));
+                promises.push(adapter.setStateAsync(`info.activeTitleImage`, ``, true));
+                promises.push(adapter.setStateAsync(`info.activeTitleName`, ``, true));
+                promises.push(adapter.setStateAsync(`info.activeTitleId`, ``, true));
+                promises.push(adapter.setStateAsync(`info.currentTitles`, `{}`, true));
+                promises.push(adapter.setStateAsync(`info.activeTitleType`, ``, true));
+
+                await Promise.all(promises);
+
+                adapter.log.info(`[END] cleaned everything up...`);
+                callback();
             });
-        } catch (e) {
+        } catch {
             callback();
         } // endTryCatch
     });
