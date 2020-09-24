@@ -4,7 +4,6 @@
 
 ![Build Status](https://github.com/foxriver76/ioBroker.xbox/workflows/Test%20and%20Release/badge.svg)![Number of Installations](http://iobroker.live/badges/xbox-installed.svg) ![Number of Installations](http://iobroker.live/badges/xbox-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.xbox.svg)](https://www.npmjs.com/package/iobroker.xbox)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.xbox.svg)](https://www.npmjs.com/package/iobroker.xbox)
-[![Greenkeeper badge](https://badges.greenkeeper.io/foxriver76/ioBroker.xbox.svg)](https://greenkeeper.io/)
 
 [![NPM](https://nodei.co/npm/iobroker.xbox.png?downloads=true)](https://nodei.co/npm/iobroker.xbox/)
 
@@ -315,7 +314,7 @@ In this section you can find a description of every state of the adapter.
    *View button for media content.*
    
 ## Changelog
-### 0.6.6 (2020-09-24)
+### 0.6.7 (2020-09-24)
 * (foxriver76) minor optimization
 
 ### 0.6.5 (2020-05-28)

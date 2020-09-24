@@ -51,7 +51,7 @@ function startAdapter(options) {
             }
 
             adapter.setState(`info.connection`, false, true);
-            adapter.setState(`power.settings`, false, true);
+            adapter.setState(`settings.power`, false, true);
             if (os.startsWith(`win`)) {
                 // Windows
                 killCmd = `taskkill /F /PID ${restServerPid}`;
