@@ -406,7 +406,7 @@ function discoverAndUpdateConsole(ip) { // is used by connect
                         }
                     } else {
                         try {
-                            for (const i in jsonBody.devices) {
+                            for (const i of Object.keys(jsonBody.devices)) {
                                 if (jsonBody.devices[i].address === ip) {
                                     liveId = jsonBody.devices[i].liveid;
                                     discovered = true;
@@ -838,10 +838,17 @@ async function prepareAuthentication(authenticate) {
         return Promise.resolve();
     } else {
         // del Objects
-        adapter.delObject(`info.authenticated`);
-        adapter.delObject(`info.gamertag`);
-        adapter.delObject(`info.activeTitleImage`);
-        adapter.delObject(`info.gameDvr`);
+        const promises = [];
+        promises.push(adapter.delObjectAsync(`info.authenticated`));
+        promises.push(adapter.delObjectAsync(`info.gamertag`));
+        promises.push(adapter.delObjectAsync(`info.activeTitleImage`));
+        promises.push(adapter.delObjectAsync(`info.gameDvr`));
+
+        try {
+            await Promise.all(promises);
+        } catch {
+            // ignore
+        }
         return Promise.resolve();
     } // endElse
 } // endPrepareAuthentication

@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.6.5",
+    "version": "0.6.6",
     "news": {
+      "0.6.6": {
+        "en": "minor optimization",
+        "de": "geringfügige Optimierung",
+        "ru": "небольшая оптимизация",
+        "pt": "pequena otimização",
+        "nl": "kleine optimalisatie",
+        "fr": "optimisation mineure",
+        "it": "ottimizzazione minore",
+        "es": "optimización menor",
+        "pl": "drobna optymalizacja",
+        "zh-cn": "小优化"
+      },
       "0.6.5": {
         "en": "fixed problem with auth only states",
         "de": "Problem mit nur Auth-Zuständen behoben",
