@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "request": "^2.88.0",
-    "ping": "^0.2.2",
+    "ping": "^0.3.0",
     "nopy": "^0.2.6",
     "@iobroker/adapter-core": "^2.0.0"
   },
