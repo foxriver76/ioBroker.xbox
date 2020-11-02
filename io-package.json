@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.6.8",
+    "version": "0.6.9",
     "news": {
+      "0.6.9": {
+        "en": "dependency upgrade, fixes installation problems",
+        "de": "Abhängigkeits-Upgrade, behebt Installationsprobleme",
+        "ru": "обновление зависимости, устраняет проблемы установки",
+        "pt": "atualização de dependência, corrige problemas de instalação",
+        "nl": "afhankelijkheidsupgrade, lost installatieproblemen op",
+        "fr": "mise à niveau des dépendances, corrige les problèmes d'installation",
+        "it": "aggiornamento delle dipendenze, risolve i problemi di installazione",
+        "es": "actualización de dependencia, soluciona problemas de instalación",
+        "pl": "aktualizacja zależności, naprawia problemy z instalacją",
+        "zh-cn": "依赖性升级，修复安装问题"
+      },
       "0.6.8": {
         "en": "minor optimization",
         "de": "geringfügige Optimierung",
