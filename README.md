@@ -14,7 +14,7 @@
 
 ## Requirements
 
-* You need to have Python >= 3.6 installed
+* You need to have Python >= 3.7 installed
 * For Linux additional packages are required.
    
    The required packages will automatically be installed. Due to this fact root privileges are required as well as the 
@@ -314,6 +314,9 @@ In this section you can find a description of every state of the adapter.
    *View button for media content.*
    
 ## Changelog
+### 0.6.10 (2020-11-03)
+* (foxriver76) removed Python3.6 support 
+
 ### 0.6.9 (2020-11-02)
 * (foxriver76) dependency upgrade, fixes installation problems
 

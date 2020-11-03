@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.6.9",
+    "version": "0.6.10",
     "news": {
+      "0.6.10": {
+        "en": "python3.6 support removed, because smartglass does not support it anymore",
+        "de": "Python3.6-Unterstützung entfernt, da Smartglass sie nicht mehr unterstützt",
+        "ru": "поддержка python3.6 удалена, потому что smartglass больше не поддерживает ее",
+        "pt": "Suporte python3.6 removido, porque smartglass não o suporta mais",
+        "nl": "python3.6-ondersteuning verwijderd, omdat smartglass het niet meer ondersteunt",
+        "fr": "Prise en charge de python3.6 supprimée, car smartglass ne la prend plus en charge",
+        "it": "Supporto per python3.6 rimosso, perché smartglass non lo supporta più",
+        "es": "Se eliminó el soporte de python3.6, porque smartglass ya no lo admite",
+        "pl": "Usunięto obsługę pythona3.6, ponieważ smartglass już go nie obsługuje",
+        "zh-cn": "删除了python3.6支持，因为smartglass不再支持它"
+      },
       "0.6.9": {
         "en": "dependency upgrade, fixes installation problems",
         "de": "Abhängigkeits-Upgrade, behebt Installationsprobleme",

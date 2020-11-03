@@ -318,8 +318,8 @@ function connect(ip) {
                 });
 
                 if (liveId && result.device && result.device.device_status === `Available`) {
-                    request(statusURL, (error, response, body) => {
-                        if (!error) {
+                    request(statusURL, (err, response, body) => {
+                        if (!err) {
                             if (JSON.parse(body).success) {
                                 adapter.setState(`info.connection`, true, true);
                                 adapter.log.info(`[CONNECT] <=== Successfully connected to ${liveId} (${result.device.address})`);
@@ -334,10 +334,10 @@ function connect(ip) {
                                 result.connectionState = false;
                             } //endElse
                         } else {
-                            adapter.log.error(`[CONNECT] <=== ${error.message}`);
+                            adapter.log.error(`[CONNECT] <=== ${err.message}`);
                             adapter.setState(`info.connection`, false, true);
                             result.connectionState = false;
-                            if (error.message.includes(`ECONNREFUSED`)) {
+                            if (err.message.includes(`ECONNREFUSED`)) {
                                 adapter.log.error(`[CONNECT] REST server seems to be down, adapter will be restarted`);
                                 restartAdapter();
                             } // endIf
