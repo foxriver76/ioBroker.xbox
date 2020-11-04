@@ -218,40 +218,41 @@ async function main() {
                 } else {
                     adapter.log.debug(`[PING] Xbox offline, but marked available`);
                 }
-                connect(ip).then(connectionState => { // check if connection is (still) established
-                    if (connectionState === `Connected`) {
-                        request(`http://${restServerAddress}:5557/device/${liveId}/console_status`, (error, response, body) => {
-                            if (error) {
-                                return adapter.log.warn(`[STATUS] <=== Error getting status: ${error.message}`);
-                            }
 
-                            const currentTitles = JSON.parse(body).console_status.active_titles;
-                            const currentTitlesState = {};
-                            let activeName = ``;
-                            let activeHex = ``;
-                            let activeImage = ``;
-                            let activeType = ``;
-                            for (const title of currentTitles) {
-                                const titleName = title.name.split(`_`)[0];
-                                const titleHex = parseInt(title.title_id).toString(16);
-                                currentTitlesState[titleName] = titleHex;
-                                if (title.has_focus) {
-                                    activeName = titleName;
-                                    activeHex = titleHex;
-                                    activeImage = title.image || ``;
-                                    activeType = title.type || ``;
-                                } // endIf
-                            } // endFor
-                            adapter.log.debug(`[STATUS] Set ${JSON.stringify(currentTitlesState)}`);
+                const connectionState = await connect(ip);
+                // check if connection is (still) established
+                if (connectionState === `Connected`) {
+                    try {
+                        const res = await axios.get(`http://${restServerAddress}:5557/device/${liveId}/console_status`);
 
-                            adapter.setStateChanged(`info.currentTitles`, JSON.stringify(currentTitlesState), true);
-                            adapter.setStateChanged(`info.activeTitleName`, activeName, true);
-                            adapter.setStateChanged(`info.activeTitleId`, activeHex, true);
-                            adapter.setStateChanged(`info.activeTitleImage`, activeImage, true);
-                            adapter.setStateChanged(`info.activeTitleType`, activeType, true);
-                        });
-                    } // endIf
-                });
+                        const currentTitles = res.data.active_titles;
+                        const currentTitlesState = {};
+                        let activeName = ``;
+                        let activeHex = ``;
+                        let activeImage = ``;
+                        let activeType = ``;
+                        for (const title of currentTitles) {
+                            const titleName = title.name.split(`_`)[0];
+                            const titleHex = parseInt(title.title_id).toString(16);
+                            currentTitlesState[titleName] = titleHex;
+                            if (title.has_focus) {
+                                activeName = titleName;
+                                activeHex = titleHex;
+                                activeImage = title.image || ``;
+                                activeType = title.type || ``;
+                            } // endIf
+                        } // endFor
+                        adapter.log.debug(`[STATUS] Set ${JSON.stringify(currentTitlesState)}`);
+
+                        adapter.setStateChanged(`info.currentTitles`, JSON.stringify(currentTitlesState), true);
+                        adapter.setStateChanged(`info.activeTitleName`, activeName, true);
+                        adapter.setStateChanged(`info.activeTitleId`, activeHex, true);
+                        adapter.setStateChanged(`info.activeTitleImage`, activeImage, true);
+                        adapter.setStateChanged(`info.activeTitleType`, activeType, true);
+                    } catch (e) {
+                        adapter.log.warn(`[STATUS] <=== Error getting status: ${e.message}`);
+                    }
+                } // endIf
             } else {
                 adapter.getStateAsync(`info.connection`).then(state => {
                     if ((!state || state.val) && !xboxAvailable) {
@@ -302,7 +303,7 @@ function connect(ip) {
                         adapter.log.debug(`[CONNECT] Currently connecting`);
                     } else {
                         adapter.setState(`info.connection`, true, true);
-                        adapter.log.info(`[CONNECT] <=== Successfully connected to ${liveId} (${result.device.address})`);
+                        adapter.log.info(`[CONNECT] <=== Successfully connected to ${liveId} (${result.device.ip_address})`);
                     } // endIf
 
                     resolve(result.connectionState);
@@ -326,7 +327,7 @@ function connect(ip) {
                         if (!err) {
                             if (JSON.parse(body).success) {
                                 adapter.setState(`info.connection`, true, true);
-                                adapter.log.info(`[CONNECT] <=== Successfully connected to ${liveId} (${result.device.address})`);
+                                adapter.log.info(`[CONNECT] <=== Successfully connected to ${liveId} (${result.device.ip_address})`);
                                 result.connectionState = true;
                             } else {
                                 if (firstReconnectAttempt) {
@@ -361,78 +362,81 @@ function connect(ip) {
     });
 } // endConnect
 
-function powerOff(liveId) {
-    return new Promise(resolve => {
-        const endpoint = `http://${restServerAddress}:5557/device/${liveId}/poweroff`;
-        adapter.log.debug(`[POWEROFF] Powering off Xbox (${ip})`);
+/**
+ * Power off console
+ * @param {string} liveId - liveId of the console
+ * @returns {Promise<void>}
+ */
+async function powerOff(liveId) {
+    const endpoint = `http://${restServerAddress}:5557/device/${liveId}/poweroff`;
+    adapter.log.debug(`[POWEROFF] Powering off Xbox (${ip})`);
 
-        request(endpoint, (error, response, body) => {
-            if (!error) {
-                if (JSON.parse(body).success) {
-                    adapter.log.debug(`[POWEROFF] <=== ${body}`);
-                } else {
-                    adapter.log.warn(`[POWEROFF] <=== ${body}`);
-                } //endElse
-            } else {
-                adapter.log.error(`[POWEROFF] <=== ${error.message}`);
-            } // endElse
-            resolve();
-        });
-    });
+    try {
+        const res = await axios.get(endpoint);
+        if (!res.data.success) {
+            adapter.log.warn(`[POWEROFF] <=== ${JSON.stringify(res.data)}`);
+        }
+    } catch (e) {
+        adapter.log.error(`[POWEROFF] <=== ${e.message}`);
+    }
 } // endPowerOff
 
-function discoverAndUpdateConsole(ip) { // is used by connect
-    return new Promise(resolve => {
-        adapter.getStateAsync(`info.connection`).then(state => {
-            let endpoint;
-            if (!state || !state.val) {
-                endpoint = `http://${restServerAddress}:5557/device?addr=${ip}`;
-                adapter.log.debug(`[DISCOVER] Searching for consoles`);
-            } else {
-                endpoint = `http://${restServerAddress}:5557/device/${liveId}`;
-                adapter.log.debug(`[UPDATE] Check console status`);
-            } // endElse
-            let connectionState = false;
-            let discovered = false;
+/**
+ * Discover configured console by ip or check if connection is alive
+ *
+ * @param {string} ip - ip address of Xbox
+ * @returns {Promise<{discovered: boolean, connectionState: boolean, device: *}>}
+ */
+async function discoverAndUpdateConsole(ip) { // is used by connect
+    const state = await adapter.getStateAsync(`info.connection`);
+    let endpoint;
+    if (!state || !state.val) {
+        endpoint = `http://${restServerAddress}:5557/device?addr=${ip}`;
+        adapter.log.debug(`[DISCOVER] Searching for consoles`);
+    } else {
+        endpoint = `http://${restServerAddress}:5557/device/${liveId}`;
+        adapter.log.debug(`[UPDATE] Check console status`);
+    } // endElse
+    let connectionState = false;
+    let discovered = false;
+    let device = null;
 
-            request(endpoint, (error, response, body) => {
-                let device;
-                if (!error) {
-                    const jsonBody = JSON.parse(body);
-                    if (state && state.val) {
-                        try {
-                            device = jsonBody.device;
-                            liveId = jsonBody.device.liveid;
-                            connectionState = jsonBody.device.connection_state;
-                            adapter.log.debug(`[UPDATE] <=== ${body}`);
-                        } catch (e) {
-                            adapter.log.debug(`[UPDATE] <=== ${body}`);
-                        }
-                    } else {
-                        try {
-                            for (const i of Object.keys(jsonBody.devices)) {
-                                if (jsonBody.devices[i].address === ip) {
-                                    liveId = jsonBody.devices[i].liveid;
-                                    discovered = true;
-                                } // endIf
-                            } // endFor
-                            if (jsonBody.devices[liveId].connection_state) {
-                                connectionState = jsonBody.devices[liveId].connection_state;
-                            }
-                            device = jsonBody.devices[liveId];
-                            adapter.log.debug(`[DISCOVER] <=== ${JSON.stringify(jsonBody.devices)}`);
-                        } catch (e) {
-                            adapter.log.debug(`[DISCOVER] <=== ${body}`);
-                        }
-                    }
-                } else {
-                    adapter.log.error(`[DISCOVER] <=== ${error.message}`);
-                    adapter.setState(`info.connection`, false, true);
-                } // endElse
-                resolve({connectionState, discovered, device});
-            });
-        });
-    });
+    try {
+        const res = await axios.get(endpoint);
+        const jsonBody = res.data;
+        if (state && state.val) {
+            // already connected
+            try {
+                device = jsonBody;
+                liveId = jsonBody.liveid;
+                connectionState = jsonBody.connection_state;
+                adapter.log.debug(`[UPDATE] <=== ${JSON.stringify(jsonBody)}`);
+            } catch (e) {
+                adapter.log.debug(`[UPDATE] <=== ${JSON.stringify(jsonBody)}`);
+            }
+        } else {
+            try {
+                for (const i of Object.keys(jsonBody)) {
+                    if (jsonBody[i].ip_address === ip) {
+                        liveId = jsonBody[i].liveid;
+                        discovered = true;
+                        connectionState = jsonBody[i].connection_state;
+                        device = jsonBody[i];
+                        break;
+                    } // endIf
+                } // endFor
+
+                adapter.log.debug(`[DISCOVER] <=== ${JSON.stringify(jsonBody.devices)}`);
+            } catch (e) {
+                adapter.log.error(`[DISCOVER] <=== Error on discovery: ${e.message}`);
+            }
+        }
+    } catch (e) {
+        adapter.log.error(`[DISCOVER] <=== ${e.message}`);
+        adapter.setState(`info.connection`, false, true);
+    }
+
+    return {connectionState, discovered, device};
 } // endDiscover
 
 function powerOn() {
