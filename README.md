@@ -314,7 +314,9 @@ In this section you can find a description of every state of the adapter.
    *View button for media content.*
    
 ## Changelog
-### 0.6.10 (2020-11-03)
+### 0.7.0 (2020-11-04)
+* (foxriver76) replaced deprecated requests module by axios
+* (foxriver76) migrated to xbox-smartglass 1.3
 * (foxriver76) removed Python3.6 support 
 
 ### 0.6.9 (2020-11-02)

@@ -1,19 +1,19 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.6.10",
+    "version": "0.7.0",
     "news": {
-      "0.6.10": {
-        "en": "python3.6 support removed, because smartglass does not support it anymore",
-        "de": "Python3.6-Unterstützung entfernt, da Smartglass sie nicht mehr unterstützt",
-        "ru": "поддержка python3.6 удалена, потому что smartglass больше не поддерживает ее",
-        "pt": "Suporte python3.6 removido, porque smartglass não o suporta mais",
-        "nl": "python3.6-ondersteuning verwijderd, omdat smartglass het niet meer ondersteunt",
-        "fr": "Prise en charge de python3.6 supprimée, car smartglass ne la prend plus en charge",
-        "it": "Supporto per python3.6 rimosso, perché smartglass non lo supporta più",
-        "es": "Se eliminó el soporte de python3.6, porque smartglass ya no lo admite",
-        "pl": "Usunięto obsługę pythona3.6, ponieważ smartglass już go nie obsługuje",
-        "zh-cn": "删除了python3.6支持，因为smartglass不再支持它"
+      "0.7.0": {
+        "en": "migrated to smartglass v1.3, removed python3.6 support, replaced deprecated requests module",
+        "de": "auf Smartglass v1.3 migriert, Python3.6-Unterstützung entfernt, veraltetes Anforderungsmodul ersetzt",
+        "ru": "перешел на smartglass v1.3, удалена поддержка python3.6, заменен устаревший модуль запросов",
+        "pt": "migrou para smartglass v1.3, removeu o suporte a python3.6, substituiu o módulo de solicitações obsoletas",
+        "nl": "gemigreerd naar smartglass v1.3, python3.6-ondersteuning verwijderd, verouderde aanvraagmodule vervangen",
+        "fr": "migré vers smartglass v1.3, suppression de la prise en charge de python3.6, remplacement du module de requêtes obsolètes",
+        "it": "migrato a smartglass v1.3, rimosso il supporto python3.6, sostituito il modulo delle richieste deprecato",
+        "es": "migró a smartglass v1.3, eliminó el soporte de python3.6, reemplazó el módulo de solicitudes obsoleto",
+        "pl": "zmigrowano do smartglass v1.3, usunięto obsługę Pythona 3.6, zastąpiono przestarzały moduł żądań",
+        "zh-cn": "迁移到smartglass v1.3，删除了python3.6支持，替换了不推荐使用的请求模块"
       },
       "0.6.9": {
         "en": "dependency upgrade, fixes installation problems",
