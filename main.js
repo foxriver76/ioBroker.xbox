@@ -53,6 +53,7 @@ function startAdapter(options) {
 
             adapter.setState(`info.connection`, false, true);
             adapter.setState(`settings.power`, false, true);
+
             if (os.startsWith(`win`)) {
                 // Windows
                 killCmd = `taskkill /F /PID ${restServerPid}`;
@@ -62,10 +63,11 @@ function startAdapter(options) {
             } // endElse
 
             exec(killCmd, async (error, stdout, stderr) => {
+
                 if (!error) {
                     adapter.log.info(`[END] REST server stopped`);
                 } else {
-                    adapter.log.info(`[END] REST server stopped ${stderr}`);
+                    adapter.log.info(`[END] Could not stop REST server: ${stderr}`);
                 } // endElse
 
                 const promises = [];
@@ -142,16 +144,19 @@ function startAdapter(options) {
             adapter.log.info(`[START] Starting REST server`);
         } // endElse
 
-        helper.startRestServer().catch(err => {
-            adapter.log.error(`[START] Failed starting REST server: ${err}`);
-            adapter.log.error(`[START] Restarting adapter in 30 seconds`);
+        try {
+            await helper.startRestServer();
+            adapter.log.info(`[START] Successfully started REST server`);
+        } catch (e) {
+            adapter.log.error(`[START] Failed starting REST server: ${e.message}`);
+            adapter.log.error(`[START] Restarting adapter`);
             // clear the checking interval
             if (onlineInterval) {
                 clearInterval(onlineInterval);
                 onlineInterval = null;
             } // endIf
-            restartTimer = setTimeout(() => restartAdapter(), 30000); // restart the adapter if REST server can't be started
-        });
+            return void adapter.restart();
+        }
 
         // create device namespace
         adapter.setForeignObjectNotExists(adapter.namespace, {
@@ -163,8 +168,7 @@ function startAdapter(options) {
 
         await prepareAuthentication(authenticate);
 
-        // Server needs time to start
-        startTimer = setTimeout(main, 5000);
+        main();
     });
 
     return adapter;
@@ -188,7 +192,7 @@ async function main() {
 
     // Get Rest Server PID once for killing on windows
     if (os.startsWith(`win`)) {
-        exec(`wmic process get processid, commandline | findstr "^py *xbox-rest-server.exe>"`, (err, stdout/*, stderr*/) => {
+        exec(`wmic process get processid, commandline | findstr "^py *xbox-rest-server.exe>"`, (err, stdout) => {
             restServerPid = stdout.split(`.exe`)[1].replace(/\s+/g, ``);
             adapter.log.debug(`[START] REST-Server is running as ${restServerPid}`);
         });
@@ -284,7 +288,7 @@ function connect(ip) {
 
             if (result.connectionState === `Error`) {
                 adapter.log.warn(`[CONNECT] Error with rest server, restarting adapter`);
-                return restartAdapter();
+                return void adapter.restart();
             } // endIf
 
             // Set device status to var to not only rely on ping to check if Xbox is online
@@ -339,7 +343,7 @@ function connect(ip) {
                             result.connectionState = false;
                             if (err.message.includes(`ECONNREFUSED`)) {
                                 adapter.log.error(`[CONNECT] REST server seems to be down, adapter will be restarted`);
-                                restartAdapter();
+                                return void adapter.restart();
                             } // endIf
                         } // endElse
                         resolve(result.connectionState);
@@ -639,14 +643,6 @@ function sendCustomCommand(endpoint) {
         });
     });
 } // endSendCustomCommand
-
-function restartAdapter() {
-    adapter.getForeignObjectAsync(`system.adapter.${adapter.namespace}`).then(obj => {
-        if (obj) {
-            adapter.setForeignObject(`system.adapter.${adapter.namespace}`, obj);
-        }
-    });
-} // endFunctionRestartAdapter
 
 function decrypt(key, value) {
     let result = ``;
