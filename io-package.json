@@ -173,14 +173,9 @@
   },
   "native": {
     "ip": "",
-    "liveId": "",
-    "mail": "",
-    "password": ""
+    "liveId": ""
   },
-  "protectedNative": [
-    "mail",
-    "password"
-  ],
+  "protectedNative": [],
   "objects": [],
   "instanceObjects": [
     {

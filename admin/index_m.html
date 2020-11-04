@@ -71,26 +71,23 @@
                     if (isAlive || common.enabled) {
                         // Check authenticate checkbox on startup
                         var $authenticate = $('#authenticate');
-                        var $password = $('#password');
-                        var $mail = $('#mail');
                         if ($authenticate.prop('checked')) {
-                            $password.prop('disabled', false);
-                            $mail.prop('disabled', false);
+                            // show link to auth
                         } else {
-                            $password.prop('disabled', true);
-                            $mail.prop('disabled', true);
+                            // $password.prop('disabled', true);
+                            // hide link to auth
                         } // endElse
 
                         // Listen on checkbox changes
                         $authenticate.on('change', function () {
                             if ($(this).prop('checked')) {
-                                showToast(null, _('Please provide your Xbox Live account information'));
-                                $password.prop('disabled', false);
-                                $mail.prop('disabled', false);
-                                $mail.focus();
+                                //showToast(null, _('Please provide your Xbox Live account information'));
+                                //$password.prop('disabled', false);
+                                //$mail.prop('disabled', false);
+                                //$mail.focus();
                             } else {
-                                $password.prop('disabled', true);
-                                $mail.prop('disabled', true);
+                                //$password.prop('disabled', true);
+                                //$mail.prop('disabled', true);
                             } // endElse
                         });
                     }
@@ -147,17 +144,6 @@
         <div class="input-field col s12 m6 l4">
             <input class="value" id="authenticate" type="checkbox">
             <label for="authenticate" class="translate">Authenticate on Xbox Live</label>
-        </div>
-    </div>
-    <div class="row">
-        <div class="input-field col s12 m6 l4">
-            <input class="value validate" id="mail" data-crypt="1" type="email" disabled>
-            <label for="mail" class="translate">E-mail address</label>
-            <span class="helper-text" data-error="Invalid Email"></span>
-        </div>
-        <div class="input-field col s12 m6 l4">
-            <input class="value" id="password" data-crypt="1" type="password" disabled>
-            <label for="password" class="translate">Password</label>
         </div>
     </div>
 </div>

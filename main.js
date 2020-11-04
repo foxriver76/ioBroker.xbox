@@ -110,21 +110,6 @@ function startAdapter(options) {
         } // endElse
     });
 
-    // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-    adapter.on(`message`, obj => {
-        if (typeof obj === `object` && obj.message) {
-            if (obj.command === `browse`) {
-                // e.g. send email or pushover or whatever
-                adapter.log.info(`[BROWSE] Start browsing`);
-
-                // Send response in callback if required
-                if (obj.callback) {
-                    adapter.sendTo(obj.from, obj.command, `Message received`, obj.callback);
-                }
-            } // endIf
-        } // endIf
-    });
-
     adapter.on(`ready`, async () => {
         ip = adapter.config.ip;
         liveId = adapter.config.liveId;
@@ -177,8 +162,13 @@ async function main() {
 
     // Authenticate on Xbox Live, make sure to be logged out first
     if (authenticate) {
-        await logOut();
-        await authenticateOnServer();
+        // await logOut();
+        //await authenticateOnServer();
+        try {
+            await checkLoggedIn();
+        } catch {
+            adapter.log.warn(`Not logged in, authenticate at http://${IO_HOST_IP}:5557/auth/login`);
+        }
     } // endIf
 
     // Get Rest Server PID once for killing on windows
@@ -658,43 +648,13 @@ function decrypt(key, value) {
 
 function authenticateOnServer() {
     return new Promise(resolve => {
-        request.post(`http://${restServerAddress}:5557/auth/login`,
-            {form: {email: mail, password: password}}, async (err, response, body) => {
-                let jsonBody;
-
-                try {
-                    jsonBody = JSON.parse(body);
-                } catch (e) {
-                    adapter.log.debug(`Could not parse body`);
-                }
-
-                if (!err && jsonBody.two_factor_required) {
-                    adapter.log.debug(`[LOGIN] Two factor authentication required, try to load token`);
-                    try {
-                        await loadToken();
-                    } catch {
-                        adapter.log.warn(`[LOGIN] Failed to load Token, log in at http://${IO_HOST_IP}:5557/auth/oauth`);
-                    }
-                    return resolve();
-                } else if (err && err.toString().includes(`ECONNREFUSED`)) {
-                    adapter.log.warn(`[LOGIN] Connection refused, will try again`);
-                    setTimeout(() => authenticateOnServer(), 2500);
-                } else if (err || (jsonBody.success === false && !jsonBody.message.includes(`An account is already signed in`))) {
-                    adapter.log.warn(`[LOGIN] <=== Error: ${(err ? err : body)}`);
-                    adapter.setStateChanged(`info.authenticated`, false, true);
-                } else if (jsonBody.message.includes(`An account is already signed in`)) {
-                    adapter.log.info(`[LOGIN] An account is still logged in`);
-                    adapter.setStateChanged(`info.authenticated`, true, true);
-                } else {
-                    adapter.log.info(`[LOGIN] <=== Successfully logged in as: ${jsonBody.gamertag}`);
-                    adapter.setStateChanged(`info.authenticated`, true, true);
-                    adapter.setStateChanged(`info.gamertag`, jsonBody.gamertag, true);
-                } // endElse
-                resolve();
-            });
+        request.get(`http://${restServerAddress}:5557/auth/login`, async (err, response) => {
+            resolve();
+        });
     });
 } // endAuthenticateOnServer
 
+/*
 function logOut() {
     return new Promise(resolve => {
         request.post(`http://${restServerAddress}:5557/auth/logout`, async (err, response, body) => {
@@ -709,18 +669,21 @@ function logOut() {
         });
     });
 } // endLogOut
+ */
 
 function checkLoggedIn() {
     return new Promise((resolve, reject) => {
         request(`http://${restServerAddress}:5557/auth`, (err, response, body) => {
-            if (response && response.statusCode === 200 && JSON.parse(body).authenticated) {
+            if (response && response.statusCode === 200) {
+                const respBody = JSON.parse(response.body);
+                const username = respBody.xsts.DisplayClaims.xui[0].gtg;
                 adapter.getStateAsync(`info.authenticated`).then(state => {
                     if (!state || !state.val) {
                         adapter.setState(`info.authenticated`, true, true);
-                        adapter.log.debug(`[CHECK] Successfully logged in`);
+                        adapter.log.debug(`[CHECK] Successfully logged in as ${username}`);
                     } // endIf
                 });
-                adapter.setStateChanged(`info.gamertag`, JSON.parse(body).userinfo.gtg, true);
+                adapter.setStateChanged(`info.gamertag`, username, true);
                 resolve();
             } else {
                 adapter.getStateAsync(`info.authenticated`).then(state => {
