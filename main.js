@@ -3,7 +3,6 @@
 'use strict';
 
 const utils = require(`@iobroker/adapter-core`); // Get common adapter utils
-const IO_HOST_IP = require(`${__dirname}/lib/network`).getIP();
 const {exec} = require(`child_process`);
 const helper = require(`${__dirname}/lib/utils`);
 const ping = require(`ping`);
@@ -92,11 +91,10 @@ function startAdapter(options) {
         if (obj.command === 'auth') {
             try {
                 await checkLoggedIn();
-                adapter.sendTo(obj.from, obj.command, {authActive: true, ip: IO_HOST_IP}, obj.callback);
+                adapter.sendTo(obj.from, obj.command, {authActive: true}, obj.callback);
             } catch (e) {
                 adapter.sendTo(obj.from, obj.command, {
                     authActive: false,
-                    ip: IO_HOST_IP,
                     redirect: e.redirectUri
                 }, obj.callback);
             }
