@@ -659,53 +659,57 @@ function decrypt(key, value) {
 /**
  * Check if logged in and set states accordingly
  *
- * @param [boolean} firstAttempt - if true log the gamertag and update auth state in all cases
- * @returns {Promise<unknown>}
+ * @param {boolean} firstAttempt - if true log the gamertag and update auth state in all cases
+ * @returns {Promise<void>}
  */
-function checkLoggedIn(firstAttempt) {
-    return new Promise((resolve, reject) => {
-        request(`http://${restServerAddress}:5557/auth`, async (err, response) => {
-            if (response && response.statusCode === 200) {
-                const respBody = JSON.parse(response.body);
-                const username = respBody.xsts.DisplayClaims.xui[0].gtg;
-                adapter.getStateAsync(`info.authenticated`).then(state => {
-                    if (!state || !state.val || firstAttempt) {
-                        adapter.setState(`info.authenticated`, true, true);
-                        adapter.log.info(`[LOGIN] Successfully logged in as ${username}`);
-                    } // endIf
-                });
-                adapter.setStateChanged(`info.gamertag`, username, true);
-                resolve();
-            } else {
-                let redirectUri;
-                try {
-                    const res = await axios.get(`http://${restServerAddress}:5557/auth/login`);
-                    redirectUri = res.request.res.responseUrl;
-                } catch (e) {
-                    adapter.log.error(`Could not get redirectUri: ${e}`);
-                }
-                if (firstAttempt) {
-                    adapter.log.warn(`Could not login, please check adapter config. Code: ${response.statusCode}`);
-                }
-                adapter.getStateAsync(`info.authenticated`).then(state => {
-                    adapter.setStateChanged(`info.gamertag`, ``, true);
-                    if (!state || state.val) {
-                        adapter.setState(`info.authenticated`, false, true);
-                        adapter.log.info(`[CHECK] Auth is broken or logged out`);
-                        const err = new Error(`Auth broken`);
-                        err.redirectUri = redirectUri;
-                        reject(err);
-                    } else {
-                        const err = new Error(`Auth still not established`);
-                        err.redirectUri = redirectUri;
-                        reject(err);
-                    }
-                });
-            } // endElse
-        });
-    });
+async function checkLoggedIn(firstAttempt) {
+    let res = {};
+    try {
+        res = await axios.get(`http://${restServerAddress}:5557/auth`);
+        adapter.log.warn(res.status);
+    } catch (e) {
+        res.status = e.response.status;
+    }
+
+    if (res && res.status === 200) {
+        const respBody = res.data;
+        const username = respBody.xsts.DisplayClaims.xui[0].gtg;
+
+        const state = await adapter.getStateAsync(`info.authenticated`);
+        if (!state || !state.val || firstAttempt) {
+            adapter.setState(`info.authenticated`, true, true);
+            adapter.log.info(`[LOGIN] Successfully logged in as ${username}`);
+        } // endIf
+        adapter.setStateChanged(`info.gamertag`, username, true);
+    } else {
+        let redirectUri;
+        try {
+            const res = await axios.get(`http://${restServerAddress}:5557/auth/login`);
+            redirectUri = res.request.res.responseUrl;
+        } catch (e) {
+            adapter.log.error(`Could not get redirectUri: ${e}`);
+        }
+        if (firstAttempt) {
+            adapter.log.warn(`Could not login, please check adapter config. Code: ${res.status}`);
+        }
+        const state = await adapter.getStateAsync(`info.authenticated`);
+
+        adapter.setStateChanged(`info.gamertag`, ``, true);
+        if (!state || state.val) {
+            adapter.setState(`info.authenticated`, false, true);
+            adapter.log.info(`[CHECK] Auth is broken or logged out`);
+            const err = new Error(`Auth broken`);
+            err.redirectUri = redirectUri;
+            throw err;
+        } else {
+            const err = new Error(`Auth still not established`);
+            err.redirectUri = redirectUri;
+            throw err;
+        }
+    } // endElse
 } // endCheckLoggedIn
 
+/*
 function loadToken() {
     return new Promise((resolve, reject) => {
         request(`http://${restServerAddress}:5557/auth/load`, (err, response, body) => {
@@ -729,6 +733,7 @@ function loadToken() {
         });
     });
 } // endLoadToken
+*/
 
 /**
  * Prepares authentication by creating states or deleting states depending on passed authentication flag
