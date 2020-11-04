@@ -9,6 +9,7 @@ const helper = require(`${__dirname}/lib/utils`);
 const request = require(`request`);
 const ping = require(`ping`);
 const os = require(`os`).platform();
+const axios = require('axios');
 
 const restServerAddress = `localhost`; // host of the REST server
 let liveId;
@@ -60,8 +61,6 @@ function startAdapter(options) {
                 killCmd = `pkill -f xbox-rest-server`;
             } // endElse
 
-            await logOut();
-
             exec(killCmd, async (error, stdout, stderr) => {
                 if (!error) {
                     adapter.log.info(`[END] REST server stopped`);
@@ -85,6 +84,24 @@ function startAdapter(options) {
         } catch {
             callback();
         } // endTryCatch
+    });
+
+    adapter.on('message', async obj => {
+        adapter.log.debug(`[MSSG] Received: ${JSON.stringify(obj)}`);
+        if (obj.command === 'auth') {
+            try {
+                await checkLoggedIn();
+                adapter.sendTo(obj.from, obj.command, {authActive: true, ip: IO_HOST_IP}, obj.callback);
+            } catch (e) {
+                adapter.sendTo(obj.from, obj.command, {
+                    authActive: false,
+                    ip: IO_HOST_IP,
+                    redirect: e.redirectUri
+                }, obj.callback);
+            }
+        } else {
+            adapter.log.warn(`Unknown message command ${obj.command}`);
+        }
     });
 
     adapter.on(`stateChange`, (id, state) => {
@@ -162,12 +179,10 @@ async function main() {
 
     // Authenticate on Xbox Live, make sure to be logged out first
     if (authenticate) {
-        // await logOut();
-        //await authenticateOnServer();
         try {
-            await checkLoggedIn();
-        } catch {
-            adapter.log.warn(`Not logged in, authenticate at http://${IO_HOST_IP}:5557/auth/login`);
+            await checkLoggedIn(true);
+        } catch (e) {
+            adapter.log.warn(`Not logged in, authenticate at ${e.redirectUri}`);
         }
     } // endIf
 
@@ -184,12 +199,7 @@ async function main() {
             try {
                 await checkLoggedIn();
             } catch (e) {
-                if (e.message === 'BROKEN') {
-                    // err is only true when lost auth recently, so try one reauthentication
-                    authenticateOnServer();
-                } else {
-                    adapter.log.debug(`[CHECK] Auth is not established`);
-                }
+                adapter.log.debug(`[CHECK] Auth is not established: ${e.message}`);
             }
 
             if (isAlive || xboxAvailable) {
@@ -646,53 +656,49 @@ function decrypt(key, value) {
     return result;
 } // endDecrypt
 
-function authenticateOnServer() {
-    return new Promise(resolve => {
-        request.get(`http://${restServerAddress}:5557/auth/login`, async (err, response) => {
-            resolve();
-        });
-    });
-} // endAuthenticateOnServer
-
-/*
-function logOut() {
-    return new Promise(resolve => {
-        request.post(`http://${restServerAddress}:5557/auth/logout`, async (err, response, body) => {
-            if (!err && JSON.parse(body).success) {
-                adapter.log.debug(`[LOGOUT] <=== Successfully logged out`);
-                await adapter.setStateAsync(`info.authenticated`, false, true);
-                resolve();
-            } else {
-                adapter.log.debug(`[LOGOUT] <=== Failed to logout: ${body}`);
-                resolve();
-            } // endElse
-        });
-    });
-} // endLogOut
+/**
+ * Check if logged in and set states accordingly
+ *
+ * @param [boolean} firstAttempt - if true log the gamertag and update auth state in all cases
+ * @returns {Promise<unknown>}
  */
-
-function checkLoggedIn() {
+function checkLoggedIn(firstAttempt) {
     return new Promise((resolve, reject) => {
-        request(`http://${restServerAddress}:5557/auth`, (err, response, body) => {
+        request(`http://${restServerAddress}:5557/auth`, async (err, response) => {
             if (response && response.statusCode === 200) {
                 const respBody = JSON.parse(response.body);
                 const username = respBody.xsts.DisplayClaims.xui[0].gtg;
                 adapter.getStateAsync(`info.authenticated`).then(state => {
-                    if (!state || !state.val) {
+                    if (!state || !state.val || firstAttempt) {
                         adapter.setState(`info.authenticated`, true, true);
-                        adapter.log.debug(`[CHECK] Successfully logged in as ${username}`);
+                        adapter.log.info(`[LOGIN] Successfully logged in as ${username}`);
                     } // endIf
                 });
                 adapter.setStateChanged(`info.gamertag`, username, true);
                 resolve();
             } else {
+                let redirectUri;
+                try {
+                    const res = await axios.get(`http://${restServerAddress}:5557/auth/login`);
+                    redirectUri = res.request.res.responseUrl;
+                } catch (e) {
+                    adapter.log.error(`Could not get redirectUri: ${e}`);
+                }
+                if (firstAttempt) {
+                    adapter.log.warn(`Could not login, please check adapter config. Code: ${response.statusCode}`);
+                }
                 adapter.getStateAsync(`info.authenticated`).then(state => {
+                    adapter.setStateChanged(`info.gamertag`, ``, true);
                     if (!state || state.val) {
                         adapter.setState(`info.authenticated`, false, true);
-                        adapter.log.debug(`[CHECK] Auth is broken or logged out`);
-                        reject(new Error(`BROKEN`));
+                        adapter.log.info(`[CHECK] Auth is broken or logged out`);
+                        const err = new Error(`Auth broken`);
+                        err.redirectUri = redirectUri;
+                        reject(err);
                     } else {
-                        reject(new Error());
+                        const err = new Error(`Auth still not established`);
+                        err.redirectUri = redirectUri;
+                        reject(err);
                     }
                 });
             } // endElse

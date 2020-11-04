@@ -47,7 +47,11 @@
             // example: select elements with id=key and class=value and insert value
             socket.emit('getObject', 'system.config', function (err, obj) {
                 secret = (obj.native ? obj.native.secret : '') || 'Zgfr56gFe87jJOM';
-                if (!settings) return;
+                var lang = obj.common.language || 'en';
+
+                if (!settings) {
+                    return;
+                }
                 $('.value').each(function () {
                     var $key = $(this);
                     var id = $key.attr('id');
@@ -68,29 +72,40 @@
                 });
 
                 getIsAdapterAlive(function (isAlive) {
-                    if (isAlive || common.enabled) {
-                        // Check authenticate checkbox on startup
-                        var $authenticate = $('#authenticate');
-                        if ($authenticate.prop('checked')) {
-                            // show link to auth
-                        } else {
-                            // $password.prop('disabled', true);
-                            // hide link to auth
-                        } // endElse
+                    var $authStatus = $('#authStatus');
+                    var $authenticate = $('#authenticate');
+                    var $authStatusDiv = $('#authStatusDiv');
 
-                        // Listen on checkbox changes
-                        $authenticate.on('change', function () {
-                            if ($(this).prop('checked')) {
-                                //showToast(null, _('Please provide your Xbox Live account information'));
-                                //$password.prop('disabled', false);
-                                //$mail.prop('disabled', false);
-                                //$mail.focus();
+                    if (isAlive || common.enabled) {
+                        sendTo(null, 'auth', null, function (data) {
+                            if (data.authActive) {
+                                $authStatus.html(systemDictionary['Authentication active'][lang]);
                             } else {
-                                //$password.prop('disabled', true);
-                                //$mail.prop('disabled', true);
-                            } // endElse
+                                $authStatus.html('<a href="' + data.redirect + '"  target="_blank">' +
+                                    systemDictionary['Authentication inactive, activate here!'][lang] + '</a>');
+                            }
                         });
+                    } else {
+                        // auth wanted but adapter not running
+                        $authStatus.html(systemDictionary['REST-Server not running'][lang]);
                     }
+
+                    // Check authenticate checkbox on startup
+                    if ($authenticate.prop('checked')) {
+                        $authStatusDiv.show();
+                    } else {
+                        $authStatusDiv.hide();
+                    }
+
+                    // Listen on checkbox changes
+                    $authenticate.on('change', function () {
+                        if ($(this).prop('checked')) {
+                            $authStatusDiv.show();
+                        } else {
+                            console.log('hide');
+                            $authStatusDiv.hide();
+                        } // endElse
+                    });
                 });
                 onChange(false);
                 M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
@@ -144,6 +159,11 @@
         <div class="input-field col s12 m6 l4">
             <input class="value" id="authenticate" type="checkbox">
             <label for="authenticate" class="translate">Authenticate on Xbox Live</label>
+        </div>
+    </div>
+    <div class="row" id="authStatusDiv">
+        <div class="input-field col s12 m6 l4">
+            <span id="authStatus" class="translate"></span>
         </div>
     </div>
 </div>

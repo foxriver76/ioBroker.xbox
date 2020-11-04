@@ -165,7 +165,7 @@
     "connectionType": "local",
     "dataSource": "poll",
     "license": "MIT",
-    "messagebox": false,
+    "messagebox": true,
     "stopTimeout": 2000,
     "docs": {
       "de": "docs/de/README.md"
