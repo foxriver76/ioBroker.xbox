@@ -103,7 +103,7 @@ function startAdapter(options) {
         }
     });
 
-    adapter.on(`stateChange`, (id, state) => {
+    adapter.on(`stateChange`, async (id, state) => {
         if (!id || !state || state.ack) {
             return;
         } // Ignore acknowledged state changes or error states
@@ -114,15 +114,14 @@ function startAdapter(options) {
         id = id.substring(adapter.namespace.length + 1); // remove instance name and id
 
         if (stateVal && id === `settings.power`) {
-            handleStateChange(state, id);
+            handleStateChange(stateVal, id);
         } else {
-            adapter.getStateAsync(`info.connection`).then(state => {
-                if (state.val) {
-                    handleStateChange(stateVal, id);
-                } else {
-                    adapter.log.warn(`[COMMAND] ===> Can not handle id change ${id} with value ${stateVal} because not connected`);
-                }
-            });
+            const state = await adapter.getStateAsync(`info.connection`);
+            if (state.val) {
+                handleStateChange(stateVal, id);
+            } else {
+                adapter.log.warn(`[COMMAND] ===> Can not handle id change ${id} with value ${stateVal} because not connected`);
+            }
         } // endElse
     });
 
@@ -461,134 +460,159 @@ async function powerOn() {
     } // unblock Box because on
 } // endPowerOn
 
-function handleStateChange(state, id) {
-    return new Promise(resolve => {
-        if (blockXbox) {
-            return adapter.log.warn(`[STATE] ${id} change to ${state.val} dropped, because Xbox blocked`);
-        }
-        blockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
+/**
+ * Handle state change and send command to Xbox if matching
+ * @param {any} state - state value
+ * @param {string} id - id of state
+ * @returns {Promise<void>}
+ */
+async function handleStateChange(state, id) {
+    if (blockXbox) {
+        return adapter.log.warn(`[STATE] ${id} change to ${state.val} dropped, because Xbox blocked`);
+    }
+    blockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
 
-        switch (id) {
-            case `settings.power`:
-                if (state) {
-                    powerOn();
-                } else {
-                    powerOff(liveId);
-                } // endElse
-                break;
-            case `gamepad.rightShoulder`:
-                sendButton(`right_shoulder`);
-                break;
-            case `gamepad.leftShoulder`:
-                sendButton(`left_shoulder`);
-                break;
-            case `gamepad.leftThumbstick`:
-                sendButton(`left_thumbstick`);
-                break;
-            case `gamepad.rightThumbstick`:
-                sendButton(`left_thumbstick`);
-                break;
-            case `gamepad.enroll`:
-                sendButton(`enroll`);
-                break;
-            case `gamepad.view`:
-                sendButton(`view`);
-                break;
-            case `gamepad.menu`:
-                sendButton(`menu`);
-                break;
-            case `gamepad.nexus`:
-                sendButton(`nexus`);
-                break;
-            case `gamepad.a`:
-                sendButton(`a`);
-                break;
-            case `gamepad.b`:
-                sendButton(`b`);
-                break;
-            case `gamepad.y`:
-                sendButton(`y`);
-                break;
-            case `gamepad.x`:
-                sendButton(`x`);
-                break;
-            case `gamepad.dpadUp`:
-                sendButton(`dpad_up`);
-                break;
-            case `gamepad.dpadDown`:
-                sendButton(`dpad_down`);
-                break;
-            case `gamepad.dpadLeft`:
-                sendButton(`dpad_left`);
-                break;
-            case `gamepad.dpadRight`:
-                sendButton(`dpad_right`);
-                break;
-            case `gamepad.clear`:
-                sendButton(`clear`);
-                break;
-            case `media.play`:
-                sendMediaCmd(`play`);
-                break;
-            case `media.pause`:
-                sendMediaCmd(`pause`);
-                break;
-            case `media.record`:
-                sendMediaCmd(`record`);
-                break;
-            case `media.playPause`:
-                sendMediaCmd(`play_pause`);
-                break;
-            case `media.previousTrack`:
-                sendMediaCmd(`prev_track`);
-                break;
-            case `media.seek`:
-                sendCustomCommand(`http://${restServerAddress}:5557/device/${liveId}/media/seek/${state}`)
-                    .then(() => adapter.setState(id, state, true));
-                break;
-            case `media.channelUp`:
-                sendMediaCmd(`channel_up`);
-                break;
-            case `media.nextTrack`:
-                sendMediaCmd(`next_track`);
-                break;
-            case `media.channelDown`:
-                sendMediaCmd(`channel_down`);
-                break;
-            case `media.menu`:
-                sendMediaCmd(`menu`);
-                break;
-            case `media.back`:
-                sendMediaCmd(`back`);
-                break;
-            case `media.rewind`:
-                sendMediaCmd(`rewind`);
-                break;
-            case `media.view`:
-                sendMediaCmd(`view`);
-                break;
-            case `media.fastForward`:
-                sendMediaCmd(`fast_forward`);
-                break;
-            case `media.stop`:
-                sendMediaCmd(`stop`);
-                break;
-            case `settings.inputText`:
-                sendCustomCommand(`http://${restServerAddress}:5557/device/${liveId}/text/${state}`)
-                    .then(() => adapter.setState(id, state, true));
-                break;
-            case `settings.launchTitle`:
-                sendCustomCommand(`http://${restServerAddress}:5557/device/${liveId}/launch/ms-xbl-${state}://`)
-                    .then(() => adapter.setState(id, state, true));
-                break;
-            case `settings.gameDvr`:
-                sendCustomCommand(`http://${restServerAddress}:5557/device/${liveId}/gamedvr`);
-                break;
-            default:
-                adapter.log.warn(`[COMMAND] ===> Not a valid id: ${id}`);
-        } // endSwitch
-        resolve();
-    });
+    switch (id) {
+        case `settings.power`:
+            if (state) {
+                await powerOn();
+            } else {
+                await powerOff(liveId);
+            } // endElse
+            break;
+        case `gamepad.rightShoulder`:
+            await sendButton(`right_shoulder`);
+            break;
+        case `gamepad.leftShoulder`:
+            await sendButton(`left_shoulder`);
+            break;
+        case `gamepad.leftThumbstick`:
+            await sendButton(`left_thumbstick`);
+            break;
+        case `gamepad.rightThumbstick`:
+            await sendButton(`left_thumbstick`);
+            break;
+        case `gamepad.enroll`:
+            await sendButton(`enroll`);
+            break;
+        case `gamepad.view`:
+            await sendButton(`view`);
+            break;
+        case `gamepad.menu`:
+            await sendButton(`menu`);
+            break;
+        case `gamepad.nexus`:
+            await sendButton(`nexus`);
+            break;
+        case `gamepad.a`:
+            await sendButton(`a`);
+            break;
+        case `gamepad.b`:
+            await sendButton(`b`);
+            break;
+        case `gamepad.y`:
+            await sendButton(`y`);
+            break;
+        case `gamepad.x`:
+            await sendButton(`x`);
+            break;
+        case `gamepad.dpadUp`:
+            await sendButton(`dpad_up`);
+            break;
+        case `gamepad.dpadDown`:
+            await sendButton(`dpad_down`);
+            break;
+        case `gamepad.dpadLeft`:
+            await sendButton(`dpad_left`);
+            break;
+        case `gamepad.dpadRight`:
+            await sendButton(`dpad_right`);
+            break;
+        case `gamepad.clear`:
+            await sendButton(`clear`);
+            break;
+        case `media.play`:
+            await sendMediaCmd(`play`);
+            break;
+        case `media.pause`:
+            await sendMediaCmd(`pause`);
+            break;
+        case `media.record`:
+            await sendMediaCmd(`record`);
+            break;
+        case `media.playPause`:
+            await sendMediaCmd(`play_pause`);
+            break;
+        case `media.previousTrack`:
+            await sendMediaCmd(`prev_track`);
+            break;
+        case `media.seek`:
+            try {
+                await sendCustomCommand(`http://${restServerAddress}:5557/device/${liveId}/media/seek/${state}`);
+                adapter.setState(id, state, true);
+            } catch {
+                // ignore
+            }
+            break;
+        case `media.channelUp`:
+            await sendMediaCmd(`channel_up`);
+            break;
+        case `media.nextTrack`:
+            await sendMediaCmd(`next_track`);
+            break;
+        case `media.channelDown`:
+            await sendMediaCmd(`channel_down`);
+            break;
+        case `media.menu`:
+            await sendMediaCmd(`menu`);
+            break;
+        case `media.back`:
+            await sendMediaCmd(`back`);
+            break;
+        case `media.rewind`:
+            await sendMediaCmd(`rewind`);
+            break;
+        case `media.view`:
+            await sendMediaCmd(`view`);
+            break;
+        case `media.fastForward`:
+            await sendMediaCmd(`fast_forward`);
+            break;
+        case `media.stop`:
+            await sendMediaCmd(`stop`);
+            break;
+        case `settings.inputText`:
+            try {
+                await sendCustomCommand(`http://${restServerAddress}:5557/device/${liveId}/text/${state}`);
+                adapter.setState(id, state, true);
+            } catch {
+                // ignore
+            }
+            break;
+        case `settings.launchTitle`:
+            try {
+                await sendCustomCommand(`http://${restServerAddress}:5557/device/${liveId}/launch/ms-xbl-${state}://`);
+                adapter.setState(id, state, true);
+            } catch {
+                // ignore
+            }
+            break;
+        case `settings.gameDvr`: {
+            let query = 'start=-60&end=0'; // default
+            if (typeof state === 'string' && state.includes(',')) {
+                const [start, end] = state.split(',');
+                query = `start=${start.trim()}&end=${end.trim()}`;
+            }
+            try {
+                await sendCustomCommand(`http://${restServerAddress}:5557/device/${liveId}/gamedvr?${query}`);
+            } catch {
+                // ignore
+            }
+            break;
+        }
+        default:
+            adapter.log.warn(`[COMMAND] ===> Not a valid id: ${id}`);
+    } // endSwitch
 } // endHandleStateChange
 
 /**
@@ -645,6 +669,7 @@ async function sendCustomCommand(endpoint) {
         } // endElse
     } catch (e) {
         adapter.log.error(`[REQUEST] <=== Custom request error: ${e.message}`);
+        throw e;
     }
 } // endSendCustomCommand
 
@@ -787,7 +812,7 @@ async function prepareAuthentication(authenticate) {
             common: {
                 name: `Game Recorder`,
                 role: `button`,
-                type: `boolean`,
+                type: `string`,
                 read: true,
                 write: true
             },

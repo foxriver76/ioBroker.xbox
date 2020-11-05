@@ -176,7 +176,7 @@ der Tastenkombination "STRG + F".
    Die Title ID eines aktiven Spiels kann durch den info.currentTitles State herausgefunden werden.
    Der State wird bestätigt, sobald er an die Xbox übermittelt wurde, was nicht heißt, dass der Befehl auch ausgeführt wurde.*
 
-   *Example:*
+   *Beispiel:*
     ```javascript
     setState('settings.launchTitle', '2340236c', false); // Starte Red Dead Redemption 2
     ```
@@ -191,17 +191,25 @@ der Tastenkombination "STRG + F".
    Nachricht zu versenden oder einen Code einzugeben.
    Der State wird bestätigt, sobald er an die Xbox übermittelt wurde, was nicht heißt, dass der Befehl auch ausgeführt wurde.*
 
-   *Example:*
+   *Beispiel:*
    ```javascript
    setState('settings.inputText', 'H1 M8 h0w d0 u do?', false); // Versendet einen nerdigen Text
    ```
 
 * settings.gameDvr
 
-    *Button, welcher bei Druck die vergangene Minute eines Spiels aufzeichnet. Der Button ist
+    |Datentyp|Berechtigung|
+    |:---:|:---:|
+    |string|W|
+    *Schreibbarer String, welcher die definierte Zeit eines Spiels aufzeichnet. Der State ist
     verfügbar, wenn die Authentifizierung in den Einstellungen vorgenommen wurde.
     Ebenfalls muss der authentifizierte Account auf der Xbox angemeldet sein und ein Spiel
     muss sich im Vordergrund befinden.
+    
+    *Beispiel:*
+   ```javascript
+   setState('settings.gameDvr', '-60,30', false); // zeichne die letzten 60 Sekunden bis zu den nächsten 30 Sekunden auf (90 Sekunden gesamt)
+   ```
 
 ### Channel: Gamepad
 
