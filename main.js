@@ -197,13 +197,12 @@ async function main() {
     onlineInterval = setInterval(() => { // check online
         ping.sys.probe(ip, async isAlive => {
             try {
-                await checkLoggedIn();
+                await checkLoggedIn(false);
             } catch (e) {
                 adapter.log.debug(`[CHECK] Auth is not established: ${e.message}`);
             }
 
             if (isAlive || xboxAvailable) {
-
                 if (xboxAvailable) {
                     adapter.setStateChanged(`settings.power`, true, true);
                 }
@@ -276,6 +275,12 @@ async function main() {
 
 } // endMain
 
+/**
+ * Connect to Xbox and return connection state
+ *
+ * @param {string} ip - ip address of console
+ * @returns {Promise<string|boolean>}
+ */
 async function connect(ip) {
     const result = await discoverAndUpdateConsole(ip);
     const statusURL = `http://${restServerAddress}:5557/device/${liveId}/connect`;
@@ -291,18 +296,17 @@ async function connect(ip) {
     xboxAvailable = result.device && result.device.device_status === `Available`;
 
     if (result.connectionState && result.connectionState !== `Disconnected`) {
-        adapter.getStateAsync(`info.connection`).then(state => {
-            if (state.val && result.connectionState === `Connected`) {
-                adapter.log.debug(`[CONNECT] Still connected`);
-            } else if (result.connectionState === `Connecting`) {
-                adapter.log.debug(`[CONNECT] Currently connecting`);
-            } else {
-                adapter.setState(`info.connection`, true, true);
-                adapter.log.info(`[CONNECT] <=== Successfully connected to ${liveId} (${result.device.ip_address})`);
-            } // endIf
+        const state = await adapter.getStateAsync(`info.connection`);
+        if (state.val && result.connectionState === `Connected`) {
+            adapter.log.debug(`[CONNECT] Still connected`);
+        } else if (result.connectionState === `Connecting`) {
+            adapter.log.debug(`[CONNECT] Currently connecting`);
+        } else {
+            adapter.setState(`info.connection`, true, true);
+            adapter.log.info(`[CONNECT] <=== Successfully connected to ${liveId} (${result.device.ip_address})`);
+        } // endIf
 
-            return result.connectionState;
-        });
+        return result.connectionState;
     } else {
         const state = await adapter.getStateAsync(`info.connection`);
         if (!state || state.val) {
@@ -376,7 +380,7 @@ async function powerOff(liveId) {
  * Discover configured console by ip or check if connection is alive
  *
  * @param {string} ip - ip address of Xbox
- * @returns {Promise<{discovered: boolean, connectionState: boolean, device: *}>}
+ * @returns {Promise<{discovered: boolean, connectionState: string, device: *}>}
  */
 async function discoverAndUpdateConsole(ip) { // is used by connect
     const state = await adapter.getStateAsync(`info.connection`);
@@ -662,7 +666,7 @@ async function sendMediaCmd(cmd) {
 async function sendCustomCommand(endpoint) {
     try {
         const response = await axios.get(endpoint);
-        if (response.statusCode === 200 && response.data.success) {
+        if (response.data && response.data.success) {
             adapter.log.debug(`[REQUEST] <=== Custom Command ${endpoint} acknowledged by REST-Server`);
         } else {
             adapter.log.warn(`[REQUEST] <=== Custom command ${endpoint} not acknowledged by REST-Server`);

@@ -1,19 +1,19 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "news": {
-      "0.7.1": {
-        "en": "removed logging of error on adapter stoppage due to rest server termination",
-        "de": "Die Fehlerprotokollierung beim Anhalten des Adapters aufgrund der Beendigung des Restservers wurde entfernt",
-        "ru": "удалено ведение журнала ошибки при остановке адаптера из-за остановки сервера отдыха",
-        "pt": "log de erro removido na parada do adaptador devido ao término do servidor de descanso",
-        "nl": "verwijderde logboekregistratie van fouten bij het stoppen van de adapter vanwege het beëindigen van de server",
-        "fr": "suppression de la journalisation des erreurs lors de l'arrêt de l'adaptateur en raison de l'arrêt du serveur de repos",
-        "it": "è stata rimossa la registrazione degli errori all'arresto dell'adattatore a causa della chiusura del server di riposo",
-        "es": "eliminado el registro de error en la parada del adaptador debido a la terminación del servidor de reposo",
-        "pl": "usunięto rejestrowanie błędu zatrzymania adaptera z powodu zakończenia serwera odpoczynku",
-        "zh-cn": "删除了由于剩余服务器终止而导致的适配器停止错误记录"
+      "0.7.2": {
+        "en": "removed logging of error on adapter stoppage due to rest server termination and fixed a bug with \"currentTitles\"",
+        "de": "Die Fehlerprotokollierung beim Anhalten des Adapters aufgrund der Beendigung des Restservers wurde entfernt und ein Fehler mit \"currentTitles\" wurde behoben.",
+        "ru": "удалено ведение журнала ошибки при остановке адаптера из-за остановки сервера отдыха и исправлена ошибка с \"currentTitles\"",
+        "pt": "removeu o registro de erro na parada do adaptador devido ao encerramento do servidor restante e corrigiu um bug com \"currentTitles\"",
+        "nl": "verwijderde logboekregistratie van fout bij stopzetting van adapter als gevolg van beëindiging van de server en repareerde een bug met \"currentTitles\"",
+        "fr": "suppression de la journalisation des erreurs lors de l'arrêt de l'adaptateur en raison de l'arrêt du serveur de repos et correction d'un bogue avec \"currentTitles\"",
+        "it": "rimossa la registrazione dell'errore sull'arresto dell'adattatore a causa della chiusura del server di riposo e risolto un bug con \"currentTitles\"",
+        "es": "eliminó el registro de error en la parada del adaptador debido a la terminación del servidor de descanso y corrigió un error con \"currentTitles\"",
+        "pl": "usunięto rejestrowanie błędu zatrzymania adaptera z powodu zakończenia serwera i naprawiono błąd z \"currentTitles\"",
+        "zh-cn": "删除了由于剩余服务器终止而导致的适配器停止错误记录，并修复了“ currentTitles”错误"
       },
       "0.7.0": {
         "en": "migrated to smartglass v1.3, removed python3.6 support, replaced deprecated requests module",
