@@ -691,7 +691,6 @@ async function checkLoggedIn(firstAttempt) {
     let res = {};
     try {
         res = await axios.get(`http://${restServerAddress}:5557/auth`);
-        adapter.log.warn(res.status);
     } catch (e) {
         res.status = e.response.status;
     }
