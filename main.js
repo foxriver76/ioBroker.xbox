@@ -421,7 +421,7 @@ async function discoverAndUpdateConsole(ip) { // is used by connect
                     } // endIf
                 } // endFor
 
-                adapter.log.debug(`[DISCOVER] <=== ${JSON.stringify(jsonBody.devices)}`);
+                adapter.log.debug(`[DISCOVER] <=== ${JSON.stringify(jsonBody)}`);
             } catch (e) {
                 adapter.log.error(`[DISCOVER] <=== Error on discovery: ${e.message}`);
             }

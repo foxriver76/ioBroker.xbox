@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "news": {
+      "0.7.3": {
+        "en": "fixed debug logging on discovery",
+        "de": "Debug Logging bei der Erkennung behoben",
+        "ru": "исправлено ведение журнала отладки при обнаружении",
+        "pt": "registro de depuração corrigido na descoberta",
+        "nl": "vaste foutopsporingslogboekregistratie bij detectie",
+        "fr": "correction de la journalisation du débogage lors de la découverte",
+        "it": "corretto il registro di debug alla scoperta",
+        "es": "registro de depuración fijo en el descubrimiento",
+        "pl": "poprawione logowanie do debugowania przy wykrywaniu",
+        "zh-cn": "修复发现时的调试日志记录"
+      },
       "0.7.2": {
         "en": "removed logging of error on adapter stoppage due to rest server termination and fixed a bug with \"currentTitles\"",
         "de": "Die Fehlerprotokollierung beim Anhalten des Adapters aufgrund der Beendigung des Restservers wurde entfernt und ein Fehler mit \"currentTitles\" wurde behoben.",
