@@ -25,6 +25,7 @@ let adapter;
 let onlineInterval;
 let restartTimer;
 let startTimer;
+let restServer;
 
 function startAdapter(options) {
     options = options || {};
@@ -65,7 +66,7 @@ function startAdapter(options) {
                 if (!error) {
                     adapter.log.info(`[END] REST server stopped`);
                 } else {
-                    adapter.log.info(`[END] Could not stop REST server: ${stderr}`);
+                    adapter.log.info(`[END] Could not stop REST server: ${stderr || error}`);
                 } // endElse
 
                 const promises = [];
@@ -141,7 +142,7 @@ function startAdapter(options) {
         } // endElse
 
         try {
-            await helper.startRestServer();
+            restServer = await helper.startRestServer();
             adapter.log.info(`[START] Successfully started REST server`);
         } catch (e) {
             adapter.log.error(`[START] Failed starting REST server: ${e.message}`);
@@ -154,13 +155,30 @@ function startAdapter(options) {
             return void adapter.restart();
         }
 
-        // create device namespace
-        adapter.setForeignObjectNotExists(adapter.namespace, {
-            type: `device`,
-            common: {
-                name: `Xbox device`
+        // register rest server event handlers
+        restServer.stderr.on('data', data => {
+            if (data.includes('INFO:')) {
+                adapter.log.debug(`[SERVER] ${data}`);
+            } else {
+                adapter.log.error(`[SERVER] ${data}`);
             }
         });
+
+        restServer.stdout.on('data', data => {
+            adapter.log.debug(`[SERVER] ${data}`);
+        });
+
+        // create device namespace
+        try {
+            await adapter.setForeignObjectNotExistsAsync(adapter.namespace, {
+                type: `device`,
+                common: {
+                    name: `Xbox device`
+                }
+            });
+        } catch {
+            // ignore
+        }
 
         await prepareAuthentication(authenticate);
 
@@ -196,10 +214,12 @@ async function main() {
 
     onlineInterval = setInterval(() => { // check online
         ping.sys.probe(ip, async isAlive => {
-            try {
-                await checkLoggedIn(false);
-            } catch (e) {
-                adapter.log.debug(`[CHECK] Auth is not established: ${e.message}`);
+            if (authenticate) {
+                try {
+                    await checkLoggedIn(false);
+                } catch (e) {
+                    adapter.log.debug(`[CHECK] Auth is not established: ${e.message}`);
+                }
             }
 
             if (isAlive || xboxAvailable) {
@@ -242,7 +262,9 @@ async function main() {
                         adapter.setStateChanged(`info.currentTitles`, JSON.stringify(currentTitlesState), true);
                         adapter.setStateChanged(`info.activeTitleName`, activeName, true);
                         adapter.setStateChanged(`info.activeTitleId`, activeHex, true);
-                        adapter.setStateChanged(`info.activeTitleImage`, activeImage, true);
+                        if (authenticate) {
+                            adapter.setStateChanged(`info.activeTitleImage`, activeImage, true);
+                        }
                         adapter.setStateChanged(`info.activeTitleType`, activeType, true);
                     } catch (e) {
                         adapter.log.warn(`[STATUS] <=== Error getting status: ${e.message}`);
@@ -253,7 +275,9 @@ async function main() {
                     if ((!state || state.val) && !xboxAvailable) {
                         adapter.setState(`info.connection`, false, true);
                         adapter.setState(`info.activeTitleImage`, ``, true);
-                        adapter.setState(`info.activeTitleName`, ``, true);
+                        if (authenticate) {
+                            adapter.setState(`info.activeTitleName`, ``, true);
+                        }
                         adapter.setState(`info.activeTitleId`, ``, true);
                         adapter.setState(`info.currentTitles`, `{}`, true);
                         adapter.setState(`info.activeTitleType`, ``, true);
@@ -837,7 +861,6 @@ async function prepareAuthentication(authenticate) {
         }));
 
         await Promise.all(promises);
-        return Promise.resolve();
     } else {
         // del Objects
         const promises = [];
@@ -851,7 +874,6 @@ async function prepareAuthentication(authenticate) {
         } catch {
             // ignore
         }
-        return Promise.resolve();
     } // endElse
 } // endPrepareAuthentication
 
