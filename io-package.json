@@ -196,7 +196,9 @@
                 "zh-cn": "增加stopTimeout以成功关闭基于Windows的系统上的适配器"
             }
         },
-        "title": "Xbox",
+        "titleLang": {
+            "en": "Xbox"
+        },
         "desc": {
             "en": "Control your Xbox One (X)",
             "de": "Steuere deine Xbox One (X)"
@@ -233,7 +235,8 @@
         "messagebox": true,
         "stopTimeout": 2000,
         "docs": {
-            "de": "docs/de/README.md"
+            "de": "docs/de/README.md",
+            "en":"README.md"
         }
     },
     "native": {
