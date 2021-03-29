@@ -322,12 +322,12 @@ In this section you can find a description of every state of the adapter.
    *View button for media content.*
    
 ## Changelog
-## Changelog
 <!--
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### 0.7.4 (2021-03-29)
+
+### 0.7.5 (2021-03-29)
 * (foxriver76) added `requests` package as pip dev
 * (foxriver76) added logging for rest server
 
