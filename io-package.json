@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "xbox",
-        "version": "0.7.6",
+        "version": "0.7.7",
         "news": {
+            "0.7.7": {
+                "en": "do not log rest server logging on levels above debug, so it can be activated when needed",
+                "de": "Protokollieren Sie den Restserver nicht auf Ebenen oberhalb des Debugs, damit er bei Bedarf aktiviert werden kann",
+                "ru": "не регистрировать вход сервера отдыха на уровнях выше отладки, поэтому его можно активировать при необходимости",
+                "pt": "não registre o log de descanso do servidor em níveis acima de depuração, para que possa ser ativado quando necessário",
+                "nl": "log geen logboekregistratie van de restserver op niveaus boven de foutopsporing, dus het kan worden geactiveerd wanneer dat nodig is",
+                "fr": "ne pas enregistrer la journalisation du serveur de repos sur les niveaux supérieurs au débogage, afin qu'il puisse être activé en cas de besoin",
+                "it": "non registrare la registrazione del server di riposo a livelli superiori al debug, quindi può essere attivata quando necessario",
+                "es": "No registre el inicio de sesión del servidor de descanso en niveles superiores a la depuración, para que pueda activarse cuando sea necesario",
+                "pl": "nie rejestruj logowania do serwera odpoczynku na poziomach powyżej debugowania, aby można go było aktywować w razie potrzeby",
+                "zh-cn": "不要在高于调试级别的级别上记录其余服务器的记录，因此可以在需要时将其激活"
+            },
             "0.7.6": {
                 "en": "added `requests` package as pip dev\nadded logging for rest server",
                 "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
@@ -236,7 +248,7 @@
         "stopTimeout": 2000,
         "docs": {
             "de": "docs/de/README.md",
-            "en":"README.md"
+            "en": "README.md"
         }
     },
     "native": {

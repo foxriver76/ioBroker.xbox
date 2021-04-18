@@ -157,15 +157,11 @@ function startAdapter(options) {
 
         // register rest server event handlers
         restServer.stderr.on('data', data => {
-            if (data.includes('INFO:')) {
-                adapter.log.debug(`[SERVER] ${data}`);
-            } else {
-                adapter.log.error(`[SERVER] ${data}`);
-            }
+            adapter.log.debug(`[SERVER - STDERR] ${data}`);
         });
 
         restServer.stdout.on('data', data => {
-            adapter.log.debug(`[SERVER] ${data}`);
+            adapter.log.debug(`[SERVER - STDOUT] ${data}`);
         });
 
         // create device namespace

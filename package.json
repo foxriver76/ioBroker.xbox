@@ -1,6 +1,6 @@
 {
   "name": "iobroker.xbox",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "engines": {
     "node": ">=10.0.0"
   },
@@ -28,10 +28,10 @@
     "url": "https://github.com/foxriver76/ioBroker.xbox"
   },
   "dependencies": {
+    "@iobroker/adapter-core": "^2.0.0",
     "axios": "^0.21.0",
-    "ping": "^0.4.0",
     "nopy": "^0.2.6",
-    "@iobroker/adapter-core": "^2.0.0"
+    "ping": "^0.4.0"
   },
   "scripts": {
     "test:unit": "node_modules/.bin/mocha test/unitAdapter --exit",
