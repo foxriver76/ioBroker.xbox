@@ -34,9 +34,9 @@
     "ping": "^0.4.0"
   },
   "scripts": {
-    "test:unit": "node_modules/.bin/mocha test/unitAdapter --exit",
-    "test:package": "node_modules/.bin/mocha test/packageFiles --exit",
-    "test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit",
+    "test:unit": "mocha test/unitAdapter --exit",
+    "test:package": "mocha test/packageFiles --exit",
+    "test:integration": "mocha test/integrationAdapter --exit",
     "install": "npip install",
     "nopy": "nopy",
     "npip": "npip",
@@ -64,7 +64,7 @@
     "chai": "^4.1.2",
     "eslint": "^7.12.1",
     "gulp": "^4.0.0",
-    "mocha": "^8.2.0"
+    "mocha": "^9.0.1"
   },
   "main": "main.js",
   "bugs": {
