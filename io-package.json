@@ -1,808 +1,689 @@
 {
-    "common": {
-        "name": "xbox",
-        "version": "0.7.7",
-        "news": {
-            "0.7.7": {
-                "en": "do not log rest server logging on levels above debug, so it can be activated when needed",
-                "de": "Protokollieren Sie den Restserver nicht auf Ebenen oberhalb des Debugs, damit er bei Bedarf aktiviert werden kann",
-                "ru": "не регистрировать вход сервера отдыха на уровнях выше отладки, поэтому его можно активировать при необходимости",
-                "pt": "não registre o log de descanso do servidor em níveis acima de depuração, para que possa ser ativado quando necessário",
-                "nl": "log geen logboekregistratie van de restserver op niveaus boven de foutopsporing, dus het kan worden geactiveerd wanneer dat nodig is",
-                "fr": "ne pas enregistrer la journalisation du serveur de repos sur les niveaux supérieurs au débogage, afin qu'il puisse être activé en cas de besoin",
-                "it": "non registrare la registrazione del server di riposo a livelli superiori al debug, quindi può essere attivata quando necessario",
-                "es": "No registre el inicio de sesión del servidor de descanso en niveles superiores a la depuración, para que pueda activarse cuando sea necesario",
-                "pl": "nie rejestruj logowania do serwera odpoczynku na poziomach powyżej debugowania, aby można go było aktywować w razie potrzeby",
-                "zh-cn": "不要在高于调试级别的级别上记录其余服务器的记录，因此可以在需要时将其激活"
-            },
-            "0.7.6": {
-                "en": "added `requests` package as pip dev\nadded logging for rest server",
-                "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
-                "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
-                "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
-                "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
-                "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
-                "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
-                "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
-                "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
-                "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
-            },
-            "0.7.5": {
-                "en": "added `requests` package as pip dev\nadded logging for rest server",
-                "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
-                "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
-                "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
-                "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
-                "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
-                "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
-                "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
-                "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
-                "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
-            },
-            "0.7.4": {
-                "en": "added `requests` package as pip dev\nadded logging for rest server",
-                "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
-                "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
-                "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
-                "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
-                "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
-                "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
-                "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
-                "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
-                "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
-            },
-            "0.7.3": {
-                "en": "fixed debug logging on discovery",
-                "de": "Debug Logging bei der Erkennung behoben",
-                "ru": "исправлено ведение журнала отладки при обнаружении",
-                "pt": "registro de depuração corrigido na descoberta",
-                "nl": "vaste foutopsporingslogboekregistratie bij detectie",
-                "fr": "correction de la journalisation du débogage lors de la découverte",
-                "it": "corretto il registro di debug alla scoperta",
-                "es": "registro de depuración fijo en el descubrimiento",
-                "pl": "poprawione logowanie do debugowania przy wykrywaniu",
-                "zh-cn": "修复发现时的调试日志记录"
-            },
-            "0.7.2": {
-                "en": "removed logging of error on adapter stoppage due to rest server termination and fixed a bug with \"currentTitles\"",
-                "de": "Die Fehlerprotokollierung beim Anhalten des Adapters aufgrund der Beendigung des Restservers wurde entfernt und ein Fehler mit \"currentTitles\" wurde behoben.",
-                "ru": "удалено ведение журнала ошибки при остановке адаптера из-за остановки сервера отдыха и исправлена ошибка с \"currentTitles\"",
-                "pt": "removeu o registro de erro na parada do adaptador devido ao encerramento do servidor restante e corrigiu um bug com \"currentTitles\"",
-                "nl": "verwijderde logboekregistratie van fout bij stopzetting van adapter als gevolg van beëindiging van de server en repareerde een bug met \"currentTitles\"",
-                "fr": "suppression de la journalisation des erreurs lors de l'arrêt de l'adaptateur en raison de l'arrêt du serveur de repos et correction d'un bogue avec \"currentTitles\"",
-                "it": "rimossa la registrazione dell'errore sull'arresto dell'adattatore a causa della chiusura del server di riposo e risolto un bug con \"currentTitles\"",
-                "es": "eliminó el registro de error en la parada del adaptador debido a la terminación del servidor de descanso y corrigió un error con \"currentTitles\"",
-                "pl": "usunięto rejestrowanie błędu zatrzymania adaptera z powodu zakończenia serwera i naprawiono błąd z \"currentTitles\"",
-                "zh-cn": "删除了由于剩余服务器终止而导致的适配器停止错误记录，并修复了“ currentTitles”错误"
-            },
-            "0.7.0": {
-                "en": "migrated to smartglass v1.3, removed python3.6 support, replaced deprecated requests module",
-                "de": "auf Smartglass v1.3 migriert, Python3.6-Unterstützung entfernt, veraltetes Anforderungsmodul ersetzt",
-                "ru": "перешел на smartglass v1.3, удалена поддержка python3.6, заменен устаревший модуль запросов",
-                "pt": "migrou para smartglass v1.3, removeu o suporte a python3.6, substituiu o módulo de solicitações obsoletas",
-                "nl": "gemigreerd naar smartglass v1.3, python3.6-ondersteuning verwijderd, verouderde aanvraagmodule vervangen",
-                "fr": "migré vers smartglass v1.3, suppression de la prise en charge de python3.6, remplacement du module de requêtes obsolètes",
-                "it": "migrato a smartglass v1.3, rimosso il supporto python3.6, sostituito il modulo delle richieste deprecato",
-                "es": "migró a smartglass v1.3, eliminó el soporte de python3.6, reemplazó el módulo de solicitudes obsoleto",
-                "pl": "zmigrowano do smartglass v1.3, usunięto obsługę Pythona 3.6, zastąpiono przestarzały moduł żądań",
-                "zh-cn": "迁移到smartglass v1.3，删除了python3.6支持，替换了不推荐使用的请求模块"
-            },
-            "0.6.9": {
-                "en": "dependency upgrade, fixes installation problems",
-                "de": "Abhängigkeits-Upgrade, behebt Installationsprobleme",
-                "ru": "обновление зависимости, устраняет проблемы установки",
-                "pt": "atualização de dependência, corrige problemas de instalação",
-                "nl": "afhankelijkheidsupgrade, lost installatieproblemen op",
-                "fr": "mise à niveau des dépendances, corrige les problèmes d'installation",
-                "it": "aggiornamento delle dipendenze, risolve i problemi di installazione",
-                "es": "actualización de dependencia, soluciona problemas de instalación",
-                "pl": "aktualizacja zależności, naprawia problemy z instalacją",
-                "zh-cn": "依赖性升级，修复安装问题"
-            },
-            "0.6.8": {
-                "en": "minor optimization",
-                "de": "geringfügige Optimierung",
-                "ru": "небольшая оптимизация",
-                "pt": "pequena otimização",
-                "nl": "kleine optimalisatie",
-                "fr": "optimisation mineure",
-                "it": "ottimizzazione minore",
-                "es": "optimización menor",
-                "pl": "drobna optymalizacja",
-                "zh-cn": "小优化"
-            },
-            "0.6.5": {
-                "en": "fixed problem with auth only states",
-                "de": "Problem mit nur Auth-Zuständen behoben",
-                "ru": "исправлена проблема с аутентификацией только состояний",
-                "pt": "problema corrigido com estados somente de autenticação",
-                "nl": "opgelost probleem met alleen auth staten",
-                "fr": "problème fixe avec les états d'authentification uniquement",
-                "it": "risolto problema con stati di solo autenticazione",
-                "es": "problema solucionado con estados solo de autenticación",
-                "pl": "naprawiono problem ze stanami tylko autoryzacji",
-                "zh-cn": "修复了仅授权状态的问题"
-            },
-            "0.6.4": {
-                "en": "js-controller v3 compatibility",
-                "de": "Kompatibilität mit js-controller v3",
-                "ru": "совместимость с js-контроллером v3",
-                "pt": "Compatibilidade com js-controller v3",
-                "nl": "js-controller v3 compatibiliteit",
-                "fr": "compatibilité js-controller v3",
-                "it": "Compatibilità js-controller v3",
-                "es": "Compatibilidad con js-controller v3",
-                "pl": "Kompatybilność z js-controller v3",
-                "zh-cn": "js-controller v3兼容性"
-            },
-            "0.6.3": {
-                "en": "we now try specific python versions first on install and auth fixed",
-                "de": "Wir versuchen jetzt bestimmte Python-Versionen zuerst bei der Installation und Authentifizierung behoben",
-                "ru": "Теперь мы сначала попробуем установить конкретные версии Python при установке и авторизации.",
-                "pt": "agora tentamos primeiro versões específicas do python na instalação e autenticação corrigidas",
-                "nl": "we proberen nu eerst specifieke python-versies bij installatie en auth fixed",
-                "fr": "nous essayons maintenant des versions spécifiques de python d'abord sur l'installation et l'authentification corrigée",
-                "it": "ora proviamo prima versioni specifiche di Python su install e auth fixed",
-                "es": "ahora intentamos versiones específicas de Python primero en la instalación y auth arreglado",
-                "pl": "teraz próbujemy konkretnych wersji Pythona po instalacji i naprawiono uwierzytelnianie",
-                "zh-cn": "我们现在首先在安装和身份验证固定后尝试特定的python版本"
-            },
-            "0.6.1": {
-                "en": "fixes for compact mode, improved error handling, translations",
-                "de": "Korrekturen für den kompakten Modus, verbesserte Fehlerbehandlung, Übersetzungen",
-                "ru": "исправления для компактного режима, улучшенная обработка ошибок, переводы",
-                "pt": "correções para o modo compacto, manipulação aprimorada de erros, traduções",
-                "nl": "oplossingen voor compacte modus, verbeterde foutafhandeling, vertalingen",
-                "fr": "corrections pour le mode compact, gestion améliorée des erreurs, traductions",
-                "it": "correzioni per la modalità compatta, una migliore gestione degli errori, traduzioni",
-                "es": "correcciones para el modo compacto, manejo mejorado de errores, traducciones",
-                "pl": "poprawki trybu kompaktowego, ulepszona obsługa błędów, tłumaczenia",
-                "zh-cn": "修复了紧凑模式，改进的错误处理，翻译"
-            },
-            "0.6.0": {
-                "en": "dependency upgrade, python 3.6 required",
-                "de": "Abhängigkeits-Upgrade, Python 3.6 erforderlich",
-                "ru": "обновление зависимостей, требуется Python 3.6",
-                "pt": "atualização de dependência, requer python 3.6",
-                "nl": "afhankelijkheid upgrade, python 3.6 vereist",
-                "fr": "mise à niveau des dépendances, python 3.6 requis",
-                "it": "aggiornamento delle dipendenze, richiesto python 3.6",
-                "es": "actualización de dependencia, requiere Python 3.6",
-                "pl": "aktualizacja zależności, wymagany Python 3.6",
-                "zh-cn": "依赖项升级，需要python 3.6"
-            },
-            "0.5.12": {
-                "en": "we let js-controller know which apt packages are required",
-                "de": "wir teilen js-controller mit, welche apt-pakete benötigt werden",
-                "ru": "мы сообщаем js-controller, какие пакеты apt требуются",
-                "pt": "nós informamos ao js-controller quais pacotes apt são necessários",
-                "nl": "we laten js-controller weten welke apt-pakketten nodig zijn",
-                "fr": "nous informons js-controller des packages apt requis",
-                "it": "facciamo sapere a js-controller quali pacchetti apt sono richiesti",
-                "es": "le informamos a js-controller qué paquetes apt son necesarios",
-                "pl": "informujemy sterownik js, które pakiety apt są wymagane",
-                "zh-cn": "我们让js-controller知道需要哪些apt软件包"
-            },
-            "0.5.11": {
-                "en": "we not try to install apt packages any longer if already installed",
-                "de": "Wir versuchen nicht mehr, apt-Pakete zu installieren, wenn diese bereits installiert sind",
-                "ru": "мы больше не пытаемся устанавливать пакеты apt, если они уже установлены",
-                "pt": "não tentamos instalar mais pacotes apt se já estiver instalado",
-                "nl": "we proberen niet langer apt-pakketten te installeren als deze al zijn geïnstalleerd",
-                "fr": "nous n'essayons plus d'installer des paquets apt s'ils sont déjà installés",
-                "it": "non proviamo più a installare i pacchetti apt se già installati",
-                "es": "ya no intentamos instalar paquetes apt si ya están instalados",
-                "pl": "nie próbujemy już instalować pakietów apt, jeśli są już zainstalowane",
-                "zh-cn": "如果已经安装，我们不会再尝试安装apt软件包"
-            },
-            "0.5.8": {
-                "en": "increased stopTimeout to successfully shut down adapter on windows based systems",
-                "de": "StopTimeout wurde erhöht, um den Adapter auf Windows-basierten Systemen erfolgreich herunterzufahren",
-                "ru": "увеличено значение stopTimeout для успешного выключения адаптера в системах на базе Windows",
-                "pt": "aumento de stopTimeout para desligar com sucesso o adaptador em sistemas baseados em Windows",
-                "nl": "verhoogde stopTimeout om adapter op Windows-gebaseerde systemen succesvol af te sluiten",
-                "fr": "stopTimeout augmenté pour arrêter l'adaptateur avec succès sur les systèmes Windows",
-                "it": "stopTimeout aumentato per chiudere correttamente l'adattatore su sistemi basati su Windows",
-                "es": "Incremento de stopTimeout para apagar con éxito el adaptador en sistemas basados en Windows",
-                "pl": "zwiększono stopTimeout, aby pomyślnie zamknąć adapter w systemach opartych na systemie Windows",
-                "zh-cn": "增加stopTimeout以成功关闭基于Windows的系统上的适配器"
-            }
-        },
-        "titleLang": {
-            "en": "Xbox"
-        },
-        "desc": {
-            "en": "Control your Xbox One (X)",
-            "de": "Steuere deine Xbox One (X)"
-        },
-        "authors": [
-            "Moritz Heusinger <moritz.heusinger@gmail.com>"
-        ],
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "icon": "xbox.png",
-        "materialize": true,
-        "enabled": true,
-        "compact": true,
-        "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",
-        "keywords": [
-            "xbox",
-            "gaming",
-            "playstation"
-        ],
-        "osDependencies": {
-            "linux": [
-                "build-essential",
-                "libssl-dev",
-                "libffi-dev",
-                "python3-dev"
-            ]
-        },
-        "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
-        "loglevel": "info",
-        "type": "multimedia",
-        "connectionType": "local",
-        "dataSource": "poll",
-        "license": "MIT",
-        "messagebox": true,
-        "stopTimeout": 2000,
-        "docs": {
-            "de": "docs/de/README.md",
-            "en": "README.md"
-        }
+  "common": {
+    "name": "xbox",
+    "version": "0.7.8",
+    "news": {
+      "0.7.8": {
+        "en": "we now set `unsafePerm` flag to ensure compatibility with future controller\nupdated dependencies",
+        "de": "Wir setzen jetzt das Flag \"unsafePerm\", um die Kompatibilität mit zukünftigen Controllern sicherzustellen\naktualisierte Abhängigkeiten",
+        "ru": "теперь мы устанавливаем флаг `unsafePerm`, чтобы обеспечить совместимость с будущим контроллером\nобновленные зависимости",
+        "pt": "agora definimos o sinalizador `unsafePerm` para garantir a compatibilidade com o futuro controlador\ndependências atualizadas",
+        "nl": "we hebben nu de vlag `unsafePerm` ingesteld om compatibiliteit met toekomstige controllers te garanderen\nbijgewerkte afhankelijkheden",
+        "fr": "nous définissons maintenant le drapeau `unsafePerm` pour assurer la compatibilité avec le futur contrôleur\ndépendances mises à jour",
+        "it": "ora impostiamo il flag `unsafePerm` per garantire la compatibilità con il controller futuro\ndipendenze aggiornate",
+        "es": "ahora configuramos el indicador `unsafePerm` para garantizar la compatibilidad con el futuro controlador\ndependencias actualizadas",
+        "pl": "teraz ustawiliśmy flagę `unsafePerm`, aby zapewnić kompatybilność z przyszłym kontrolerem\nzaktualizowane zależności",
+        "zh-cn": "我们现在设置 `unsafePerm` 标志以确保与未来控制器的兼容性\n更新的依赖项"
+      },
+      "0.7.7": {
+        "en": "do not log rest server logging on levels above debug, so it can be activated when needed",
+        "de": "Protokollieren Sie den Restserver nicht auf Ebenen oberhalb des Debugs, damit er bei Bedarf aktiviert werden kann",
+        "ru": "не регистрировать вход сервера отдыха на уровнях выше отладки, поэтому его можно активировать при необходимости",
+        "pt": "não registre o log de descanso do servidor em níveis acima de depuração, para que possa ser ativado quando necessário",
+        "nl": "log geen logboekregistratie van de restserver op niveaus boven de foutopsporing, dus het kan worden geactiveerd wanneer dat nodig is",
+        "fr": "ne pas enregistrer la journalisation du serveur de repos sur les niveaux supérieurs au débogage, afin qu'il puisse être activé en cas de besoin",
+        "it": "non registrare la registrazione del server di riposo a livelli superiori al debug, quindi può essere attivata quando necessario",
+        "es": "No registre el inicio de sesión del servidor de descanso en niveles superiores a la depuración, para que pueda activarse cuando sea necesario",
+        "pl": "nie rejestruj logowania do serwera odpoczynku na poziomach powyżej debugowania, aby można go było aktywować w razie potrzeby",
+        "zh-cn": "不要在高于调试级别的级别上记录其余服务器的记录，因此可以在需要时将其激活"
+      },
+      "0.7.6": {
+        "en": "added `requests` package as pip dev\nadded logging for rest server",
+        "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
+        "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
+        "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
+        "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
+        "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
+        "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
+        "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
+        "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
+        "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
+      },
+      "0.7.5": {
+        "en": "added `requests` package as pip dev\nadded logging for rest server",
+        "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
+        "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
+        "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
+        "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
+        "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
+        "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
+        "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
+        "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
+        "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
+      },
+      "0.7.4": {
+        "en": "added `requests` package as pip dev\nadded logging for rest server",
+        "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
+        "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
+        "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
+        "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
+        "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
+        "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
+        "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
+        "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
+        "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
+      },
+      "0.7.3": {
+        "en": "fixed debug logging on discovery",
+        "de": "Debug Logging bei der Erkennung behoben",
+        "ru": "исправлено ведение журнала отладки при обнаружении",
+        "pt": "registro de depuração corrigido na descoberta",
+        "nl": "vaste foutopsporingslogboekregistratie bij detectie",
+        "fr": "correction de la journalisation du débogage lors de la découverte",
+        "it": "corretto il registro di debug alla scoperta",
+        "es": "registro de depuración fijo en el descubrimiento",
+        "pl": "poprawione logowanie do debugowania przy wykrywaniu",
+        "zh-cn": "修复发现时的调试日志记录"
+      },
+      "0.7.2": {
+        "en": "removed logging of error on adapter stoppage due to rest server termination and fixed a bug with \"currentTitles\"",
+        "de": "Die Fehlerprotokollierung beim Anhalten des Adapters aufgrund der Beendigung des Restservers wurde entfernt und ein Fehler mit \"currentTitles\" wurde behoben.",
+        "ru": "удалено ведение журнала ошибки при остановке адаптера из-за остановки сервера отдыха и исправлена ошибка с \"currentTitles\"",
+        "pt": "removeu o registro de erro na parada do adaptador devido ao encerramento do servidor restante e corrigiu um bug com \"currentTitles\"",
+        "nl": "verwijderde logboekregistratie van fout bij stopzetting van adapter als gevolg van beëindiging van de server en repareerde een bug met \"currentTitles\"",
+        "fr": "suppression de la journalisation des erreurs lors de l'arrêt de l'adaptateur en raison de l'arrêt du serveur de repos et correction d'un bogue avec \"currentTitles\"",
+        "it": "rimossa la registrazione dell'errore sull'arresto dell'adattatore a causa della chiusura del server di riposo e risolto un bug con \"currentTitles\"",
+        "es": "eliminó el registro de error en la parada del adaptador debido a la terminación del servidor de descanso y corrigió un error con \"currentTitles\"",
+        "pl": "usunięto rejestrowanie błędu zatrzymania adaptera z powodu zakończenia serwera i naprawiono błąd z \"currentTitles\"",
+        "zh-cn": "删除了由于剩余服务器终止而导致的适配器停止错误记录，并修复了“ currentTitles”错误"
+      }
     },
-    "native": {
-        "ip": "",
-        "liveId": ""
+    "titleLang": {
+      "en": "Xbox"
     },
-    "protectedNative": [],
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "If connected to Xbox",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media",
-            "type": "channel",
-            "common": {
-                "name": "Media"
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad",
-            "type": "channel",
-            "common": {
-                "name": "Gamepad"
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings",
-            "type": "channel",
-            "common": {
-                "name": "Settings and device commands"
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings.power",
-            "type": "state",
-            "common": {
-                "role": "switch.power",
-                "name": "Console power status",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.rightShoulder",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Right Shoulder Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.leftShoulder",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Left Shoulder Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.leftThumbstick",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Left Thumbstick Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.rightThumbstick",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Right Thumbstick Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.enroll",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Enroll Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.view",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "View Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.menu",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Menu Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.nexus",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Nexus Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.a",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "A Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.b",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "B Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.x",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "X Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.y",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Y Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.dpadUp",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "DPad Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.clear",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Clear Button",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.dpadRight",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "DPad Right",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.dpadLeft",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "DPad Left",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "gamepad.dpadDown",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "DPad Down",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.play",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Play",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.pause",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Pause",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.record",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Record",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.previousTrack",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Previous Track",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.playPause",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Play/Pause",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.seek",
-            "type": "state",
-            "common": {
-                "role": "number.position",
-                "name": "Seek",
-                "type": "number",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.channelUp",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Channel Up",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.nextTrack",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Next Track",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.channelDown",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Channel Down",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.menu",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Menu",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.back",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Back",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.rewind",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Rewind",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.view",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "View",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.fastForward",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Fast Forward",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "media.stop",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Stop",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings.inputText",
-            "type": "state",
-            "common": {
-                "role": "text.input",
-                "name": "Input Text",
-                "type": "string",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "settings.launchTitle",
-            "type": "state",
-            "common": {
-                "role": "text.launch",
-                "name": "Launch Title",
-                "type": "string",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.currentTitles",
-            "type": "state",
-            "common": {
-                "role": "info.titles",
-                "name": "Current Titles",
-                "type": "string",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.activeTitleName",
-            "type": "state",
-            "common": {
-                "role": "name.title",
-                "name": "Active title name",
-                "type": "string",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.activeTitleId",
-            "type": "state",
-            "common": {
-                "role": "id.title",
-                "name": "Active title id",
-                "type": "string",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.activeTitleType",
-            "type": "state",
-            "common": {
-                "role": "name.type",
-                "name": "Active title type",
-                "type": "string",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        }
-    ]
+    "desc": {
+      "en": "Control your Xbox One (X)",
+      "de": "Steuere deine Xbox One (X)"
+    },
+    "authors": [
+      "Moritz Heusinger <moritz.heusinger@gmail.com>"
+    ],
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "xbox.png",
+    "materialize": true,
+    "enabled": true,
+    "compact": true,
+    "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",
+    "keywords": [
+      "xbox",
+      "gaming",
+      "playstation"
+    ],
+    "osDependencies": {
+      "linux": [
+        "build-essential",
+        "libssl-dev",
+        "libffi-dev",
+        "python3-dev"
+      ]
+    },
+    "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
+    "loglevel": "info",
+    "type": "multimedia",
+    "connectionType": "local",
+    "dataSource": "poll",
+    "license": "MIT",
+    "messagebox": true,
+    "stopTimeout": 2000,
+    "docs": {
+      "de": "docs/de/README.md",
+      "en": "README.md"
+    },
+    "unsafePerm": true
+  },
+  "native": {
+    "ip": "",
+    "liveId": ""
+  },
+  "protectedNative": [],
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "If connected to Xbox",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media",
+      "type": "channel",
+      "common": {
+        "name": "Media"
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad",
+      "type": "channel",
+      "common": {
+        "name": "Gamepad"
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings",
+      "type": "channel",
+      "common": {
+        "name": "Settings and device commands"
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.power",
+      "type": "state",
+      "common": {
+        "role": "switch.power",
+        "name": "Console power status",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.rightShoulder",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Right Shoulder Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.leftShoulder",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Left Shoulder Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.leftThumbstick",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Left Thumbstick Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.rightThumbstick",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Right Thumbstick Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.enroll",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Enroll Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.view",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "View Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.menu",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Menu Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.nexus",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Nexus Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.a",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "A Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.b",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "B Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.x",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "X Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.y",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Y Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.dpadUp",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "DPad Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.clear",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Clear Button",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.dpadRight",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "DPad Right",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.dpadLeft",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "DPad Left",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "gamepad.dpadDown",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "DPad Down",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.play",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Play",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.pause",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Pause",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.record",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Record",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.previousTrack",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Previous Track",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.playPause",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Play/Pause",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.seek",
+      "type": "state",
+      "common": {
+        "role": "number.position",
+        "name": "Seek",
+        "type": "number",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.channelUp",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Channel Up",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.nextTrack",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Next Track",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.channelDown",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Channel Down",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.menu",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Menu",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.back",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Back",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.rewind",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Rewind",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.view",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "View",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.fastForward",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Fast Forward",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "media.stop",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Stop",
+        "type": "boolean",
+        "read": true,
+        "write": true,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.inputText",
+      "type": "state",
+      "common": {
+        "role": "text.input",
+        "name": "Input Text",
+        "type": "string",
+        "read": true,
+        "write": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.launchTitle",
+      "type": "state",
+      "common": {
+        "role": "text.launch",
+        "name": "Launch Title",
+        "type": "string",
+        "read": true,
+        "write": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.currentTitles",
+      "type": "state",
+      "common": {
+        "role": "info.titles",
+        "name": "Current Titles",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.activeTitleName",
+      "type": "state",
+      "common": {
+        "role": "name.title",
+        "name": "Active title name",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.activeTitleId",
+      "type": "state",
+      "common": {
+        "role": "id.title",
+        "name": "Active title id",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.activeTitleType",
+      "type": "state",
+      "common": {
+        "role": "name.type",
+        "name": "Active title type",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    }
+  ]
 }

@@ -1,9 +1,9 @@
-/* jshint -W097 */// jshint strict:false
+/* jshint -W097 */ // jshint strict:false
 /*jslint node: true */
 'use strict';
 
 const utils = require(`@iobroker/adapter-core`); // Get common adapter utils
-const {exec} = require(`child_process`);
+const { exec } = require(`child_process`);
 const helper = require(`${__dirname}/lib/utils`);
 const ping = require(`ping`);
 const os = require(`os`).platform();
@@ -12,8 +12,6 @@ const axios = require('axios');
 const restServerAddress = `localhost`; // host of the REST server
 let liveId;
 let ip;
-let mail;
-let password;
 let authenticate;
 let blockXbox = false;
 let tryPowerOn = false;
@@ -62,7 +60,6 @@ function startAdapter(options) {
             } // endElse
 
             exec(killCmd, async (error, stdout, stderr) => {
-
                 if (!error) {
                     adapter.log.info(`[END] REST server stopped`);
                 } else {
@@ -92,12 +89,17 @@ function startAdapter(options) {
         if (obj.command === 'auth') {
             try {
                 await checkLoggedIn();
-                adapter.sendTo(obj.from, obj.command, {authActive: true}, obj.callback);
+                adapter.sendTo(obj.from, obj.command, { authActive: true }, obj.callback);
             } catch (e) {
-                adapter.sendTo(obj.from, obj.command, {
-                    authActive: false,
-                    redirect: e.redirectUri
-                }, obj.callback);
+                adapter.sendTo(
+                    obj.from,
+                    obj.command,
+                    {
+                        authActive: false,
+                        redirect: e.redirectUri
+                    },
+                    obj.callback
+                );
             }
         } else {
             adapter.log.warn(`Unknown message command ${obj.command}`);
@@ -121,7 +123,9 @@ function startAdapter(options) {
             if (state.val) {
                 handleStateChange(stateVal, id);
             } else {
-                adapter.log.warn(`[COMMAND] ===> Can not handle id change ${id} with value ${stateVal} because not connected`);
+                adapter.log.warn(
+                    `[COMMAND] ===> Can not handle id change ${id} with value ${stateVal} because not connected`
+                );
             }
         } // endElse
     });
@@ -130,8 +134,6 @@ function startAdapter(options) {
         ip = adapter.config.ip;
         liveId = adapter.config.liveId;
         authenticate = adapter.config.authenticate || false;
-        mail = adapter.config.mail || ``;
-        password = adapter.config.password || ``;
 
         if (!ip || !liveId) {
             adapter.log.warn(`Please provide the ip address and the Live ID of your console`);
@@ -208,7 +210,8 @@ async function main() {
         });
     } // endIf
 
-    onlineInterval = setInterval(() => { // check online
+    onlineInterval = setInterval(() => {
+        // check online
         ping.sys.probe(ip, async isAlive => {
             if (authenticate) {
                 try {
@@ -267,32 +270,31 @@ async function main() {
                     }
                 } // endIf
             } else {
-                adapter.getStateAsync(`info.connection`).then(state => {
-                    if ((!state || state.val) && !xboxAvailable) {
-                        adapter.setState(`info.connection`, false, true);
-                        adapter.setState(`info.activeTitleImage`, ``, true);
-                        if (authenticate) {
-                            adapter.setState(`info.activeTitleName`, ``, true);
-                        }
-                        adapter.setState(`info.activeTitleId`, ``, true);
-                        adapter.setState(`info.currentTitles`, `{}`, true);
-                        adapter.setState(`info.activeTitleType`, ``, true);
-
-                        adapter.log.info(`[PING] Lost connection to your Xbox (${ip})`);
-                        firstReconnectAttempt = true;
-                    } // endIf
-                });
-                adapter.getStateAsync(`settings.power`).then(state => {
-                    if (!state || (state.val && !xboxAvailable)) {
-                        adapter.setState(`settings.power`, false, true);
+                const state = await adapter.getStateAsync(`info.connection`);
+                if ((!state || state.val) && !xboxAvailable) {
+                    adapter.setState(`info.connection`, false, true);
+                    adapter.setState(`info.activeTitleImage`, ``, true);
+                    if (authenticate) {
+                        adapter.setState(`info.activeTitleName`, ``, true);
                     }
-                });
+                    adapter.setState(`info.activeTitleId`, ``, true);
+                    adapter.setState(`info.currentTitles`, `{}`, true);
+                    adapter.setState(`info.activeTitleType`, ``, true);
+
+                    adapter.log.info(`[PING] Lost connection to your Xbox (${ip})`);
+                    firstReconnectAttempt = true;
+                } // endIf
+
+                const powerState = await adapter.getStateAsync(`settings.power`);
+                if (!powerState || (powerState.val && !xboxAvailable)) {
+                    adapter.setState(`settings.power`, false, true);
+                }
+
                 xboxPingable = false;
                 adapter.log.debug(`[PING] Xbox offline`);
             } // endElse
         });
     }, 6000);
-
 } // endMain
 
 /**
@@ -345,7 +347,9 @@ async function connect(ip) {
                 const response = await axios.get(statusURL);
                 if (response.data.success) {
                     adapter.setState(`info.connection`, true, true);
-                    adapter.log.info(`[CONNECT] <=== Successfully connected to ${liveId} (${result.device.ip_address})`);
+                    adapter.log.info(
+                        `[CONNECT] <=== Successfully connected to ${liveId} (${result.device.ip_address})`
+                    );
                     result.connectionState = true;
                 } else {
                     if (firstReconnectAttempt) {
@@ -402,7 +406,8 @@ async function powerOff(liveId) {
  * @param {string} ip - ip address of Xbox
  * @returns {Promise<{discovered: boolean, connectionState: string, device: *}>}
  */
-async function discoverAndUpdateConsole(ip) { // is used by connect
+async function discoverAndUpdateConsole(ip) {
+    // is used by connect
     const state = await adapter.getStateAsync(`info.connection`);
     let endpoint;
     if (!state || !state.val) {
@@ -451,7 +456,7 @@ async function discoverAndUpdateConsole(ip) { // is used by connect
         adapter.setState(`info.connection`, false, true);
     }
 
-    return {connectionState, discovered, device};
+    return { connectionState, discovered, device };
 } // endDiscover
 
 /**
@@ -460,8 +465,9 @@ async function discoverAndUpdateConsole(ip) { // is used by connect
  * @returns {Promise<void>}
  */
 async function powerOn() {
-    if (!tryPowerOn) { // if Xbox isn't on after 17.5 seconds, stop trying
-        tryPowerOn = setTimeout(() => tryPowerOn = false, 17500);
+    if (!tryPowerOn) {
+        // if Xbox isn't on after 17.5 seconds, stop trying
+        tryPowerOn = setTimeout(() => (tryPowerOn = false), 17500);
     } // endIf
     adapter.log.debug(`[POWERON] Powering on console`);
     blockXbox = true;
@@ -494,7 +500,7 @@ async function handleStateChange(state, id) {
     if (blockXbox) {
         return adapter.log.warn(`[STATE] ${id} change to ${state.val} dropped, because Xbox blocked`);
     }
-    blockXbox = setTimeout(() => blockXbox = false, 100); // box is blocked for 100 ms to avoid overload
+    blockXbox = setTimeout(() => (blockXbox = false), 100); // box is blocked for 100 ms to avoid overload
 
     switch (id) {
         case `settings.power`:
@@ -697,14 +703,6 @@ async function sendCustomCommand(endpoint) {
     }
 } // endSendCustomCommand
 
-function decrypt(key, value) {
-    let result = ``;
-    for (let i = 0; i < value.length; ++i) {
-        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-    }
-    return result;
-} // endDecrypt
-
 /**
  * Check if logged in and set states accordingly
  *
@@ -793,68 +791,62 @@ async function prepareAuthentication(authenticate) {
     if (authenticate) {
         const promises = [];
         // create Auth-Only Objects
-        promises.push(adapter.setObjectNotExistsAsync(`info.authenticated`, {
-            type: `state`,
-            common: {
-                name: `Xbox Live authenticated`,
-                role: `indicator.authenticated`,
-                type: `boolean`,
-                read: true,
-                write: false,
-                def: false
-            },
-            native: {}
-        }));
+        promises.push(
+            adapter.setObjectNotExistsAsync(`info.authenticated`, {
+                type: `state`,
+                common: {
+                    name: `Xbox Live authenticated`,
+                    role: `indicator.authenticated`,
+                    type: `boolean`,
+                    read: true,
+                    write: false,
+                    def: false
+                },
+                native: {}
+            })
+        );
 
-        promises.push(adapter.setObjectNotExistsAsync(`info.activeTitleImage`, {
-            type: `state`,
-            common: {
-                name: `Active title image`,
-                role: `icon`,
-                type: `string`,
-                read: true,
-                write: false
-            },
-            native: {}
-        }));
+        promises.push(
+            adapter.setObjectNotExistsAsync(`info.activeTitleImage`, {
+                type: `state`,
+                common: {
+                    name: `Active title image`,
+                    role: `icon`,
+                    type: `string`,
+                    read: true,
+                    write: false
+                },
+                native: {}
+            })
+        );
 
-        promises.push(adapter.setObjectNotExistsAsync(`info.gamertag`, {
-            type: `state`,
-            common: {
-                name: `Authenticated Gamertag`,
-                role: `name.user`,
-                type: `string`,
-                read: true,
-                write: false
-            },
-            native: {}
-        }));
+        promises.push(
+            adapter.setObjectNotExistsAsync(`info.gamertag`, {
+                type: `state`,
+                common: {
+                    name: `Authenticated Gamertag`,
+                    role: `name.user`,
+                    type: `string`,
+                    read: true,
+                    write: false
+                },
+                native: {}
+            })
+        );
 
-        promises.push(adapter.setObjectNotExistsAsync(`settings.gameDvr`, {
-            type: `state`,
-            common: {
-                name: `Game Recorder`,
-                role: `button`,
-                type: `string`,
-                read: true,
-                write: true
-            },
-            native: {}
-        }));
-
-        promises.push(new Promise(resolve => {
-            adapter.getForeignObjectAsync(`system.config`).then(obj => {
-                if (obj && obj.native && obj.native.secret) {
-                    password = decrypt(obj.native.secret, password);
-                    mail = decrypt(obj.native.secret, mail);
-                    resolve();
-                } else {
-                    password = decrypt(`Zgfr56gFe87jJOM`, password);
-                    mail = decrypt(`Zgfr56gFe87jJOM`, mail);
-                    resolve();
-                } // endElse
-            });
-        }));
+        promises.push(
+            adapter.setObjectNotExistsAsync(`settings.gameDvr`, {
+                type: `state`,
+                common: {
+                    name: `Game Recorder`,
+                    role: `button`,
+                    type: `string`,
+                    read: true,
+                    write: true
+                },
+                native: {}
+            })
+        );
 
         await Promise.all(promises);
     } else {
