@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.5.1",
-    "axios": "^0.26.0",
+    "axios": "^0.27.0",
     "nopy": "^0.2.7",
     "ping": "^0.4.1"
   },
