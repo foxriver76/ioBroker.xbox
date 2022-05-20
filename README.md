@@ -331,6 +331,9 @@ In this section you can find a description of every state of the adapter.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 0.7.9 (2022-05-20)
+* (foxriver76) fixed wrong default value of `media.seek` (closes #113)
+
 ### 0.7.8 (2022-02-20)
 * (foxriver76) we now set `unsafePerm` flag to ensure compatibility with future controller
 * (foxriver76) updated dependencies

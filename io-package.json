@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.7.8",
+    "version": "0.7.9",
     "news": {
+      "0.7.9": {
+        "en": "fixed wrong default value of `media.seek` (closes #113)",
+        "de": "falscher Standardwert von `media.seek` behoben (schließt #113)",
+        "ru": "исправлено неправильное значение по умолчанию для `media.seek` (закрывается #113)",
+        "pt": "corrigido o valor padrão errado de `media.seek` (fecha #113)",
+        "nl": "vaste verkeerde standaardwaarde van `media.seek` (sluit #113)",
+        "fr": "correction de la mauvaise valeur par défaut de `media.seek` (ferme #113)",
+        "it": "corretto il valore predefinito errato di `media.seek` (chiude #113)",
+        "es": "Se corrigió el valor predeterminado incorrecto de `media.seek` (cierra # 113)",
+        "pl": "naprawiono błędną domyślną wartość `media.seek` (zamyka #113)",
+        "zh-cn": "修复了 `media.seek` 的错误默认值（关闭 #113）"
+      },
       "0.7.8": {
         "en": "we now set `unsafePerm` flag to ensure compatibility with future controller\nupdated dependencies",
         "de": "Wir setzen jetzt das Flag \"unsafePerm\", um die Kompatibilität mit zukünftigen Controllern sicherzustellen\naktualisierte Abhängigkeiten",
@@ -74,18 +86,6 @@
         "es": "registro de depuración fijo en el descubrimiento",
         "pl": "poprawione logowanie do debugowania przy wykrywaniu",
         "zh-cn": "修复发现时的调试日志记录"
-      },
-      "0.7.2": {
-        "en": "removed logging of error on adapter stoppage due to rest server termination and fixed a bug with \"currentTitles\"",
-        "de": "Die Fehlerprotokollierung beim Anhalten des Adapters aufgrund der Beendigung des Restservers wurde entfernt und ein Fehler mit \"currentTitles\" wurde behoben.",
-        "ru": "удалено ведение журнала ошибки при остановке адаптера из-за остановки сервера отдыха и исправлена ошибка с \"currentTitles\"",
-        "pt": "removeu o registro de erro na parada do adaptador devido ao encerramento do servidor restante e corrigiu um bug com \"currentTitles\"",
-        "nl": "verwijderde logboekregistratie van fout bij stopzetting van adapter als gevolg van beëindiging van de server en repareerde een bug met \"currentTitles\"",
-        "fr": "suppression de la journalisation des erreurs lors de l'arrêt de l'adaptateur en raison de l'arrêt du serveur de repos et correction d'un bogue avec \"currentTitles\"",
-        "it": "rimossa la registrazione dell'errore sull'arresto dell'adattatore a causa della chiusura del server di riposo e risolto un bug con \"currentTitles\"",
-        "es": "eliminó el registro de error en la parada del adaptador debido a la terminación del servidor de descanso y corrigió un error con \"currentTitles\"",
-        "pl": "usunięto rejestrowanie błędu zatrzymania adaptera z powodu zakończenia serwera i naprawiono błąd z \"currentTitles\"",
-        "zh-cn": "删除了由于剩余服务器终止而导致的适配器停止错误记录，并修复了“ currentTitles”错误"
       }
     },
     "titleLang": {
@@ -491,8 +491,7 @@
         "name": "Seek",
         "type": "number",
         "read": true,
-        "write": true,
-        "def": false
+        "write": true
       },
       "native": {}
     },
