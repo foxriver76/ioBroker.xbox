@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.7.9",
+    "version": "0.7.10",
     "news": {
+      "0.7.10": {
+        "en": "fixed error with mising admin ui on new installations",
+        "de": "Fehler mit fehlender Admin-Benutzeroberfläche bei Neuinstallationen behoben",
+        "ru": "исправлена ошибка с отсутствующим интерфейсом администратора при новых установках",
+        "pt": "corrigido erro com interface de administrador ausente em novas instalações",
+        "nl": "vaste fout met ontbrekende admin ui op nieuwe installaties",
+        "fr": "erreur fixe avec l'interface utilisateur d'administration manquante sur les nouvelles installations",
+        "it": "errore corretto con interfaccia utente di amministrazione mancante sulle nuove installazioni",
+        "es": "Se corrigió el error con la interfaz de usuario de administrador que faltaba en las nuevas instalaciones.",
+        "pl": "naprawiony błąd z brakującym interfejsem administratora w nowych instalacjach",
+        "zh-cn": "修复了新安装时缺少管理 ui 的错误"
+      },
       "0.7.9": {
         "en": "fixed wrong default value of `media.seek` (closes #113)",
         "de": "falscher Standardwert von `media.seek` behoben (schließt #113)",
@@ -74,18 +86,6 @@
         "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
         "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
         "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
-      },
-      "0.7.3": {
-        "en": "fixed debug logging on discovery",
-        "de": "Debug Logging bei der Erkennung behoben",
-        "ru": "исправлено ведение журнала отладки при обнаружении",
-        "pt": "registro de depuração corrigido na descoberta",
-        "nl": "vaste foutopsporingslogboekregistratie bij detectie",
-        "fr": "correction de la journalisation du débogage lors de la découverte",
-        "it": "corretto il registro di debug alla scoperta",
-        "es": "registro de depuración fijo en el descubrimiento",
-        "pl": "poprawione logowanie do debugowania przy wykrywaniu",
-        "zh-cn": "修复发现时的调试日志记录"
       }
     },
     "titleLang": {

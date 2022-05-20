@@ -1,6 +1,6 @@
 {
   "name": "iobroker.xbox",
-  "version": "0.7.9",
+  "version": "0.7.10",
   "engines": {
     "node": ">=10.0.0"
   },
@@ -75,6 +75,8 @@
     "url": "https://github.com/foxriver76/ioBroker.xbox/issues"
   },
   "files": [
+    "admin{,/!(src)/**}/!(tsconfig|tsconfig.*).json",
+    "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
     "io-package.json",
     "lib",
     "LICENSE",

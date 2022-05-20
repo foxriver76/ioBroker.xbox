@@ -331,6 +331,9 @@ In this section you can find a description of every state of the adapter.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 0.7.10 (2022-05-20)
+* (foxriver76) fixed error with mising admin ui on new installations
+
 ### 0.7.9 (2022-05-20)
 * (foxriver76) fixed wrong default value of `media.seek` (closes #113)
 
