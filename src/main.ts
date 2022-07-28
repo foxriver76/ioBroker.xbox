@@ -12,6 +12,7 @@ class Xbox extends utils.Adapter {
     private SGClient: typeof Smartglass;
     private APIClient: typeof XboxApi;
     private xboxConnected: boolean;
+    private connectionTimer: NodeJS.Timeout | undefined;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -42,6 +43,7 @@ class Xbox extends utils.Adapter {
 
         try {
             await this.APIClient.isAuthenticated();
+            await this.setStateAsync('info.authenticated', true, true);
             this.log.info('User is authenticated with Xbox Live');
             await this.getModel();
         } catch (e: any) {
@@ -94,7 +96,7 @@ class Xbox extends utils.Adapter {
             }
         }
 
-        setTimeout(() => {
+        this.connectionTimer = setTimeout(() => {
             this.checkConnection();
         }, 10_000);
     }
@@ -147,6 +149,7 @@ class Xbox extends utils.Adapter {
     private async getAppName(titleId: number): Promise<string | void> {
         try {
             await this.APIClient.isAuthenticated();
+
             const res = await this.APIClient.getProvider('catalog').getProductFromAlternateId(titleId, 'XboxTitleId');
 
             if (res.Products[0] !== undefined) {
@@ -219,8 +222,15 @@ class Xbox extends utils.Adapter {
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
      */
-    private onUnload(callback: () => void): void {
+    private async onUnload(callback: () => void): Promise<void> {
         try {
+            if (this.connectionTimer) {
+                clearTimeout(this.connectionTimer);
+            }
+
+            await this.setStateAsync('info.authenticated', false, true);
+            await this.setStateAsync('info.connection', false, true);
+
             callback();
         } catch {
             callback();

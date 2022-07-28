@@ -60,6 +60,7 @@ class Xbox extends utils.Adapter {
         await this.loadTokens();
         try {
             await this.APIClient.isAuthenticated();
+            await this.setStateAsync('info.authenticated', true, true);
             this.log.info('User is authenticated with Xbox Live');
             await this.getModel();
         }
@@ -109,7 +110,7 @@ class Xbox extends utils.Adapter {
                 this.xboxConnected = false;
             }
         }
-        setTimeout(() => {
+        this.connectionTimer = setTimeout(() => {
             this.checkConnection();
         }, 10000);
     }
@@ -219,8 +220,13 @@ class Xbox extends utils.Adapter {
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
      */
-    onUnload(callback) {
+    async onUnload(callback) {
         try {
+            if (this.connectionTimer) {
+                clearTimeout(this.connectionTimer);
+            }
+            await this.setStateAsync('info.authenticated', false, true);
+            await this.setStateAsync('info.connection', false, true);
             callback();
         }
         catch (_a) {
