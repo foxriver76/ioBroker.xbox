@@ -38,7 +38,7 @@ You can install the adapter via Admin interface or on your terminal.
 ## Setup
 1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
 2. Fill in the ip address of your Xbox.
-3. Press the Login button to start login procedure, then paste the API key which can be found after `code=` in the url.
+3. Use the Link from the log to start login procedure, then paste the API key which can be found after `code=` in the url.
 
 ## States
 In this section you can find a description of every state of the adapter.

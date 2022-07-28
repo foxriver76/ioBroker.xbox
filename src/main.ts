@@ -37,8 +37,8 @@ class Xbox extends utils.Adapter {
     private async onReady(): Promise<void> {
         this.subscribeStates('*');
 
-        this.APIClient._authentication._tokensFile = '.tokens.json'; // TODO: Path to tokens file
-        // or better this._tokens = content of tokens file read from iob storage?
+        await this.ensureMeta();
+        await this.loadTokens();
 
         try {
             await this.APIClient.isAuthenticated();
@@ -50,22 +50,23 @@ class Xbox extends utils.Adapter {
             this.log.info(`Xbox login url available at: ${this.APIClient._authentication.generateAuthorizationUrl()}`);
             this.log.info('Copy the token after login into "apiToken" of the adapter config to enable the Xbox api');
             this.log.debug(`Current Token: ${this.config.apiToken}`);
-        }
 
-        if (this.config.apiToken) {
-            this.log.info('Trying authentication with current token');
-            try {
-                const data = await this.APIClient._authentication.getTokenRequest(this.config.apiToken);
-                this.log.info('User is authenticated');
-                this.log.debug(`Got oauth token: ${JSON.stringify(data)}`);
+            // tokens file did not work out, so we try via apiToken
+            if (this.config.apiToken) {
+                this.log.info('Trying authentication with current token');
+                try {
+                    const data = await this.APIClient._authentication.getTokenRequest(this.config.apiToken);
+                    this.log.info('User is authenticated');
+                    this.log.debug(`Got oauth token: ${JSON.stringify(data)}`);
 
-                this.APIClient._authentication._tokens.oauth = data;
-                this.APIClient._authentication.saveTokens();
+                    this.APIClient._authentication._tokens.oauth = data;
+                    await this.saveTokens(data);
 
-                await this.getModel();
-            } catch (e: any) {
-                this.log.debug(`Error: ${e.body}`);
-                this.log.warn('User failed to authenticate.');
+                    await this.getModel();
+                } catch (e: any) {
+                    this.log.debug(`Error: ${e.body}`);
+                    this.log.warn('User failed to authenticate.');
+                }
             }
         }
 
@@ -480,6 +481,43 @@ class Xbox extends utils.Adapter {
         } catch (e: any) {
             this.log.warn(`Could not launch title: ${e}`);
         }
+    }
+
+    /**
+     * Ensures that Xbox Meta object exists
+     */
+    private async ensureMeta(): Promise<void> {
+        await this.setForeignObjectNotExistsAsync(this.name, {
+            type: 'meta',
+            common: {
+                name: 'Xbox',
+                type: 'meta.folder'
+            },
+            native: {}
+        });
+    }
+
+    /**
+     * Loads the tokens from ioBroker storage in the Xbox API
+     */
+    private async loadTokens(): Promise<void> {
+        this.APIClient._authentication._tokensFile = '.tokens.json';
+        try {
+            const data = await this.readFileAsync(this.name, 'tokens.json');
+            // @ts-expect-error
+            this.APIClient._authentication._tokens.oauth = JSON.parse(data.file as string);
+            this.log.info('Successfully loaded token');
+        } catch (e: any) {
+            this.log.debug(`No tokens to load: ${e.message}`);
+        }
+    }
+
+    /**
+     * Saves the tokens to ioBroker storage
+     * @param tokens
+     */
+    private async saveTokens(tokens: Record<string, any>): Promise<void> {
+        await this.writeFileAsync(this.name, 'tokens.json', JSON.stringify(tokens, undefined, 2));
     }
 }
 
