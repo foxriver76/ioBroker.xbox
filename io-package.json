@@ -101,7 +101,9 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "xbox.png",
-    "materialize": true,
+    "adminUI": {
+      "config": "json"
+    },
     "enabled": true,
     "compact": true,
     "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",

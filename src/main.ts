@@ -5,6 +5,8 @@ import Smartglass from 'xbox-smartglass-core-node';
 import XboxApi from 'xbox-webapi';
 // @ts-expect-error currently provides no types
 import SystemInputChannel from 'xbox-smartglass-core-node/src/channels/systeminput';
+// @ts-expect-error currently provides no types
+import SystemMediaChannel from 'xbox-smartglass-core-node/src/channels/systemmedia';
 
 class Xbox extends utils.Adapter {
     private SGClient: typeof Smartglass;
@@ -110,7 +112,7 @@ class Xbox extends utils.Adapter {
 
             // Setup Smartglass client config
             this.SGClient.addManager('system_input', SystemInputChannel());
-            // this.SGClient.addManager('system_media', SystemMediaChannel());
+            this.SGClient.addManager('system_media', SystemMediaChannel());
             // this.SGClient.addManager('tv_remote', TvRemoteChannel());
 
             this.SGClient.on('_on_timeout', async () => {
@@ -122,11 +124,14 @@ class Xbox extends utils.Adapter {
 
             this.SGClient.on('_on_console_status', async (resp: any) => {
                 if (resp.packet_decoded.protected_payload.apps[0] !== undefined) {
-                    const currentTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
+                    const activeTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
 
-                    const activeTitleId = await this.getAppId(currentTitleId.toString());
+                    const activeTitleName = await this.getAppName(activeTitleId);
 
-                    await this.setStateAsync('info.activeTitleId', activeTitleId, true);
+                    await this.setStateAsync('info.activeTitleId', activeTitleId.toString(), true);
+                    if (activeTitleName) {
+                        await this.setStateAsync('info.activeTitleName', activeTitleName, true);
+                    }
                 }
             });
         } catch (e: any) {
@@ -141,7 +146,7 @@ class Xbox extends utils.Adapter {
      *
      * @param titleId id of the current title
      */
-    private async getAppId(titleId: string): Promise<string> {
+    private async getAppName(titleId: number): Promise<string | void> {
         try {
             await this.APIClient.isAuthenticated();
             const res = await this.APIClient.getProvider('catalog').getProductFromAlternateId(titleId, 'XboxTitleId');
@@ -156,8 +161,6 @@ class Xbox extends utils.Adapter {
             // no real error with message
             this.log.debug(`No connection to webAPI: ${e}`);
         }
-
-        return titleId;
     }
 
     /**
@@ -239,8 +242,8 @@ class Xbox extends utils.Adapter {
 
         if (id === 'settings.power' && state.val) {
             // turning on xbox even if not connected
-            return;
             this.powerOn();
+            return;
         }
 
         if (!this.xboxConnected) {
@@ -320,10 +323,12 @@ class Xbox extends utils.Adapter {
                 break;
             case `media.seek`:
                 try {
+                    /**
                     await this.sendCustomCommand(
                         `http://localhost:5557/device/${this.config.liveId}/media/seek/${state.val}`
-                    );
-                    this.setState(id, state, true);
+                    );*/
+                    this.log.warn('Not implemented');
+                    this.setState(id, state.val, true);
                 } catch {
                     // ignore
                 }
@@ -357,9 +362,11 @@ class Xbox extends utils.Adapter {
                 break;
             case `settings.inputText`:
                 try {
+                    /*
                     await this.sendCustomCommand(
                         `http://localhost:5557/device/${this.config.liveId}/text/${state.val}`
-                    );
+                    );*/
+                    this.log.warn('Not implemented');
                     await this.setStateAsync(id, state, true);
                 } catch {
                     // ignore
@@ -367,9 +374,7 @@ class Xbox extends utils.Adapter {
                 break;
             case `settings.launchTitle`:
                 try {
-                    await this.sendCustomCommand(
-                        `http://localhost:5557/device/${this.config.liveId}/launch/ms-xbl-${state.val}://`
-                    );
+                    await this.launchApplication(state.val as string);
                     await this.setStateAsync(id, state, true);
                 } catch {
                     // ignore
@@ -382,7 +387,8 @@ class Xbox extends utils.Adapter {
                     query = `start=${start.trim()}&end=${end.trim()}`;
                 }
                 try {
-                    await this.sendCustomCommand(`http://localhost:5557/device/${this.config.liveId}/gamedvr?${query}`);
+                    this.log.warn(`not implemented: ${query}`);
+                    //await this.sendCustomCommand(`http://localhost:5557/device/${this.config.liveId}/gamedvr?${query}`);
                 } catch {
                     // ignore
                 }
@@ -393,16 +399,90 @@ class Xbox extends utils.Adapter {
         } // endSwitch
     }
 
-    private powerOn() {
-        // TODO
+    /**
+     * Tries to power on the Xbox first via Web API then via Smartglass
+     */
+    private async powerOn() {
+        // first try with web api
+        try {
+            await this.APIClient.isAuthenticated();
+            await this.APIClient.getProvider('smartglass').powerOn(this.config.liveId);
+            this.log.debug('Powered on xbox using Xbox api');
+        } catch (e: any) {
+            this.log.debug(`Failed to turn on Xbox using API: ${e}`);
+            // it failed so we use the SGClient
+            try {
+                await this.SGClient.powerOn({
+                    tries: 10,
+                    ip: this.config.ip,
+                    live_id: this.config.liveId
+                });
+            } catch (e: any) {
+                this.log.warn(`Could not power on Xbox: ${JSON.stringify(e)}`);
+            }
+        }
     }
 
-    private sendMediaCmd() {
-        // TODO
+    /**
+     * Tries to power off Xbox first via Web API then via Smartglass
+     */
+    private async powerOff() {
+        try {
+            // first try via API
+            await this.APIClient.isAuthenticated();
+            await this.APIClient.getProvider('smartglass').powerOff(this.config.liveId);
+
+            this.log.debug('Powered off xbox using xbox api');
+        } catch (e: any) {
+            this.log.debug(`Failed to turn off xbox using xbox api: ${e}`);
+            try {
+                // no we try it via smartglass
+                await this.SGClient.powerOff();
+                this.log.debug('Powered off xbox using smartglass');
+            } catch (e: any) {
+                this.log.warn(`Could not turn off Xbox: ${e}`);
+            }
+        }
     }
 
-    private sendButton() {
-        // TODO
+    /**
+     * Sends command via Media Manager
+     *
+     * @param command command to send via media manager
+     */
+    private async sendMediaCmd(command: string) {
+        try {
+            await this.SGClient.getManager('system_media').sendCommand(command);
+        } catch (e: any) {
+            this.log.warn(`Could not send media command "${command}": ${e}`);
+        }
+    }
+
+    /**
+     * Sends command via Input Manager
+     *
+     * @param command command to send via input manager
+     */
+    private async sendButton(command: string) {
+        try {
+            await this.SGClient.getManager('system_input').sendCommand(command);
+        } catch (e: any) {
+            this.log.warn(`Could not send media command "${command}": ${e}`);
+        }
+    }
+
+    /**
+     * Launchs Title on the Xbox
+     *
+     * @param titleId title id of desired title
+     */
+    private async launchApplication(titleId: string) {
+        try {
+            await this.APIClient.isAuthenticated();
+            this.log.warn(`Not implemented ${titleId}`);
+        } catch (e: any) {
+            this.log.warn(`Could not launch title: ${e}`);
+        }
     }
 }
 

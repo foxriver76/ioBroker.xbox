@@ -33,6 +33,8 @@ const xbox_smartglass_core_node_1 = __importDefault(require("xbox-smartglass-cor
 const xbox_webapi_1 = __importDefault(require("xbox-webapi"));
 // @ts-expect-error currently provides no types
 const systeminput_1 = __importDefault(require("xbox-smartglass-core-node/src/channels/systeminput"));
+// @ts-expect-error currently provides no types
+const systemmedia_1 = __importDefault(require("xbox-smartglass-core-node/src/channels/systemmedia"));
 class Xbox extends utils.Adapter {
     constructor(options = {}) {
         super({
@@ -121,7 +123,7 @@ class Xbox extends utils.Adapter {
             await this.setStateAsync('info.connection', true, true);
             // Setup Smartglass client config
             this.SGClient.addManager('system_input', (0, systeminput_1.default)());
-            // this.SGClient.addManager('system_media', SystemMediaChannel());
+            this.SGClient.addManager('system_media', (0, systemmedia_1.default)());
             // this.SGClient.addManager('tv_remote', TvRemoteChannel());
             this.SGClient.on('_on_timeout', async () => {
                 this.log.info('Smartglass connection timeout detected. Reconnecting...');
@@ -131,9 +133,12 @@ class Xbox extends utils.Adapter {
             });
             this.SGClient.on('_on_console_status', async (resp) => {
                 if (resp.packet_decoded.protected_payload.apps[0] !== undefined) {
-                    const currentTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
-                    const activeTitleId = await this.getAppId(currentTitleId.toString());
-                    await this.setStateAsync('info.activeTitleId', activeTitleId, true);
+                    const activeTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
+                    const activeTitleName = await this.getAppName(activeTitleId);
+                    await this.setStateAsync('info.activeTitleId', activeTitleId.toString(), true);
+                    if (activeTitleName) {
+                        await this.setStateAsync('info.activeTitleName', activeTitleName, true);
+                    }
                 }
             });
         }
@@ -148,7 +153,7 @@ class Xbox extends utils.Adapter {
      *
      * @param titleId id of the current title
      */
-    async getAppId(titleId) {
+    async getAppName(titleId) {
         try {
             await this.APIClient.isAuthenticated();
             const res = await this.APIClient.getProvider('catalog').getProductFromAlternateId(titleId, 'XboxTitleId');
@@ -161,7 +166,6 @@ class Xbox extends utils.Adapter {
             // no real error with message
             this.log.debug(`No connection to webAPI: ${e}`);
         }
-        return titleId;
     }
     /**
      * Gets information about the Xbox model
@@ -227,14 +231,257 @@ class Xbox extends utils.Adapter {
     /**
      * Is called if a subscribed state changes
      */
-    onStateChange(id, state) {
-        if (state) {
-            // The state was changed
-            this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+    async onStateChange(id, state) {
+        if (!state || state.ack) {
+            return;
         }
-        else {
-            // The state was deleted
-            this.log.info(`state ${id} deleted`);
+        this.log.debug(`stateChange of "${id}": ${state.val}`);
+        id = id.substring(this.namespace.length + 1); // remove instance name and id
+        if (id === 'settings.power' && state.val) {
+            // turning on xbox even if not connected
+            this.powerOn();
+            return;
+        }
+        if (!this.xboxConnected) {
+            this.log.warn(`Ignoring state change of "${id}", because not connected`);
+            return;
+        }
+        switch (id) {
+            case `settings.power`:
+                await this.powerOff();
+                break;
+            case `gamepad.rightShoulder`:
+                await this.sendButton(`right_shoulder`);
+                break;
+            case `gamepad.leftShoulder`:
+                await this.sendButton(`left_shoulder`);
+                break;
+            case `gamepad.leftThumbstick`:
+                await this.sendButton(`left_thumbstick`);
+                break;
+            case `gamepad.rightThumbstick`:
+                await this.sendButton(`left_thumbstick`);
+                break;
+            case `gamepad.enroll`:
+                await this.sendButton(`enroll`);
+                break;
+            case `gamepad.view`:
+                await this.sendButton(`view`);
+                break;
+            case `gamepad.menu`:
+                await this.sendButton(`menu`);
+                break;
+            case `gamepad.nexus`:
+                await this.sendButton(`nexus`);
+                break;
+            case `gamepad.a`:
+                await this.sendButton(`a`);
+                break;
+            case `gamepad.b`:
+                await this.sendButton(`b`);
+                break;
+            case `gamepad.y`:
+                await this.sendButton(`y`);
+                break;
+            case `gamepad.x`:
+                await this.sendButton(`x`);
+                break;
+            case `gamepad.dpadUp`:
+                await this.sendButton(`dpad_up`);
+                break;
+            case `gamepad.dpadDown`:
+                await this.sendButton(`dpad_down`);
+                break;
+            case `gamepad.dpadLeft`:
+                await this.sendButton(`dpad_left`);
+                break;
+            case `gamepad.dpadRight`:
+                await this.sendButton(`dpad_right`);
+                break;
+            case `gamepad.clear`:
+                await this.sendButton(`clear`);
+                break;
+            case `media.play`:
+                await this.sendMediaCmd(`play`);
+                break;
+            case `media.pause`:
+                await this.sendMediaCmd(`pause`);
+                break;
+            case `media.record`:
+                await this.sendMediaCmd(`record`);
+                break;
+            case `media.playPause`:
+                await this.sendMediaCmd(`play_pause`);
+                break;
+            case `media.previousTrack`:
+                await this.sendMediaCmd(`prev_track`);
+                break;
+            case `media.seek`:
+                try {
+                    /**
+                    await this.sendCustomCommand(
+                        `http://localhost:5557/device/${this.config.liveId}/media/seek/${state.val}`
+                    );*/
+                    this.log.warn('Not implemented');
+                    this.setState(id, state.val, true);
+                }
+                catch (_a) {
+                    // ignore
+                }
+                break;
+            case `media.channelUp`:
+                await this.sendMediaCmd(`channel_up`);
+                break;
+            case `media.nextTrack`:
+                await this.sendMediaCmd(`next_track`);
+                break;
+            case `media.channelDown`:
+                await this.sendMediaCmd(`channel_down`);
+                break;
+            case `media.menu`:
+                await this.sendMediaCmd(`menu`);
+                break;
+            case `media.back`:
+                await this.sendMediaCmd(`back`);
+                break;
+            case `media.rewind`:
+                await this.sendMediaCmd(`rewind`);
+                break;
+            case `media.view`:
+                await this.sendMediaCmd(`view`);
+                break;
+            case `media.fastForward`:
+                await this.sendMediaCmd(`fast_forward`);
+                break;
+            case `media.stop`:
+                await this.sendMediaCmd(`stop`);
+                break;
+            case `settings.inputText`:
+                try {
+                    /*
+                    await this.sendCustomCommand(
+                        `http://localhost:5557/device/${this.config.liveId}/text/${state.val}`
+                    );*/
+                    this.log.warn('Not implemented');
+                    await this.setStateAsync(id, state, true);
+                }
+                catch (_b) {
+                    // ignore
+                }
+                break;
+            case `settings.launchTitle`:
+                try {
+                    await this.launchApplication(state.val);
+                    await this.setStateAsync(id, state, true);
+                }
+                catch (_c) {
+                    // ignore
+                }
+                break;
+            case `settings.gameDvr`: {
+                let query = 'start=-60&end=0'; // default
+                if (typeof state.val === 'string' && state.val.includes(',')) {
+                    const [start, end] = state.val.split(',');
+                    query = `start=${start.trim()}&end=${end.trim()}`;
+                }
+                try {
+                    this.log.warn(`not implemented: ${query}`);
+                    //await this.sendCustomCommand(`http://localhost:5557/device/${this.config.liveId}/gamedvr?${query}`);
+                }
+                catch (_d) {
+                    // ignore
+                }
+                break;
+            }
+            default:
+                this.log.warn(`[COMMAND] ===> Not a valid id: ${id}`);
+        } // endSwitch
+    }
+    /**
+     * Tries to power on the Xbox first via Web API then via Smartglass
+     */
+    async powerOn() {
+        // first try with web api
+        try {
+            await this.APIClient.isAuthenticated();
+            await this.APIClient.getProvider('smartglass').powerOn(this.config.liveId);
+            this.log.debug('Powered on xbox using Xbox api');
+        }
+        catch (e) {
+            this.log.debug(`Failed to turn on Xbox using API: ${e}`);
+            // it failed so we use the SGClient
+            try {
+                await this.SGClient.powerOn({
+                    tries: 10,
+                    ip: this.config.ip,
+                    live_id: this.config.liveId
+                });
+            }
+            catch (e) {
+                this.log.warn(`Could not power on Xbox: ${JSON.stringify(e)}`);
+            }
+        }
+    }
+    /**
+     * Tries to power off Xbox first via Web API then via Smartglass
+     */
+    async powerOff() {
+        try {
+            // first try via API
+            await this.APIClient.isAuthenticated();
+            await this.APIClient.getProvider('smartglass').powerOff(this.config.liveId);
+            this.log.debug('Powered off xbox using xbox api');
+        }
+        catch (e) {
+            this.log.debug(`Failed to turn off xbox using xbox api: ${e}`);
+            try {
+                // no we try it via smartglass
+                await this.SGClient.powerOff();
+                this.log.debug('Powered off xbox using smartglass');
+            }
+            catch (e) {
+                this.log.warn(`Could not turn off Xbox: ${e}`);
+            }
+        }
+    }
+    /**
+     * Sends command via Media Manager
+     *
+     * @param command command to send via media manager
+     */
+    async sendMediaCmd(command) {
+        try {
+            await this.SGClient.getManager('system_media').sendCommand(command);
+        }
+        catch (e) {
+            this.log.warn(`Could not send media command "${command}": ${e}`);
+        }
+    }
+    /**
+     * Sends command via Input Manager
+     *
+     * @param command command to send via input manager
+     */
+    async sendButton(command) {
+        try {
+            await this.SGClient.getManager('system_input').sendCommand(command);
+        }
+        catch (e) {
+            this.log.warn(`Could not send media command "${command}": ${e}`);
+        }
+    }
+    /**
+     * Launchs Title on the Xbox
+     *
+     * @param titleId title id of desired title
+     */
+    async launchApplication(titleId) {
+        try {
+            await this.APIClient.isAuthenticated();
+            this.log.warn(`Not implemented ${titleId}`);
+        }
+        catch (e) {
+            this.log.warn(`Could not launch title: ${e}`);
         }
     }
 }
