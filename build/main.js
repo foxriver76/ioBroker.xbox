@@ -136,8 +136,8 @@ class Xbox extends utils.Adapter {
                 if (resp.packet_decoded.protected_payload.apps[0] !== undefined) {
                     const activeTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
                     const appInformation = await this.getAppInformation(activeTitleId);
-                    await this.setStateAsync('info.activeTitleId', activeTitleId.toString(), true);
                     if (appInformation) {
+                        await this.setStateAsync('info.activeTitleId', appInformation.productId, true);
                         await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
                         await this.setStateAsync('info.activeTitleImage', appInformation.imageUrl, true);
                         await this.setStateAsync('info.activeTitleType', appInformation.productType, true);
@@ -165,7 +165,13 @@ class Xbox extends utils.Adapter {
                 this.log.debug(`getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`);
                 const imageUrl = ((_a = res.Products[0].LocalizedProperties[0].Images[0]) === null || _a === void 0 ? void 0 : _a.Uri) || '';
                 const productType = res.Products[0].ProductType;
-                return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl, productType };
+                const productId = res.Products[0].ProductId;
+                return {
+                    shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle,
+                    imageUrl,
+                    productType,
+                    productId
+                };
             }
         }
         catch (e) {

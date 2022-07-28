@@ -15,6 +15,8 @@ interface AppInformation {
     imageUrl: string;
     /** Product Type e.g. Game */
     productType: string;
+    /** Unique ID to launch title */
+    productId: string;
 }
 
 class Xbox extends utils.Adapter {
@@ -138,8 +140,8 @@ class Xbox extends utils.Adapter {
 
                     const appInformation = await this.getAppInformation(activeTitleId);
 
-                    await this.setStateAsync('info.activeTitleId', activeTitleId.toString(), true);
                     if (appInformation) {
+                        await this.setStateAsync('info.activeTitleId', appInformation.productId, true);
                         await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
                         await this.setStateAsync('info.activeTitleImage', appInformation.imageUrl, true);
                         await this.setStateAsync('info.activeTitleType', appInformation.productType, true);
@@ -170,8 +172,14 @@ class Xbox extends utils.Adapter {
                 );
                 const imageUrl = res.Products[0].LocalizedProperties[0].Images[0]?.Uri || '';
                 const productType = res.Products[0].ProductType;
+                const productId = res.Products[0].ProductId;
 
-                return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl, productType };
+                return {
+                    shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle,
+                    imageUrl,
+                    productType,
+                    productId
+                };
             }
         } catch (e: any) {
             // no real error with message
