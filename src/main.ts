@@ -35,9 +35,6 @@ class Xbox extends utils.Adapter {
      * Is called when databases are connected and adapter received configuration.
      */
     private async onReady(): Promise<void> {
-        this.log.info(`config ip: ${this.config.ip}`);
-        this.log.info(`config liveId: ${this.config.liveId}`);
-
         this.subscribeStates('*');
 
         this.APIClient._authentication._tokensFile = '.tokens.json'; // TODO: Path to tokens file
@@ -200,7 +197,7 @@ class Xbox extends utils.Adapter {
             if (e.errorCode === 'XboxDataNotFound') {
                 this.log.warn(`Console ID not found on connected xbox account. Live ID: ${this.config.liveId}`);
             } else {
-                this.log.warn(`Failed to get xbox console type from Xbox API: ${e.message}`);
+                this.log.warn(`Failed to get Xbox console type from Xbox API: ${JSON.stringify(e)}`);
             }
 
             try {
@@ -213,7 +210,7 @@ class Xbox extends utils.Adapter {
                     this.log.info(`- ${console.id} - ${console.consoleType} - ${console.name}`);
                 }
             } catch (e: any) {
-                this.log.warn(`Failed to get list of consoles: ${e.message}`);
+                this.log.warn(`Failed to get list of consoles: ${JSON.stringify(e)}`);
             }
         }
     }

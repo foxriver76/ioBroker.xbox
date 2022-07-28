@@ -55,8 +55,6 @@ class Xbox extends utils.Adapter {
      * Is called when databases are connected and adapter received configuration.
      */
     async onReady() {
-        this.log.info(`config ip: ${this.config.ip}`);
-        this.log.info(`config liveId: ${this.config.liveId}`);
         this.subscribeStates('*');
         this.APIClient._authentication._tokensFile = '.tokens.json'; // TODO: Path to tokens file
         // or better this._tokens = content of tokens file read from iob storage?
@@ -202,7 +200,7 @@ class Xbox extends utils.Adapter {
                 this.log.warn(`Console ID not found on connected xbox account. Live ID: ${this.config.liveId}`);
             }
             else {
-                this.log.warn(`Failed to get xbox console type from Xbox API: ${e.message}`);
+                this.log.warn(`Failed to get Xbox console type from Xbox API: ${JSON.stringify(e)}`);
             }
             try {
                 const res = await this.APIClient.getProvider('smartglass').getConsolesList();
@@ -213,7 +211,7 @@ class Xbox extends utils.Adapter {
                 }
             }
             catch (e) {
-                this.log.warn(`Failed to get list of consoles: ${e.message}`);
+                this.log.warn(`Failed to get list of consoles: ${JSON.stringify(e)}`);
             }
         }
     }

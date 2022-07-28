@@ -14,16 +14,16 @@
       "zh-cn": "控制台的实时ID"
     },
     "ip": {
-      "en": "Your consoles ip address or hostname",
-      "de": "IP-Adresse oder Hostname Ihrer Konsole",
-      "ru": "Ваш IP-адрес консоли или имя хоста",
-      "pt": "O endereço IP ou o nome do host de seus consoles",
-      "nl": "Het IP-adres of de hostnaam van uw console",
-      "fr": "Adresse IP ou nom d'hôte de votre console",
-      "it": "Indirizzo IP o nome host della tua console",
-      "es": "Su dirección IP o nombre de host de la consola",
-      "pl": "Twój adres IP lub nazwa hosta",
-      "zh-cn": "您的控制台IP地址或主机名"
+      "en": "IP address of your console",
+      "de": "IP-Adresse Ihrer Konsole",
+      "ru": "IP адрес вашей консоли",
+      "pt": "Endereço IP do console",
+      "nl": "IP adres van je console",
+      "fr": "Adresse IP de votre console",
+      "it": "Indirizzo IP della console",
+      "es": "Dirección IP de su consola",
+      "pl": "IP address of your console",
+      "zh-cn": "IP地址"
     },
     "apiToken": {
       "en": "API Token",
@@ -45,7 +45,7 @@
     },
     "ip": {
       "label": "ip",
-      "type": "ip"
+      "type": "text"
     },
     "apiToken": {
       "label": "apiToken",
