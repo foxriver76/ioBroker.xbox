@@ -63,6 +63,7 @@ class Xbox extends utils.Adapter {
             await this.setStateAsync('info.authenticated', true, true);
             this.log.info('User is authenticated with Xbox Live');
             await this.getModel();
+            await this.setGamertag();
         }
         catch (e) {
             // it's not a real error has no message
@@ -139,6 +140,7 @@ class Xbox extends utils.Adapter {
                     if (appInformation) {
                         await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
                         await this.setStateAsync('info.activeTitleImage', appInformation.imageUrl, true);
+                        await this.setStateAsync('info.activeTitleType', appInformation.productType, true);
                     }
                 }
             });
@@ -162,7 +164,8 @@ class Xbox extends utils.Adapter {
             if (res.Products[0] !== undefined) {
                 this.log.debug(`getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`);
                 const imageUrl = ((_a = res.Products[0].LocalizedProperties[0].Images[0]) === null || _a === void 0 ? void 0 : _a.Uri) || '';
-                return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl };
+                const productType = res.Products[0].ProductType;
+                return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl, productType };
             }
         }
         catch (e) {
@@ -488,7 +491,7 @@ class Xbox extends utils.Adapter {
             await this.APIClient.isAuthenticated();
             // e.g. 9WZDNCRFJ3TJ Netflix
             const res = await this.APIClient.getProvider('smartglass').launchApp(this.config.liveId, titleId);
-            this.log.debug(`Launch application "${titleId}" result: ${res}`);
+            this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
         }
         catch (e) {
             this.log.warn(`Could not launch title: ${e}`);
@@ -528,6 +531,20 @@ class Xbox extends utils.Adapter {
      */
     async saveTokens(tokens) {
         await this.writeFileAsync(this.name, 'tokens.json', JSON.stringify(tokens, undefined, 2));
+    }
+    /**
+     * Gets User profile information and sets gamertag accordingly
+     */
+    async setGamertag() {
+        try {
+            const res = await this.APIClient.getProvider('profile').getUserProfile();
+            this.log.debug(`Gamertag response: ${JSON.stringify(res)}`);
+            const gamertagObj = res.profileUsers[0].settings.find((val) => val.id === 'Gamertag');
+            await this.setStateAsync('info.gamertag', gamertagObj.value, true);
+        }
+        catch (e) {
+            this.log.debug(`Cannot retrive gamertag: ${JSON.stringify(e)}`);
+        }
     }
 }
 if (require.main !== module) {

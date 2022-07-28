@@ -678,6 +678,18 @@
         "write": false
       },
       "native": {}
+    },
+    {
+      "_id": "info.gamertag",
+      "type": "state",
+      "common": {
+        "role": "name.user",
+        "name": "Authenticated Gamertag",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
     }
   ]
 }

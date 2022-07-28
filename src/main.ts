@@ -9,8 +9,12 @@ import SystemInputChannel from 'xbox-smartglass-core-node/src/channels/systeminp
 import SystemMediaChannel from 'xbox-smartglass-core-node/src/channels/systemmedia';
 
 interface AppInformation {
+    /** Title of the active App */
     shortTitle: string;
+    /** URL of first image */
     imageUrl: string;
+    /** Product Type e.g. Game */
+    productType: string;
 }
 
 class Xbox extends utils.Adapter {
@@ -51,6 +55,7 @@ class Xbox extends utils.Adapter {
             await this.setStateAsync('info.authenticated', true, true);
             this.log.info('User is authenticated with Xbox Live');
             await this.getModel();
+            await this.setGamertag();
         } catch (e: any) {
             // it's not a real error has no message
             this.log.debug(`Error: ${JSON.stringify(e)}`);
@@ -137,6 +142,7 @@ class Xbox extends utils.Adapter {
                     if (appInformation) {
                         await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
                         await this.setStateAsync('info.activeTitleImage', appInformation.imageUrl, true);
+                        await this.setStateAsync('info.activeTitleType', appInformation.productType, true);
                     }
                 }
             });
@@ -163,7 +169,9 @@ class Xbox extends utils.Adapter {
                     `getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`
                 );
                 const imageUrl = res.Products[0].LocalizedProperties[0].Images[0]?.Uri || '';
-                return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl };
+                const productType = res.Products[0].ProductType;
+
+                return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl, productType };
             }
         } catch (e: any) {
             // no real error with message
@@ -496,7 +504,7 @@ class Xbox extends utils.Adapter {
             await this.APIClient.isAuthenticated();
             // e.g. 9WZDNCRFJ3TJ Netflix
             const res = await this.APIClient.getProvider('smartglass').launchApp(this.config.liveId, titleId);
-            this.log.debug(`Launch application "${titleId}" result: ${res}`);
+            this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
         } catch (e: any) {
             this.log.warn(`Could not launch title: ${e}`);
         }
@@ -537,6 +545,21 @@ class Xbox extends utils.Adapter {
      */
     private async saveTokens(tokens: Record<string, any>): Promise<void> {
         await this.writeFileAsync(this.name, 'tokens.json', JSON.stringify(tokens, undefined, 2));
+    }
+
+    /**
+     * Gets User profile information and sets gamertag accordingly
+     */
+    private async setGamertag() {
+        try {
+            const res = await this.APIClient.getProvider('profile').getUserProfile();
+            this.log.debug(`Gamertag response: ${JSON.stringify(res)}`);
+            const gamertagObj = res.profileUsers[0].settings.find((val: Record<string, any>) => val.id === 'Gamertag');
+
+            await this.setStateAsync('info.gamertag', gamertagObj.value, true);
+        } catch (e) {
+            this.log.debug(`Cannot retrive gamertag: ${JSON.stringify(e)}`);
+        }
     }
 }
 
