@@ -162,7 +162,7 @@ class Xbox extends utils.Adapter {
                 this.log.debug(
                     `getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`
                 );
-                const imageUrl = (res.Products[0].LocalizedProperties[0].Images[0]?.Uri || '').substring(2);
+                const imageUrl = res.Products[0].LocalizedProperties[0].Images[0]?.Uri || '';
                 return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl };
             }
         } catch (e: any) {
@@ -494,7 +494,9 @@ class Xbox extends utils.Adapter {
     private async launchApplication(titleId: string) {
         try {
             await this.APIClient.isAuthenticated();
-            this.log.warn(`Not implemented ${titleId}`);
+            // e.g. 9WZDNCRFJ3TJ Netflix
+            const res = await this.APIClient.getProvider('smartglass').launchApp(this.config.liveId, titleId);
+            this.log.debug(`Launch application "${titleId}" result: ${res}`);
         } catch (e: any) {
             this.log.warn(`Could not launch title: ${e}`);
         }
