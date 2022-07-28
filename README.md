@@ -18,46 +18,27 @@ Microsoft Corporation, or any associated subsidiaries, logos or trademarks.
 * Install the adapter and control your Xbox One or Xbox One X
 
 ## Requirements
-
-* You need to have Python >= 3.7 installed
-* For Linux additional packages are required.
-   
-   The required packages will automatically be installed. Due to this fact root privileges are required as well as the 
-   --unsafe-perm flag. If this fails, you have to install the packages manually (`build-essential libssl-dev libffi-dev 
-   python3-dev`).
 * If you want to power your Xbox on with this adapter, you have to
 [configure the instant-on power modus](https://support.xbox.com/en-GB/xbox-one/console/learn-about-power-modes) on your Xbox.
 
 ## Acknowledgement
 Thanks to [Team Open Xbox](https://openxbox.org/) for developing and maintaining the
-[xbox-rest-server](https://github.com/OpenXbox/xbox-smartglass-rest-python) and the related libraries.
+[xbox-rest-server](https://github.com/OpenXbox/xbox-smartglass-core-node) and the related libraries.
 Without their effort, developing this package would not be possible.
 
 ## Installation
 You can install the adapter via Admin interface or on your terminal.
 
-### Admin
 1. Open your ioBroker web interface in a browser (eg: 192.168.30.70:8081)
 2. Click on Tab "Adapters"
 3. Type "Xbox" in the filter
 4. Click on the three points and then on the "+" symbol of the Xbox adapter <br/>
 ![Add Adapter](/docs/en/img/plusAddAdapter.png)
 
-### Terminal
-Navigate into your ioBroker folder and execute the following command (on Linux Root privileges are required to install 
-the additional packages, use sudo):
- 
-```bash
-npm i iobroker.xbox --unsafe-perm
-```
-
-### Setup
+## Setup
 1. Fill in the Live ID of your Xbox in the settings of the adapter. You can find the Live ID in the settings of your console.
-2. Fill in the ip address of your Xbox. <br/>
-![Adapter Configuration](/docs/en/img/adapter-configuration.png)
-3. If you want to use the features which require authentication on Xbox Live,
-you have to enable the authenticate checkbox.
-4. Provide the e-mail address as well as the password of you Xbox Live account.
+2. Fill in the ip address of your Xbox.
+3. Press the Login button to start login procedure, then paste the API key which can be found after `code=` in the url.
 
 ## States
 In this section you can find a description of every state of the adapter.
