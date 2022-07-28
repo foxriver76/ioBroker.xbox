@@ -112,14 +112,6 @@
       "gaming",
       "playstation"
     ],
-    "osDependencies": {
-      "linux": [
-        "build-essential",
-        "libssl-dev",
-        "libffi-dev",
-        "python3-dev"
-      ]
-    },
     "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
     "loglevel": "info",
     "type": "multimedia",
@@ -636,18 +628,6 @@
         "type": "string",
         "read": true,
         "write": true
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.currentTitles",
-      "type": "state",
-      "common": {
-        "role": "info.titles",
-        "name": "Current Titles",
-        "type": "string",
-        "read": true,
-        "write": false
       },
       "native": {}
     },

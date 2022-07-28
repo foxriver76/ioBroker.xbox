@@ -8,6 +8,11 @@ import SystemInputChannel from 'xbox-smartglass-core-node/src/channels/systeminp
 // @ts-expect-error currently provides no types
 import SystemMediaChannel from 'xbox-smartglass-core-node/src/channels/systemmedia';
 
+interface AppInformation {
+    shortTitle: string;
+    imageUrl: string;
+}
+
 class Xbox extends utils.Adapter {
     private SGClient: typeof Smartglass;
     private APIClient: typeof XboxApi;
@@ -126,11 +131,12 @@ class Xbox extends utils.Adapter {
                 if (resp.packet_decoded.protected_payload.apps[0] !== undefined) {
                     const activeTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
 
-                    const activeTitleName = await this.getAppName(activeTitleId);
+                    const appInformation = await this.getAppInformation(activeTitleId);
 
                     await this.setStateAsync('info.activeTitleId', activeTitleId.toString(), true);
-                    if (activeTitleName) {
-                        await this.setStateAsync('info.activeTitleName', activeTitleName, true);
+                    if (appInformation) {
+                        await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
+                        await this.setStateAsync('info.activeTitleImage', appInformation.imageUrl, true);
                     }
                 }
             });
@@ -146,7 +152,7 @@ class Xbox extends utils.Adapter {
      *
      * @param titleId id of the current title
      */
-    private async getAppName(titleId: number): Promise<string | void> {
+    private async getAppInformation(titleId: number): Promise<AppInformation | void> {
         try {
             await this.APIClient.isAuthenticated();
 
@@ -154,9 +160,10 @@ class Xbox extends utils.Adapter {
 
             if (res.Products[0] !== undefined) {
                 this.log.debug(
-                    `getAppId returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`
+                    `getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`
                 );
-                return res.Products[0].LocalizedProperties[0].ShortTitle;
+                const imageUrl = (res.Products[0].LocalizedProperties[0].Images[0]?.Uri || '').substring(2);
+                return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl };
             }
         } catch (e: any) {
             // no real error with message

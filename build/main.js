@@ -134,10 +134,11 @@ class Xbox extends utils.Adapter {
             this.SGClient.on('_on_console_status', async (resp) => {
                 if (resp.packet_decoded.protected_payload.apps[0] !== undefined) {
                     const activeTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
-                    const activeTitleName = await this.getAppName(activeTitleId);
+                    const appInformation = await this.getAppInformation(activeTitleId);
                     await this.setStateAsync('info.activeTitleId', activeTitleId.toString(), true);
-                    if (activeTitleName) {
-                        await this.setStateAsync('info.activeTitleName', activeTitleName, true);
+                    if (appInformation) {
+                        await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
+                        await this.setStateAsync('info.activeTitleImage', appInformation.imageUrl, true);
                     }
                 }
             });
@@ -153,13 +154,15 @@ class Xbox extends utils.Adapter {
      *
      * @param titleId id of the current title
      */
-    async getAppName(titleId) {
+    async getAppInformation(titleId) {
+        var _a;
         try {
             await this.APIClient.isAuthenticated();
             const res = await this.APIClient.getProvider('catalog').getProductFromAlternateId(titleId, 'XboxTitleId');
             if (res.Products[0] !== undefined) {
-                this.log.debug(`getAppId returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`);
-                return res.Products[0].LocalizedProperties[0].ShortTitle;
+                this.log.debug(`getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`);
+                const imageUrl = (((_a = res.Products[0].LocalizedProperties[0].Images[0]) === null || _a === void 0 ? void 0 : _a.Uri) || '').substring(2);
+                return { shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle, imageUrl };
             }
         }
         catch (e) {
