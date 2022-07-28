@@ -46,7 +46,7 @@ class Xbox extends utils.Adapter {
             await this.getModel();
         } catch (e: any) {
             // it's not a real error has no message
-            this.log.debug(`Error: ${e}`);
+            this.log.debug(`Error: ${JSON.stringify(e)}`);
             this.log.info(`Xbox login url available at: ${this.APIClient._authentication.generateAuthorizationUrl()}`);
             this.log.info('Copy the token after login into "apiToken" of the adapter config to enable the Xbox api');
             this.log.debug(`Current Token: ${this.config.apiToken}`);
@@ -157,7 +157,7 @@ class Xbox extends utils.Adapter {
             }
         } catch (e: any) {
             // no real error with message
-            this.log.debug(`No connection to webAPI: ${e}`);
+            this.log.debug(`No connection to webAPI: ${JSON.stringify(e)}`);
         }
     }
 
@@ -250,119 +250,119 @@ class Xbox extends utils.Adapter {
         }
 
         switch (id) {
-            case `settings.power`:
+            case 'settings.power':
                 await this.powerOff();
                 break;
-            case `gamepad.rightShoulder`:
-                await this.sendButton(`right_shoulder`);
+            case 'gamepad.rightShoulder':
+                await this.sendButton('right_shoulder');
                 break;
-            case `gamepad.leftShoulder`:
-                await this.sendButton(`left_shoulder`);
+            case 'gamepad.leftShoulder':
+                await this.sendButton('left_shoulder');
                 break;
-            case `gamepad.leftThumbstick`:
-                await this.sendButton(`left_thumbstick`);
+            case 'gamepad.leftThumbstick':
+                await this.sendButton('left_thumbstick');
                 break;
-            case `gamepad.rightThumbstick`:
-                await this.sendButton(`left_thumbstick`);
+            case 'gamepad.rightThumbstick':
+                await this.sendButton('left_thumbstick');
                 break;
-            case `gamepad.enroll`:
-                await this.sendButton(`enroll`);
+            case 'gamepad.enroll':
+                await this.sendButton('enroll');
                 break;
-            case `gamepad.view`:
-                await this.sendButton(`view`);
+            case 'gamepad.view':
+                await this.sendButton('view');
                 break;
-            case `gamepad.menu`:
-                await this.sendButton(`menu`);
+            case 'gamepad.menu':
+                await this.sendButton('menu');
                 break;
-            case `gamepad.nexus`:
-                await this.sendButton(`nexus`);
+            case 'gamepad.nexus':
+                await this.sendButton('nexus');
                 break;
-            case `gamepad.a`:
-                await this.sendButton(`a`);
+            case 'gamepad.a':
+                await this.sendButton('a');
                 break;
-            case `gamepad.b`:
-                await this.sendButton(`b`);
+            case 'gamepad.b':
+                await this.sendButton('b');
                 break;
-            case `gamepad.y`:
-                await this.sendButton(`y`);
+            case 'gamepad.y':
+                await this.sendButton('y');
                 break;
-            case `gamepad.x`:
-                await this.sendButton(`x`);
+            case 'gamepad.x':
+                await this.sendButton('x');
                 break;
-            case `gamepad.dpadUp`:
-                await this.sendButton(`dpad_up`);
+            case 'gamepad.dpadUp':
+                await this.sendButton('dpad_up');
                 break;
-            case `gamepad.dpadDown`:
-                await this.sendButton(`dpad_down`);
+            case 'gamepad.dpadDown':
+                await this.sendButton('dpad_down');
                 break;
-            case `gamepad.dpadLeft`:
-                await this.sendButton(`dpad_left`);
+            case 'gamepad.dpadLeft':
+                await this.sendButton('dpad_left');
                 break;
-            case `gamepad.dpadRight`:
-                await this.sendButton(`dpad_right`);
+            case 'gamepad.dpadRight':
+                await this.sendButton('dpad_right');
                 break;
-            case `gamepad.clear`:
-                await this.sendButton(`clear`);
+            case 'gamepad.clear':
+                await this.sendButton('clear');
                 break;
-            case `media.play`:
-                await this.sendMediaCmd(`play`);
+            case 'media.play':
+                await this.sendMediaCmd('play');
                 break;
-            case `media.pause`:
-                await this.sendMediaCmd(`pause`);
+            case 'media.pause':
+                await this.sendMediaCmd('pause');
                 break;
-            case `media.record`:
-                await this.sendMediaCmd(`record`);
+            case 'media.record':
+                await this.sendMediaCmd('record');
                 break;
-            case `media.playPause`:
-                await this.sendMediaCmd(`play_pause`);
+            case 'media.playPause':
+                await this.sendMediaCmd('play_pause');
                 break;
-            case `media.previousTrack`:
-                await this.sendMediaCmd(`prev_track`);
+            case 'media.previousTrack':
+                await this.sendMediaCmd('prev_track');
                 break;
-            case `media.seek`:
+            case 'media.seek':
                 try {
                     /**
-                    await this.sendCustomCommand(
-                        `http://localhost:5557/device/${this.config.liveId}/media/seek/${state.val}`
-                    );*/
+                     await this.sendCustomCommand(
+                     'http://localhost:5557/device/${this.config.liveId}/media/seek/${state.val}'
+                     );*/
                     this.log.warn('Not implemented');
                     this.setState(id, state.val, true);
                 } catch {
                     // ignore
                 }
                 break;
-            case `media.channelUp`:
-                await this.sendMediaCmd(`channel_up`);
+            case 'media.channelUp':
+                await this.sendMediaCmd('channel_up');
                 break;
-            case `media.nextTrack`:
-                await this.sendMediaCmd(`next_track`);
+            case 'media.nextTrack':
+                await this.sendMediaCmd('next_track');
                 break;
-            case `media.channelDown`:
-                await this.sendMediaCmd(`channel_down`);
+            case 'media.channelDown':
+                await this.sendMediaCmd('channel_down');
                 break;
-            case `media.menu`:
-                await this.sendMediaCmd(`menu`);
+            case 'media.menu':
+                await this.sendMediaCmd('menu');
                 break;
-            case `media.back`:
-                await this.sendMediaCmd(`back`);
+            case 'media.back':
+                await this.sendMediaCmd('back');
                 break;
-            case `media.rewind`:
-                await this.sendMediaCmd(`rewind`);
+            case 'media.rewind':
+                await this.sendMediaCmd('rewind');
                 break;
-            case `media.view`:
-                await this.sendMediaCmd(`view`);
+            case 'media.view':
+                await this.sendMediaCmd('view');
                 break;
-            case `media.fastForward`:
-                await this.sendMediaCmd(`fast_forward`);
+            case 'media.fastForward':
+                await this.sendMediaCmd('fast_forward');
                 break;
-            case `media.stop`:
-                await this.sendMediaCmd(`stop`);
+            case 'media.stop':
+                await this.sendMediaCmd('stop');
                 break;
-            case `settings.inputText`:
+            case 'settings.inputText':
                 try {
                     /*
                     await this.sendCustomCommand(
-                        `http://localhost:5557/device/${this.config.liveId}/text/${state.val}`
+                        'http://localhost:5557/device/${this.config.liveId}/text/${state.val}'
                     );*/
                     this.log.warn('Not implemented');
                     await this.setStateAsync(id, state, true);
@@ -370,7 +370,7 @@ class Xbox extends utils.Adapter {
                     // ignore
                 }
                 break;
-            case `settings.launchTitle`:
+            case 'settings.launchTitle':
                 try {
                     await this.launchApplication(state.val as string);
                     await this.setStateAsync(id, state, true);
@@ -378,7 +378,7 @@ class Xbox extends utils.Adapter {
                     // ignore
                 }
                 break;
-            case `settings.gameDvr`: {
+            case 'settings.gameDvr': {
                 let query = 'start=-60&end=0'; // default
                 if (typeof state.val === 'string' && state.val.includes(',')) {
                     const [start, end] = state.val.split(',');
@@ -386,14 +386,14 @@ class Xbox extends utils.Adapter {
                 }
                 try {
                     this.log.warn(`not implemented: ${query}`);
-                    //await this.sendCustomCommand(`http://localhost:5557/device/${this.config.liveId}/gamedvr?${query}`);
+                    //await this.sendCustomCommand('http://localhost:5557/device/${this.config.liveId}/gamedvr?${query}');
                 } catch {
                     // ignore
                 }
                 break;
             }
             default:
-                this.log.warn(`[COMMAND] ===> Not a valid id: ${id}`);
+                this.log.warn('[COMMAND] ===> Not a valid id: ${id}');
         } // endSwitch
     }
 
@@ -407,7 +407,7 @@ class Xbox extends utils.Adapter {
             await this.APIClient.getProvider('smartglass').powerOn(this.config.liveId);
             this.log.debug('Powered on xbox using Xbox api');
         } catch (e: any) {
-            this.log.debug(`Failed to turn on Xbox using API: ${e}`);
+            this.log.debug(`Failed to turn on Xbox using API: ${JSON.stringify(e)}`);
             // it failed so we use the SGClient
             try {
                 await this.SGClient.powerOn({
@@ -452,7 +452,7 @@ class Xbox extends utils.Adapter {
         try {
             await this.SGClient.getManager('system_media').sendCommand(command);
         } catch (e: any) {
-            this.log.warn(`Could not send media command "${command}": ${e}`);
+            this.log.warn(`Could not send media command "${command}": ${JSON.stringify(e)}`);
         }
     }
 
@@ -465,7 +465,7 @@ class Xbox extends utils.Adapter {
         try {
             await this.SGClient.getManager('system_input').sendCommand(command);
         } catch (e: any) {
-            this.log.warn(`Could not send media command "${command}": ${e}`);
+            this.log.warn(`Could not send gamepad command "${command}": ${JSON.stringify(e)}`);
         }
     }
 
