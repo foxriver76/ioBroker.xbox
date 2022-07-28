@@ -1,0 +1,55 @@
+{
+  "type": "panel",
+  "i18n": {
+    "liveId": {
+      "en": "Live Id of your console",
+      "de": "Live ID Ihrer Konsole",
+      "ru": "Live Id вашей консоли",
+      "pt": "Live ID do seu console",
+      "nl": "Live-id van uw console",
+      "fr": "ID en direct de votre console",
+      "it": "ID live della tua console",
+      "es": "Identificación en vivo de tu consola",
+      "pl": "Identyfikator na żywo Twojej konsoli",
+      "zh-cn": "控制台的实时ID"
+    },
+    "ip": {
+      "en": "Your consoles ip address or hostname",
+      "de": "IP-Adresse oder Hostname Ihrer Konsole",
+      "ru": "Ваш IP-адрес консоли или имя хоста",
+      "pt": "O endereço IP ou o nome do host de seus consoles",
+      "nl": "Het IP-adres of de hostnaam van uw console",
+      "fr": "Adresse IP ou nom d'hôte de votre console",
+      "it": "Indirizzo IP o nome host della tua console",
+      "es": "Su dirección IP o nombre de host de la consola",
+      "pl": "Twój adres IP lub nazwa hosta",
+      "zh-cn": "您的控制台IP地址或主机名"
+    },
+    "apiToken": {
+      "en": "API Token",
+      "de": "API Token",
+      "ru": "API токен",
+      "pt": "Token de API",
+      "nl": "API Token",
+      "fr": "API Token",
+      "it": "Token API",
+      "es": "API Token",
+      "pl": "API Token",
+      "zh-cn": "一、导 言"
+    }
+  },
+  "items": {
+    "liveId": {
+      "label": "liveId",
+      "type": "text"
+    },
+    "ip": {
+      "label": "ip",
+      "type": "ip"
+    },
+    "apiToken": {
+      "label": "apiToken",
+      "type": "text"
+    }
+  }
+}

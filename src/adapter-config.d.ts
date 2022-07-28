@@ -6,6 +6,7 @@ declare global {
         interface AdapterConfig {
             ip: string;
             liveId: string;
+            apiToken: string;
         }
     }
 }

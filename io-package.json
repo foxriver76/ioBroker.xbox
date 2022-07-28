@@ -134,7 +134,8 @@
   },
   "native": {
     "ip": "",
-    "liveId": ""
+    "liveId": "",
+    "apiToken": ""
   },
   "protectedNative": [],
   "objects": [],
@@ -678,6 +679,18 @@
       "common": {
         "role": "name.type",
         "name": "Active title type",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.consoleType",
+      "type": "state",
+      "common": {
+        "role": "name.type",
+        "name": "Console Type",
         "type": "string",
         "read": true,
         "write": false
