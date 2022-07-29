@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.0",
+    "version": "1.0.0-beta.1",
     "news": {
+      "1.0.0-beta.1": {
+        "en": "fixed missing state objects",
+        "de": "feste fehlende zustandsobjekte",
+        "ru": "фиксированные отсутствующие государственные объекты",
+        "pt": "objetos de estado ausentes fixos",
+        "nl": "vermiste objecten",
+        "fr": "objets d'état manquants fixes",
+        "it": "oggetti di stato mancanti fissi",
+        "es": "objetos de estado perdidos fijos",
+        "pl": "obiekt nieokreślony",
+        "zh-cn": "固定状态"
+      },
       "1.0.0-beta.0": {
         "en": "complete TypeScript rewrite\nremoved Python dependencies by siwtching to Xbox API written in Node.js\nfixed title launch (closes #39)\nfixed Xbox Live Auth (closes #63)",
         "de": "komplette TypeScript-Rewrite\nentfernt Python Abhängigkeiten, indem Sie auf Xbox API in Node geschrieben. j)\nfester titelstart (schließen #39)\nxbox Live Auth (schließt #63)",
@@ -64,18 +76,6 @@
         "zh-cn": "不要在高于调试级别的级别上记录其余服务器的记录，因此可以在需要时将其激活"
       },
       "0.7.6": {
-        "en": "added `requests` package as pip dev\nadded logging for rest server",
-        "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
-        "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
-        "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
-        "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
-        "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
-        "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
-        "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
-        "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
-        "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
-      },
-      "0.7.5": {
         "en": "added `requests` package as pip dev\nadded logging for rest server",
         "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
         "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
@@ -685,6 +685,31 @@
       "common": {
         "role": "name.user",
         "name": "Authenticated Gamertag",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.authenticated",
+      "type": "state",
+      "common": {
+        "name": "Xbox Live authenticated",
+        "role": "indicator.authenticated",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.activeTitleImage",
+      "type": "state",
+      "common": {
+        "name": "Active title image",
+        "role": "icon",
         "type": "string",
         "read": true,
         "write": false

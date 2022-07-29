@@ -302,6 +302,9 @@ In this section you can find a description of every state of the adapter.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 1.0.0-beta.1 (2022-07-29)
+* (foxriver76) fixed missing state objects
+
 ### 1.0.0-beta.0 (2022-07-29)
 * (foxriver76) complete TypeScript rewrite
 * (foxriver76) removed Python dependencies by siwtching to Xbox API written in Node.js
