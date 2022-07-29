@@ -53,16 +53,6 @@ In this section you can find a description of every state of the adapter.
    
    *Read-only boolean indicator. Is true if adapter is connected to Xbox.*
 
-* info.currentTitles
-
-    |Data type|Permission|
-    |:---:|:---:|
-    |string|R|
-
-   *Read-only JSON string, which consits of key-value pairs. The key is the name of an active title,
-   while the value is the title id converted to hexadecimal. The hex title id can be used to launch a
-   title via the settings.launchTitlte state.*
-
 * info.activeTitleName
 
     |Data type|Permission|
@@ -312,6 +302,13 @@ In this section you can find a description of every state of the adapter.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+
+### __WORK IN PROGRESS__
+* (foxriver76) complete TypeScript rewrite
+* (foxriver76) removed Python dependencies by siwtching to Xbox API written in Node.js
+* (foxriver76) fixed title launch (closes #39)
+* (foxriver76) fixed Xbox Live Auth (closes #63)
+
 ### 0.7.10 (2022-05-20)
 * (foxriver76) fixed error with mising admin ui on new installations
 
