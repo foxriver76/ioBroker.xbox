@@ -255,6 +255,8 @@ class Xbox extends utils.Adapter {
                 clearTimeout(this.connectionTimer);
             }
 
+            await this.saveTokens(this.APIClient._authentication._tokens.oauth);
+
             await this.setStateAsync('info.authenticated', false, true);
             await this.setStateAsync('info.connection', false, true);
 
@@ -557,6 +559,7 @@ class Xbox extends utils.Adapter {
      */
     private async saveTokens(tokens: Record<string, any>): Promise<void> {
         await this.writeFileAsync(this.name, 'tokens.json', JSON.stringify(tokens, undefined, 2));
+        this.log.info('Successfully saved tokens');
     }
 
     /**

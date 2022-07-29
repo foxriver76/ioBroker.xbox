@@ -240,6 +240,7 @@ class Xbox extends utils.Adapter {
             if (this.connectionTimer) {
                 clearTimeout(this.connectionTimer);
             }
+            await this.saveTokens(this.APIClient._authentication._tokens.oauth);
             await this.setStateAsync('info.authenticated', false, true);
             await this.setStateAsync('info.connection', false, true);
             callback();
@@ -540,6 +541,7 @@ class Xbox extends utils.Adapter {
      */
     async saveTokens(tokens) {
         await this.writeFileAsync(this.name, 'tokens.json', JSON.stringify(tokens, undefined, 2));
+        this.log.info('Successfully saved tokens');
     }
     /**
      * Gets User profile information and sets gamertag accordingly
