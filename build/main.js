@@ -59,6 +59,8 @@ class Xbox extends utils.Adapter {
         await this.ensureMeta();
         await this.loadTokens();
         try {
+            // update token
+            this.APIClient._authentication._tokens.oauth = await this.APIClient._authentication.refreshToken(this.APIClient._authentication._tokens.oauth.refresh_token);
             await this.APIClient.isAuthenticated();
             await this.setStateAsync('info.authenticated', true, true);
             this.log.info('User is authenticated with Xbox Live');
