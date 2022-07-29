@@ -76,11 +76,13 @@ class Xbox extends utils.Adapter {
                 this.log.info('Trying authentication with current token');
                 try {
                     const data = await this.APIClient._authentication.getTokenRequest(this.config.apiToken);
+                    this.APIClient._authentication._tokens.oauth = data;
                     this.log.info('User is authenticated');
                     this.log.debug(`Got oauth token: ${JSON.stringify(data)}`);
-                    this.APIClient._authentication._tokens.oauth = data;
+                    await this.setStateAsync('info.authenticated', true, true);
                     await this.saveTokens(data);
                     await this.getModel();
+                    await this.setGamertag();
                 }
                 catch (e) {
                     this.log.debug(`Error: ${e.body}`);
@@ -450,7 +452,7 @@ class Xbox extends utils.Adapter {
             this.log.debug('Powered off xbox using xbox api');
         }
         catch (e) {
-            this.log.debug(`Failed to turn off xbox using xbox api: ${e}`);
+            this.log.debug(`Failed to turn off xbox using xbox api: ${JSON.stringify(e)}`);
             try {
                 // no we try it via smartglass
                 await this.SGClient.powerOff();
@@ -500,7 +502,7 @@ class Xbox extends utils.Adapter {
             this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
         }
         catch (e) {
-            this.log.warn(`Could not launch title: ${e}`);
+            this.log.warn(`Could not launch title: ${JSON.stringify(e)}`);
         }
     }
     /**

@@ -690,6 +690,18 @@
         "write": false
       },
       "native": {}
+    },
+    {
+      "_id": "settings.gameDvr",
+      "type": "state",
+      "common":  {
+        "name": "Game Recorder",
+        "role": "button",
+        "type": "string",
+        "read": true,
+        "write": true
+      },
+      "native": {}
     }
   ]
 }
