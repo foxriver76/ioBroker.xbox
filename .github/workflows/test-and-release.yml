@@ -70,9 +70,6 @@ jobs:
       - name: Install package
         run: npm i --unsafe-perm
 
-      - name: Run unit tests
-        run: npm run test:unit
-
       - name: Run integration tests (unix only)
         if: startsWith(runner.OS, 'windows') == false
         run: DEBUG=testing:* npm run test:integration

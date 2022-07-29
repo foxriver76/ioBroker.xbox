@@ -101,7 +101,9 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "xbox.png",
-    "materialize": true,
+    "adminUI": {
+      "config": "json"
+    },
     "enabled": true,
     "compact": true,
     "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.xbox/master/admin/xbox.png",
@@ -110,14 +112,6 @@
       "gaming",
       "playstation"
     ],
-    "osDependencies": {
-      "linux": [
-        "build-essential",
-        "libssl-dev",
-        "libffi-dev",
-        "python3-dev"
-      ]
-    },
     "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
     "loglevel": "info",
     "type": "multimedia",
@@ -134,7 +128,8 @@
   },
   "native": {
     "ip": "",
-    "liveId": ""
+    "liveId": "",
+    "apiToken": ""
   },
   "protectedNative": [],
   "objects": [],
@@ -637,18 +632,6 @@
       "native": {}
     },
     {
-      "_id": "info.currentTitles",
-      "type": "state",
-      "common": {
-        "role": "info.titles",
-        "name": "Current Titles",
-        "type": "string",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
       "_id": "info.activeTitleName",
       "type": "state",
       "common": {
@@ -681,6 +664,42 @@
         "type": "string",
         "read": true,
         "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.consoleType",
+      "type": "state",
+      "common": {
+        "role": "name.type",
+        "name": "Console Type",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.gamertag",
+      "type": "state",
+      "common": {
+        "role": "name.user",
+        "name": "Authenticated Gamertag",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.gameDvr",
+      "type": "state",
+      "common":  {
+        "name": "Game Recorder",
+        "role": "button",
+        "type": "string",
+        "read": true,
+        "write": true
       },
       "native": {}
     }

@@ -1,0 +1,55 @@
+{
+  "type": "panel",
+  "i18n": {
+    "liveId": {
+      "en": "Live Id of your console",
+      "de": "Live ID Ihrer Konsole",
+      "ru": "Live Id вашей консоли",
+      "pt": "Live ID do seu console",
+      "nl": "Live-id van uw console",
+      "fr": "ID en direct de votre console",
+      "it": "ID live della tua console",
+      "es": "Identificación en vivo de tu consola",
+      "pl": "Identyfikator na żywo Twojej konsoli",
+      "zh-cn": "控制台的实时ID"
+    },
+    "ip": {
+      "en": "IP address of your console",
+      "de": "IP-Adresse Ihrer Konsole",
+      "ru": "IP адрес вашей консоли",
+      "pt": "Endereço IP do console",
+      "nl": "IP adres van je console",
+      "fr": "Adresse IP de votre console",
+      "it": "Indirizzo IP della console",
+      "es": "Dirección IP de su consola",
+      "pl": "IP address of your console",
+      "zh-cn": "IP地址"
+    },
+    "apiToken": {
+      "en": "API Token",
+      "de": "API Token",
+      "ru": "API токен",
+      "pt": "Token de API",
+      "nl": "API Token",
+      "fr": "API Token",
+      "it": "Token API",
+      "es": "API Token",
+      "pl": "API Token",
+      "zh-cn": "一、导 言"
+    }
+  },
+  "items": {
+    "liveId": {
+      "label": "liveId",
+      "type": "text"
+    },
+    "ip": {
+      "label": "ip",
+      "type": "text"
+    },
+    "apiToken": {
+      "label": "apiToken",
+      "type": "text"
+    }
+  }
+}
