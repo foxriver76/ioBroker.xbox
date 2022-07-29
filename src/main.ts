@@ -72,12 +72,12 @@ class Xbox extends utils.Adapter {
                     const data = await this.APIClient._authentication.getTokenRequest(this.config.apiToken);
 
                     this.APIClient._authentication._tokens.oauth = data;
-                    this.log.info('User is authenticated');
                     this.log.debug(`Got oauth token: ${JSON.stringify(data)}`);
-
-                    await this.setStateAsync('info.authenticated', true, true);
-
                     await this.saveTokens(data);
+
+                    await this.APIClient.isAuthenticated();
+                    this.log.info('User is authenticated');
+                    await this.setStateAsync('info.authenticated', true, true);
 
                     await this.getModel();
                     await this.setGamertag();
