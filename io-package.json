@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "0.7.10",
+    "version": "1.0.0-beta.0",
     "news": {
+      "1.0.0-beta.0": {
+        "en": "complete TypeScript rewrite\nremoved Python dependencies by siwtching to Xbox API written in Node.js\nfixed title launch (closes #39)\nfixed Xbox Live Auth (closes #63)",
+        "de": "komplette TypeScript-Rewrite\nentfernt Python Abhängigkeiten, indem Sie auf Xbox API in Node geschrieben. j)\nfester titelstart (schließen #39)\nxbox Live Auth (schließt #63)",
+        "ru": "полный типScript rewrite\nудалены зависимости Python с помощью swtching в Xbox API, написанные в Node. Джс\nзапуск заголовка (closes #39)\nфиксированный Xbox Live Auth (closes #63)",
+        "pt": "reescrita completa do TypeScript\nremoveu dependências do Python peneirando para a API do Xbox escrita em Node. Js\nlançamento do título fixo (fecha #39)\nauth Xbox Live fixo (fecha #63)",
+        "nl": "typeScript herschrijving\nverwijderde Python afhankelijkheid door naar Xbox API geschreven in Node. Js\nvertaling:\nxbox Live Auth (closes 63)",
+        "fr": "complet TypeScript rewrite\nsupprimé les dépendances de Python en s'adressant à l'API Xbox écrite à Node. js\nlancement du titre fixe (fermeture #39)\nxbox Live Auth (ferme #63)",
+        "it": "riscrittura completa di TypeScript\nha rimosso le dipendenze di Python spostando l'API di Xbox scritta in Node. j\nlancio del titolo fisso (chiude #39)\nfisso Xbox Live Auth (chiude #63)",
+        "es": "completa TipoScript reescribir\neliminar las dependencias de Python siwtching a Xbox API escrita en Node. js\nlanzamiento de título fijo (cerca #39)\nxbox Live Auth fijo (cerca #63)",
+        "pl": "kompletny rewrite\nusunięta wersja Pythona zależnie od siwtching do Xbox API napisanego w Node. js\noficjalna strona programu (zamknięta #39)\nxbox Live Auth (okrążając #63)",
+        "zh-cn": "完整的类型\n在诺德写成的X箱子公司用兄弟来拆除Python依赖。 j\n固定所有权发射(编号:#39)\n固定X箱Live Auth(编号:第63号)"
+      },
       "0.7.10": {
         "en": "fixed error with mising admin ui on new installations",
         "de": "Fehler mit fehlender Admin-Benutzeroberfläche bei Neuinstallationen behoben",
@@ -64,18 +76,6 @@
         "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
       },
       "0.7.5": {
-        "en": "added `requests` package as pip dev\nadded logging for rest server",
-        "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
-        "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
-        "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
-        "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
-        "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
-        "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
-        "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
-        "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
-        "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
-      },
-      "0.7.4": {
         "en": "added `requests` package as pip dev\nadded logging for rest server",
         "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
         "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
@@ -694,7 +694,7 @@
     {
       "_id": "settings.gameDvr",
       "type": "state",
-      "common":  {
+      "common": {
         "name": "Game Recorder",
         "role": "button",
         "type": "string",
