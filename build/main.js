@@ -401,6 +401,15 @@ class Xbox extends utils.Adapter {
                     // ignore
                 }
                 break;
+            case 'settings.launchStoreTitle':
+                try {
+                    await this.launchStoreApplication(state.val);
+                    await this.setStateAsync(id, state, true);
+                }
+                catch (_d) {
+                    // ignore
+                }
+                break;
             case 'settings.gameDvr': {
                 let query = 'start=-60&end=0'; // default
                 if (typeof state.val === 'string' && state.val.includes(',')) {
@@ -411,7 +420,7 @@ class Xbox extends utils.Adapter {
                     this.log.warn(`not implemented: ${query}`);
                     //await this.sendCustomCommand('http://localhost:5557/device/${this.config.liveId}/gamedvr?${query}');
                 }
-                catch (_d) {
+                catch (_e) {
                     // ignore
                 }
                 break;
@@ -494,7 +503,7 @@ class Xbox extends utils.Adapter {
         }
     }
     /**
-     * Launchs Title on the Xbox
+     * Launchs Title on the Xbox by ID
      *
      * @param titleId title id of desired title
      */
@@ -504,6 +513,30 @@ class Xbox extends utils.Adapter {
             // e.g. 9WZDNCRFJ3TJ Netflix
             const res = await this.APIClient.getProvider('smartglass').launchApp(this.config.liveId, titleId);
             this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
+        }
+        catch (e) {
+            this.log.warn(`Could not launch title: ${JSON.stringify(e)}`);
+        }
+    }
+    /**
+     * Launchs Title on Xbox by Store Name
+     *
+     * @param titleName name of the title to search for
+     */
+    async launchStoreApplication(titleName) {
+        var _a;
+        try {
+            await this.APIClient.isAuthenticated();
+            const catalogRes = await this.APIClient.getProvider('catalog').searchTitle(titleName);
+            const titleId = (_a = catalogRes.Results[0]) === null || _a === void 0 ? void 0 : _a.Products[0].ProductId;
+            if (titleId) {
+                this.log.debug(`Got ID "${titleId}" for "${titleName}" from store`);
+                const res = await this.APIClient.getProvider('smartglass').launchApp(this.config.liveId, titleId);
+                this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
+            }
+            else {
+                this.log.warn(`No result found for "${titleName}"`);
+            }
         }
         catch (e) {
             this.log.warn(`Could not launch title: ${JSON.stringify(e)}`);

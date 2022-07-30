@@ -114,7 +114,7 @@ In this section you can find a description of every state of the adapter.
 
    *Boolean-value to turn your Xbox on and off. State also indicates current power status of the Xbox.*
 
-* settings.launchTitle
+* settings.launchTitle/launchStoreTitle
 
     |Data type|Permission|
     |:---:|:---:|
@@ -129,6 +129,9 @@ In this section you can find a description of every state of the adapter.
     ```javascript
     setState('settings.launchTitle', '2340236c', false); // Launch Red Dead Redemption 2
     ```
+  
+    With `launchStoreTitle` you can use real names. The adapter will search for the title in store and take the ID of
+    the first result.
 
 * settings.inputText
 
