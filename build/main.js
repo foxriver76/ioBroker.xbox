@@ -69,7 +69,7 @@ class Xbox extends utils.Adapter {
         }
         catch (e) {
             // it's not a real error has no message
-            this.log.debug(`Error: ${JSON.stringify(e)}`);
+            this.log.debug(`Error: ${this.errorToText(e)}`);
             this.log.info(`Xbox login url available at: ${this.APIClient._authentication.generateAuthorizationUrl()}`);
             this.log.info('Copy the token after login into "apiToken" of the adapter config to enable the Xbox api');
             this.log.debug(`Current Token: ${this.config.apiToken}`);
@@ -181,7 +181,7 @@ class Xbox extends utils.Adapter {
         }
         catch (e) {
             // no real error with message
-            this.log.debug(`No connection to webAPI: ${JSON.stringify(e)}`);
+            this.log.debug(`No connection to webAPI: ${this.errorToText(e)}`);
         }
     }
     /**
@@ -219,7 +219,7 @@ class Xbox extends utils.Adapter {
                 this.log.warn(`Console ID not found on connected xbox account. Live ID: ${this.config.liveId}`);
             }
             else {
-                this.log.warn(`Failed to get Xbox console type from Xbox API: ${JSON.stringify(e)}`);
+                this.log.warn(`Failed to get Xbox console type from Xbox API: ${this.errorToText(e)}`);
             }
             try {
                 const res = await this.APIClient.getProvider('smartglass').getConsolesList();
@@ -230,7 +230,7 @@ class Xbox extends utils.Adapter {
                 }
             }
             catch (e) {
-                this.log.warn(`Failed to get list of consoles: ${JSON.stringify(e)}`);
+                this.log.warn(`Failed to get list of consoles: ${this.errorToText(e)}`);
             }
         }
     }
@@ -440,7 +440,7 @@ class Xbox extends utils.Adapter {
             this.log.debug('Powered on xbox using Xbox api');
         }
         catch (e) {
-            this.log.debug(`Failed to turn on Xbox using API: ${JSON.stringify(e)}`);
+            this.log.debug(`Failed to turn on Xbox using API: ${this.errorToText(e)}`);
             // it failed so we use the SGClient
             try {
                 await this.SGClient.powerOn({
@@ -450,7 +450,7 @@ class Xbox extends utils.Adapter {
                 });
             }
             catch (e) {
-                this.log.warn(`Could not power on Xbox: ${JSON.stringify(e)}`);
+                this.log.warn(`Could not power on Xbox: ${this.errorToText(e)}`);
             }
         }
     }
@@ -465,7 +465,7 @@ class Xbox extends utils.Adapter {
             this.log.debug('Powered off xbox using xbox api');
         }
         catch (e) {
-            this.log.debug(`Failed to turn off xbox using xbox api: ${JSON.stringify(e)}`);
+            this.log.debug(`Failed to turn off xbox using xbox api: ${this.errorToText(e)}`);
             try {
                 // no we try it via smartglass
                 await this.SGClient.powerOff();
@@ -486,7 +486,7 @@ class Xbox extends utils.Adapter {
             await this.SGClient.getManager('system_media').sendCommand(command);
         }
         catch (e) {
-            this.log.warn(`Could not send media command "${command}": ${JSON.stringify(e)}`);
+            this.log.warn(`Could not send media command "${command}": ${this.errorToText(e)}`);
         }
     }
     /**
@@ -499,7 +499,7 @@ class Xbox extends utils.Adapter {
             await this.SGClient.getManager('system_input').sendCommand(command);
         }
         catch (e) {
-            this.log.warn(`Could not send gamepad command "${command}": ${JSON.stringify(e)}`);
+            this.log.warn(`Could not send gamepad command "${command}": ${this.errorToText(e)}`);
         }
     }
     /**
@@ -515,7 +515,7 @@ class Xbox extends utils.Adapter {
             this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
         }
         catch (e) {
-            this.log.warn(`Could not launch title: ${JSON.stringify(e)}`);
+            this.log.warn(`Could not launch title: ${this.errorToText(e)}`);
         }
     }
     /**
@@ -528,7 +528,25 @@ class Xbox extends utils.Adapter {
         try {
             await this.APIClient.isAuthenticated();
             const catalogRes = await this.APIClient.getProvider('catalog').searchTitle(titleName);
-            const titleId = (_a = catalogRes.Results[0]) === null || _a === void 0 ? void 0 : _a.Products[0].ProductId;
+            let titleId = (_a = catalogRes.Results[0]) === null || _a === void 0 ? void 0 : _a.Products[0].ProductId;
+            if (catalogRes.Results.length > 1) {
+                // multiple results see if one is installed to find a better matching title
+                const res = await this.APIClient.getProvider('smartglass').getInstalledApps(this.config.liveId);
+                for (const installedApp of res.result) {
+                    try {
+                        const res = await this.APIClient.getProvider('titlehub').getTitleId(installedApp.titleId);
+                        const installedProductId = res.titles[0].detail.availabilities[0].ProductId;
+                        const matchingApplication = catalogRes.Results.find((entry) => entry.Products[0].ProductId === installedProductId);
+                        if (matchingApplication) {
+                            titleId = matchingApplication.Products[0].ProductId;
+                            break;
+                        }
+                    }
+                    catch (e) {
+                        this.log.warn(`Error getting TitleId in launchStoreApplication: ${this.errorToText(e)}`);
+                    }
+                }
+            }
             if (titleId) {
                 this.log.debug(`Got ID "${titleId}" for "${titleName}" from store`);
                 const res = await this.APIClient.getProvider('smartglass').launchApp(this.config.liveId, titleId);
@@ -539,7 +557,7 @@ class Xbox extends utils.Adapter {
             }
         }
         catch (e) {
-            this.log.warn(`Could not launch title: ${JSON.stringify(e)}`);
+            this.log.warn(`Could not launch title: ${this.errorToText(e)}`);
         }
     }
     /**
@@ -589,7 +607,20 @@ class Xbox extends utils.Adapter {
             await this.setStateAsync('info.gamertag', gamertagObj.value, true);
         }
         catch (e) {
-            this.log.debug(`Cannot retrive gamertag: ${JSON.stringify(e)}`);
+            this.log.debug(`Cannot retrive gamertag: ${this.errorToText(e)}`);
+        }
+    }
+    /**
+     * Checks if a real error was thrown and returns message then, else it stringifies
+     *
+     * @param error any kind of thrown error
+     */
+    errorToText(error) {
+        if (error instanceof Error) {
+            return error.message;
+        }
+        else {
+            return JSON.stringify(error);
         }
     }
 }

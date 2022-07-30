@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.2",
+    "version": "1.0.0-beta.3",
     "news": {
+      "1.0.0-beta.3": {
+        "en": "we have optimized `launchStoreTitle` to check for installed apps first\nwe have optimized error logging",
+        "de": "wir haben startStoreTitle optimiert, um zuerst für installierte Apps zu überprüfen\nwir haben die fehlerprotokollierung optimiert",
+        "ru": "мы оптимизировали запускStoreTitle для проверки установленных приложений первым\nмы оптимизировали логирование ошибок",
+        "pt": "nós otimizamos o launchStoreTitle para verificar para aplicativos instalados primeiro\nnós temos registro de erro otimizado",
+        "nl": "we hebben de lancering van StarTitle geïnstalleerd\nwe hebben een fout gemaakt",
+        "fr": "nous avons optimisé le lancementStoreTitle pour vérifier d'abord les applications installées\nnous avons optimisé l'enregistrement d'erreurs",
+        "it": "abbiamo ottimizzato il lancioStoreTitle per controllare prima le app installate\nabbiamo ottimizzato la registrazione degli errori",
+        "es": "hemos optimizado el lanzamientoStoreTitle para comprobar las aplicaciones instaladas primero\nhemos optimizado el registro de errores",
+        "pl": "zoptymalizowano startStoreTitle, aby sprawdzić zainstalowane aplikacje\nzoptymalizował błąd logowania",
+        "zh-cn": "我们优化了发射StoreTitle,以检查首次安装的配件。\n我们优化了错误伐木"
+      },
       "1.0.0-beta.2": {
         "en": "added `launchStoreTitle` state to launch apps by their names",
         "de": "einführung StoreTitle Staat Apps mit ihren Namen starten",
@@ -74,18 +86,6 @@
         "es": "ahora configuramos el indicador `unsafePerm` para garantizar la compatibilidad con el futuro controlador\ndependencias actualizadas",
         "pl": "teraz ustawiliśmy flagę `unsafePerm`, aby zapewnić kompatybilność z przyszłym kontrolerem\nzaktualizowane zależności",
         "zh-cn": "我们现在设置 `unsafePerm` 标志以确保与未来控制器的兼容性\n更新的依赖项"
-      },
-      "0.7.7": {
-        "en": "do not log rest server logging on levels above debug, so it can be activated when needed",
-        "de": "Protokollieren Sie den Restserver nicht auf Ebenen oberhalb des Debugs, damit er bei Bedarf aktiviert werden kann",
-        "ru": "не регистрировать вход сервера отдыха на уровнях выше отладки, поэтому его можно активировать при необходимости",
-        "pt": "não registre o log de descanso do servidor em níveis acima de depuração, para que possa ser ativado quando necessário",
-        "nl": "log geen logboekregistratie van de restserver op niveaus boven de foutopsporing, dus het kan worden geactiveerd wanneer dat nodig is",
-        "fr": "ne pas enregistrer la journalisation du serveur de repos sur les niveaux supérieurs au débogage, afin qu'il puisse être activé en cas de besoin",
-        "it": "non registrare la registrazione del server di riposo a livelli superiori al debug, quindi può essere attivata quando necessario",
-        "es": "No registre el inicio de sesión del servidor de descanso en niveles superiores a la depuración, para que pueda activarse cuando sea necesario",
-        "pl": "nie rejestruj logowania do serwera odpoczynku na poziomach powyżej debugowania, aby można go było aktywować w razie potrzeby",
-        "zh-cn": "不要在高于调试级别的级别上记录其余服务器的记录，因此可以在需要时将其激活"
       }
     },
     "titleLang": {
