@@ -305,6 +305,9 @@ In this section you can find a description of every state of the adapter.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 1.0.0-beta.2 (2022-07-30)
+* (foxriver76) added `launchStoreTitle` state to launch apps by their names
+
 ### 1.0.0-beta.1 (2022-07-29)
 * (foxriver76) fixed missing state objects
 

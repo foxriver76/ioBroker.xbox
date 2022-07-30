@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.1",
+    "version": "1.0.0-beta.2",
     "news": {
+      "1.0.0-beta.2": {
+        "en": "added `launchStoreTitle` state to launch apps by their names",
+        "de": "einführung StoreTitle Staat Apps mit ihren Namen starten",
+        "ru": "добавлен запуск StoreTitle государство для запуска приложений по их именам",
+        "pt": "lançamento adicionado StoreTitle state para lançar aplicativos por seus nomes",
+        "nl": "vertaling: Vertaling:",
+        "fr": "lancement ajouté StoreTitle État pour lancer des applications par leurs noms",
+        "it": "lancio aggiunto StoreTitle stato per lanciare applicazioni con i loro nomi",
+        "es": "lanzamiento StoreTitle State lanzará aplicaciones por sus nombres",
+        "pl": "dodać Statek StoreTitle (ang.)",
+        "zh-cn": "发射 被绑架国以其名称发射了材料"
+      },
       "1.0.0-beta.1": {
         "en": "fixed missing state objects",
         "de": "feste fehlende zustandsobjekte",
@@ -74,18 +86,6 @@
         "es": "No registre el inicio de sesión del servidor de descanso en niveles superiores a la depuración, para que pueda activarse cuando sea necesario",
         "pl": "nie rejestruj logowania do serwera odpoczynku na poziomach powyżej debugowania, aby można go było aktywować w razie potrzeby",
         "zh-cn": "不要在高于调试级别的级别上记录其余服务器的记录，因此可以在需要时将其激活"
-      },
-      "0.7.6": {
-        "en": "added `requests` package as pip dev\nadded logging for rest server",
-        "de": "`Anfragen` Paket als pip dev hinzugefügt\nProtokollierung für Rest-Server hinzugefügt",
-        "ru": "добавлен пакет `requests` как pip dev\nдобавлено логирование для сервера отдыха",
-        "pt": "adicionado pacote `requests` como pip dev\nadicionado registro para servidor de descanso",
-        "nl": "heeft `requests` pakket toegevoegd als pip dev\nlogboekregistratie toegevoegd voor de rustserver",
-        "fr": "ajout du package `requests` en tant que pip dev\najout de la journalisation pour le serveur de repos",
-        "it": "aggiunto il pacchetto `requests` come pip dev\naggiunta la registrazione per il server di riposo",
-        "es": "se agregó el paquete `solicitudes` como pip dev\nregistro agregado para el servidor de descanso",
-        "pl": "dodano pakiet `request` jako pip dev\ndodane logowanie do serwera odpoczynku",
-        "zh-cn": "将`requests`软件包添加为pip dev\n添加了其余服务器的日志记录"
       }
     },
     "titleLang": {
