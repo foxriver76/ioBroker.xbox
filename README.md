@@ -305,7 +305,7 @@ In this section you can find a description of every state of the adapter.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
-### 1.0.0-beta.3 (2022-07-30)
+### 1.0.0-beta.4 (2022-07-30)
 * (foxriver76) we have optimized `launchStoreTitle` to check for installed apps first
 * (foxriver76) we have optimized error logging
 

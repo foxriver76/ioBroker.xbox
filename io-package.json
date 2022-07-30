@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.3",
+    "version": "1.0.0-beta.4",
     "news": {
+      "1.0.0-beta.4": {
+        "en": "we have optimized `launchStoreTitle` to check for installed apps first\nwe have optimized error logging",
+        "de": "wir haben startStoreTitle optimiert, um zuerst für installierte Apps zu überprüfen\nwir haben die fehlerprotokollierung optimiert",
+        "ru": "мы оптимизировали запускStoreTitle для проверки установленных приложений первым\nмы оптимизировали логирование ошибок",
+        "pt": "nós otimizamos o launchStoreTitle para verificar para aplicativos instalados primeiro\nnós temos registro de erro otimizado",
+        "nl": "we hebben de lancering van StarTitle geïnstalleerd\nwe hebben een fout gemaakt",
+        "fr": "nous avons optimisé le lancementStoreTitle pour vérifier d'abord les applications installées\nnous avons optimisé l'enregistrement d'erreurs",
+        "it": "abbiamo ottimizzato il lancioStoreTitle per controllare prima le app installate\nabbiamo ottimizzato la registrazione degli errori",
+        "es": "hemos optimizado el lanzamientoStoreTitle para comprobar las aplicaciones instaladas primero\nhemos optimizado el registro de errores",
+        "pl": "zoptymalizowano startStoreTitle, aby sprawdzić zainstalowane aplikacje\nzoptymalizował błąd logowania",
+        "zh-cn": "我们优化了发射StoreTitle,以检查首次安装的配件。\n我们优化了错误伐木"
+      },
       "1.0.0-beta.3": {
         "en": "we have optimized `launchStoreTitle` to check for installed apps first\nwe have optimized error logging",
         "de": "wir haben startStoreTitle optimiert, um zuerst für installierte Apps zu überprüfen\nwir haben die fehlerprotokollierung optimiert",
@@ -74,18 +86,6 @@
         "es": "Se corrigió el valor predeterminado incorrecto de `media.seek` (cierra # 113)",
         "pl": "naprawiono błędną domyślną wartość `media.seek` (zamyka #113)",
         "zh-cn": "修复了 `media.seek` 的错误默认值（关闭 #113）"
-      },
-      "0.7.8": {
-        "en": "we now set `unsafePerm` flag to ensure compatibility with future controller\nupdated dependencies",
-        "de": "Wir setzen jetzt das Flag \"unsafePerm\", um die Kompatibilität mit zukünftigen Controllern sicherzustellen\naktualisierte Abhängigkeiten",
-        "ru": "теперь мы устанавливаем флаг `unsafePerm`, чтобы обеспечить совместимость с будущим контроллером\nобновленные зависимости",
-        "pt": "agora definimos o sinalizador `unsafePerm` para garantir a compatibilidade com o futuro controlador\ndependências atualizadas",
-        "nl": "we hebben nu de vlag `unsafePerm` ingesteld om compatibiliteit met toekomstige controllers te garanderen\nbijgewerkte afhankelijkheden",
-        "fr": "nous définissons maintenant le drapeau `unsafePerm` pour assurer la compatibilité avec le futur contrôleur\ndépendances mises à jour",
-        "it": "ora impostiamo il flag `unsafePerm` per garantire la compatibilità con il controller futuro\ndipendenze aggiornate",
-        "es": "ahora configuramos el indicador `unsafePerm` para garantizar la compatibilidad con el futuro controlador\ndependencias actualizadas",
-        "pl": "teraz ustawiliśmy flagę `unsafePerm`, aby zapewnić kompatybilność z przyszłym kontrolerem\nzaktualizowane zależności",
-        "zh-cn": "我们现在设置 `unsafePerm` 标志以确保与未来控制器的兼容性\n更新的依赖项"
       }
     },
     "titleLang": {

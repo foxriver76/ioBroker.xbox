@@ -543,7 +543,7 @@ class Xbox extends utils.Adapter {
                         }
                     }
                     catch (e) {
-                        this.log.warn(`Error getting TitleId in launchStoreApplication: ${this.errorToText(e)}`);
+                        this.log.debug(`Error getting TitleId in launchStoreApplication: ${this.errorToText(e)}`);
                     }
                 }
             }
