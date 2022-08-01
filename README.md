@@ -75,8 +75,7 @@ In this section you can find a description of every state of the adapter.
     |:---:|:---:|
     |string|R|
 
-    *Contains the link to the active title (which is focused) cover image as a string.
-    The state is only available when authenticate is activated in the settings.*
+    *Contains the link to the active title (which is focused) cover image as a string.* 
 
 * info.activeTitleType
 
@@ -92,17 +91,31 @@ In this section you can find a description of every state of the adapter.
     |:---:|:---:|
     |string|R|
 
-    *String which contains the gamertag of the currently authenticated user.
-    The state is only available when authenticate is activated in the settings.*
+    *String which contains the gamertag of the currently authenticated user.* 
+
+* info.gamerscore
+
+  |Data type|Permission|
+  |:---:|:---:|
+  |number|R|
+
+  *Number which contains the gamerscore of the currently authenticated user.*
+
+* info.installedApplications
+
+  |Data type|Permission|
+  |:---:|:---:|
+  |string|R|
+
+  *String which contains a comma-separated list of the currently installed applicaitons. DLCs are excluded.*
 
 * info.authenticated
 
-    |Data type|Permission|
-    |:---:|:---:|
-    |boolean|R|
+  |Data type|Permission|
+  |:---:|:---:|
+  |boolean|R|
 
-    *Boolean value which indicates if you are successfully authenticated on Xbox Live.
-    The state is only available when authenticate is activated in the settings.*
+  *Boolean value which indicates if you are successfully authenticated on Xbox Live.* 
    
 ### Channel Settings
 
@@ -305,6 +318,12 @@ In this section you can find a description of every state of the adapter.
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 1.0.0-beta.5 (2022-08-01)
+* (foxriver76) fixed `activeTitleImage` which is now the cover and always an url
+* (foxriver76) optimized `launchStoreTitle` by preventing API calls for DLCs
+* (foxriver76) added gamerscore as state (synched every 10 minutes)
+* (foxriver76) added list of installed applications to a new state
+
 ### 1.0.0-beta.4 (2022-07-30)
 * (foxriver76) we have optimized `launchStoreTitle` to check for installed apps first
 * (foxriver76) we have optimized error logging

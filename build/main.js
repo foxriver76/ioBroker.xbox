@@ -41,6 +41,8 @@ class Xbox extends utils.Adapter {
             ...options,
             name: 'xbox'
         });
+        this.pollAPIInterval = 60000 * 10;
+        this.checkConnectionInterval = 10000;
         this.xboxConnected = false;
         this.SGClient = (0, xbox_smartglass_core_node_1.default)();
         this.APIClient = (0, xbox_webapi_1.default)({
@@ -94,6 +96,7 @@ class Xbox extends utils.Adapter {
             }
         }
         this.checkConnection();
+        this.pollAPI();
     }
     /**
      * Checks and handles the connection periodically
@@ -118,7 +121,7 @@ class Xbox extends utils.Adapter {
         }
         this.connectionTimer = setTimeout(() => {
             this.checkConnection();
-        }, 10000);
+        }, this.checkConnectionInterval);
     }
     async connectConsole() {
         this.SGClient = (0, xbox_smartglass_core_node_1.default)();
@@ -141,11 +144,14 @@ class Xbox extends utils.Adapter {
                 if (resp.packet_decoded.protected_payload.apps[0] !== undefined) {
                     const activeTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
                     const appInformation = await this.getAppInformation(activeTitleId);
+                    const imageUrl = await this.getImageUrl(activeTitleId);
                     if (appInformation) {
                         await this.setStateAsync('info.activeTitleId', appInformation.productId, true);
                         await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
-                        await this.setStateAsync('info.activeTitleImage', appInformation.imageUrl, true);
                         await this.setStateAsync('info.activeTitleType', appInformation.productType, true);
+                    }
+                    if (imageUrl) {
+                        await this.setStateAsync('info.activeTitleImage', imageUrl, true);
                     }
                 }
             });
@@ -162,18 +168,15 @@ class Xbox extends utils.Adapter {
      * @param titleId id of the current title
      */
     async getAppInformation(titleId) {
-        var _a;
         try {
             await this.APIClient.isAuthenticated();
             const res = await this.APIClient.getProvider('catalog').getProductFromAlternateId(titleId, 'XboxTitleId');
             if (res.Products[0] !== undefined) {
                 this.log.debug(`getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`);
-                const imageUrl = ((_a = res.Products[0].LocalizedProperties[0].Images[0]) === null || _a === void 0 ? void 0 : _a.Uri) || '';
                 const productType = res.Products[0].ProductType;
                 const productId = res.Products[0].ProductId;
                 return {
                     shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle,
-                    imageUrl,
                     productType,
                     productId
                 };
@@ -225,8 +228,7 @@ class Xbox extends utils.Adapter {
                 const res = await this.APIClient.getProvider('smartglass').getConsolesList();
                 this.log.info('The following consoles are available on this account:');
                 for (const console of Object.values(res.result)) {
-                    // @ts-expect-error
-                    this.log.info(`- ${console.id} - ${console.consoleType} - ${console.name}`);
+                    this.log.info(`LiveID: ${console.id} (${console.consoleType} - ${console.name})`);
                 }
             }
             catch (e) {
@@ -241,6 +243,9 @@ class Xbox extends utils.Adapter {
         try {
             if (this.connectionTimer) {
                 clearTimeout(this.connectionTimer);
+            }
+            if (this.pollAPITimer) {
+                clearTimeout(this.pollAPITimer);
             }
             await this.saveTokens(this.APIClient._authentication._tokens.oauth);
             await this.setStateAsync('info.authenticated', false, true);
@@ -534,6 +539,10 @@ class Xbox extends utils.Adapter {
                 const res = await this.APIClient.getProvider('smartglass').getInstalledApps(this.config.liveId);
                 for (const installedApp of res.result) {
                     try {
+                        if (installedApp.parentId) {
+                            // DLCs cannot be started directly
+                            continue;
+                        }
                         const res = await this.APIClient.getProvider('titlehub').getTitleId(installedApp.titleId);
                         const installedProductId = res.titles[0].detail.availabilities[0].ProductId;
                         const matchingApplication = catalogRes.Results.find((entry) => entry.Products[0].ProductId === installedProductId);
@@ -611,6 +620,35 @@ class Xbox extends utils.Adapter {
         }
     }
     /**
+     * Gets User profile information and sets gamerscore accordingly
+     */
+    async setGamerscore() {
+        try {
+            const res = await this.APIClient.getProvider('profile').getUserProfile();
+            this.log.debug(`Gamerscore response: ${JSON.stringify(res)}`);
+            const gamerscoreObj = res.profileUsers[0].settings.find((val) => val.id === 'Gamerscore');
+            await this.setStateAsync('info.gamerscore', parseInt(gamerscoreObj.value), true);
+        }
+        catch (e) {
+            this.log.debug(`Cannot retrive gamerscore: ${this.errorToText(e)}`);
+        }
+    }
+    /**
+     * Gets installed apps and sets them comma separated
+     */
+    async setInstalledApps() {
+        try {
+            const res = await this.APIClient.getProvider('smartglass').getInstalledApps(this.config.liveId);
+            this.log.debug(`Installed apps response: ${JSON.stringify(res)}`);
+            // filter out dlcs
+            const installedTitles = res.result.filter(entry => entry.parentId === null).map(entry => entry.name);
+            await this.setStateAsync('info.installedApplications', installedTitles.join(', '), true);
+        }
+        catch (e) {
+            this.log.debug(`Cannot retrive installed apps: ${this.errorToText(e)}`);
+        }
+    }
+    /**
      * Checks if a real error was thrown and returns message then, else it stringifies
      *
      * @param error any kind of thrown error
@@ -621,6 +659,35 @@ class Xbox extends utils.Adapter {
         }
         else {
             return JSON.stringify(error);
+        }
+    }
+    /**
+     * Poll states from API and syncs them to ioBroker states
+     */
+    async pollAPI() {
+        try {
+            await this.APIClient.isAuthenticated();
+            await this.setGamerscore();
+            await this.setInstalledApps();
+        }
+        catch (e) {
+            this.log.warn(`Could not poll API: ${this.errorToText(e)}`);
+        }
+        this.pollAPITimer = setTimeout(() => {
+            this.pollAPI();
+        }, this.pollAPIInterval);
+    }
+    /**
+     * Gets the url of the display image for a titleId
+     * @param titleId id of the title
+     */
+    async getImageUrl(titleId) {
+        try {
+            const titleRes = await this.APIClient.getProvider('titlehub').getTitleId(titleId);
+            return titleRes.titles[0].displayImage;
+        }
+        catch (e) {
+            this.log.warn(`Could not get image url for "${titleId}": ${this.errorToText(e)}`);
         }
     }
 }

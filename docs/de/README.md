@@ -126,8 +126,7 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R|
 
-    *Enthält den Link zum Coverbild des Titels im Vordergrund in Form eines Strings.
-    Der State ist nur vorhanden sowie funktional wenn die Authentifizierung in den Adaptereinstellungen aktiviert wurde.*
+    *Enthält den Link zum Coverbild des Titels im Vordergrund in Form eines Strings.*
 
 * info.activeTitleType
 
@@ -143,8 +142,23 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |string|R|
 
-    *String Wert, der den Gamertag des aktuell authentifizierten Accounts enthält.
-    Der State ist nur vorhanden sowie funktional wenn die Authentifizierung in den Adaptereinstellungen aktiviert wurde.*
+    *String Wert, der den Gamertag des aktuell authentifizierten Accounts enthält.*
+
+* info.gamerscore
+
+  |Datentyp|Berechtigung|
+  |:---:|:---:|
+  |number|R|
+
+  *Number-Wert, welcher den Gamerscore des aktuell authentifizierten Accounts enthält.*
+
+* info.installedApplications
+
+  |Datentyp|Berechtigung|
+  |:---:|:---:|
+  |string|R|
+
+  *String der eine kommaseparierte Liste mit den aktuell installierten Applikationen enthält. DLCs sind ausgeschlossen.*
 
 * info.authenticated
 
@@ -152,8 +166,7 @@ der Tastenkombination "STRG + F".
     |:---:|:---:|
     |boolean|R|
 
-    *Boolscher Wert, welcher true ist, wenn die Authentifizierung mit Xbox Live erfolgreich war, ansonsten false.
-    Der State ist nur vorhanden sowie funktional wenn die Authentifizierung in den Adaptereinstellungen aktiviert wurde.*
+    *Boolscher Wert, welcher true ist, wenn die Authentifizierung mit Xbox Live erfolgreich war, ansonsten false.*
    
 ### Channel: Settings
 
@@ -166,13 +179,13 @@ der Tastenkombination "STRG + F".
    *Boolscher Wert, mit welchem die Xbox an und ausgeschaltet werden kann. Ebenfalls dient der Wert als Indikator
    ob die Xbox ein- oder ausgeschaltet ist.*
 
-* settings.launchTitle
+* settings.launchTitle/launchStoreTitle
 
     |Datentyp|Berechtigung|
     |:---:|:---:|
     |string|R/W|
 
-   *Durch setzen des String Wertes auf eine hexadezimale Title ID, kann ein Titel auf der Xbox gestartet werden.
+   *Durch Setzen des String Wertes auf eine hexadezimale Title ID, kann ein Titel auf der Xbox gestartet werden.
    Die Title ID eines aktiven Spiels kann durch den info.currentTitles State herausgefunden werden.
    Der State wird bestätigt, sobald er an die Xbox übermittelt wurde, was nicht heißt, dass der Befehl auch ausgeführt wurde.*
 
@@ -180,6 +193,8 @@ der Tastenkombination "STRG + F".
     ```javascript
     setState('settings.launchTitle', '2340236c', false); // Starte Red Dead Redemption 2
     ```
+  
+   *`launchStoreTitle` erlaubt das Setzen von sprechenden Namen*
 
 * settings.inputText
 

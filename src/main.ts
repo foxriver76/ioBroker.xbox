@@ -11,12 +11,336 @@ import SystemMediaChannel from 'xbox-smartglass-core-node/src/channels/systemmed
 interface AppInformation {
     /** Title of the active App */
     shortTitle: string;
-    /** URL of first image */
-    imageUrl: string;
     /** Product Type e.g. Game */
     productType: string;
     /** Unique ID to launch title */
     productId: string;
+}
+
+interface GetUserProfileResponse {
+    profileUsers: UserProfileEntry[];
+}
+
+interface UserProfileEntry {
+    id: string;
+    hostId: string;
+    settings: [
+        /** Seems to be same as Gamertag */
+        { id: 'GameDisplayName'; value: string },
+        /** Url to gamertag image */
+        { id: 'GameDisplayPicRaw'; value: string },
+        /** Gamerscore represented as string */
+        { id: 'Gamerscore'; value: string },
+        /** Gamertag of the user */
+        { id: 'Gamertag'; value: string }
+    ];
+    isSponsoredUser: boolean;
+}
+
+interface GetInstalledAppsResponse {
+    status: StatusObject;
+    result: InstalledAppsEntry[];
+    agentUserId: null;
+}
+
+interface StatusObject {
+    errorCode: string;
+    errorMessage: string | null;
+}
+
+interface InstalledAppsEntry {
+    oneStoreProductId: string | null;
+    titleId: number;
+    aumid: string | null;
+    lastActiveTime: string | null;
+    isGame: boolean;
+    name: string;
+    contentType: string;
+    instanceId: string;
+    storageDeviceId: string;
+    uniqueId: string;
+    legacyProductId: string | null;
+    version: number;
+    sizeInBytes: number;
+    installTime: string;
+    updateTime: string | null;
+    /** If not null it is a DLC */
+    parentId: string | null;
+}
+
+interface LaunchAppResponse {
+    status: StatusObject;
+    result: null;
+    uiText: null;
+    destination: DestinationObject;
+    userInfo: null;
+    opId: string;
+}
+
+type BooleanString = 'True' | 'False';
+
+interface DestinationObject {
+    id: string;
+    name: string;
+    locale: string;
+    powerState: string;
+    consoleType: string;
+    remoteManagementEnabled: BooleanString;
+    consoleStreamingEnabled: BooleanString;
+    wirelessWarning: BooleanString;
+    outOfHomeWarning: BooleanString;
+    osVersion: string;
+}
+
+interface GetConsoleStatusResponse {
+    status: StatusObject;
+    id: string;
+    name: string;
+    locale: string;
+    region: string;
+    consoleType: string;
+    powerState: string;
+    playbackState: string;
+    loginState: null;
+    focusAppAumid: string;
+    isTvConfigured: boolean;
+    digitalAssistantRemoteControlEnabled: boolean;
+    consoleStreamingEnabled: boolean;
+    remoteManagementEnabled: boolean;
+}
+
+interface GetTitleIdResponse {
+    xuid: string;
+    titles: TitleEntry[];
+}
+
+interface TitleEntry {
+    titleId: string;
+    pfn: string;
+    bingId: string;
+    serviceConfigId: string;
+    windowsPhoneProductId: null;
+    name: string;
+    type: string;
+    devices: string[];
+    /** URL to image */
+    displayImage: string;
+    mediaItemType: string;
+    modernTitleId: string;
+    isBundle: boolean;
+    achievement: AchivementObject;
+    stats: null;
+    gamePass: null;
+    images: ImagesEntry[];
+    titleHistory: null;
+    titleRecord: null;
+    detail: TitleDetail;
+    friendsWhoPlayed: null;
+    alternateTitleIds: string[];
+    contentBoards: null;
+    xboxLiveTier: string;
+}
+
+interface AchivementObject {
+    currentAchievements: number;
+    totalAchievements: number;
+    currentGamerscore: number;
+    totalGamerscore: number;
+    progressPercentage: number;
+    sourceVersion: number;
+}
+
+interface ImagesEntry {
+    url: string;
+    type: string;
+}
+
+interface TitleDetail {
+    attributes: AttributesEntry[];
+    availabilities: AvailabilitiesEntry[];
+    capabilities: unknown[];
+    description: string;
+    developerName: string;
+    genres: string[];
+    minAge: number;
+    publisherName: string;
+    releaseDate: string;
+    shortDescription: string;
+    vuiDisplayName: null;
+    xboxLiveGoldRequired: boolean;
+}
+
+interface AttributesEntry {
+    applicablePlatforms: null;
+    maximum: number | null;
+    minimum: number | null;
+    name: string;
+}
+
+interface AvailabilitiesEntry {
+    Actions: string[];
+    AvailabilityId: string;
+    Platforms: string[];
+    SkuId: string;
+    ProductId: string;
+}
+
+interface GetConsolesListResponse {
+    status: StatusObject;
+    result: ConsoleListResultEntry[];
+    agentUserId: null;
+}
+
+interface ConsoleListResultEntry {
+    /** The Live ID */
+    id: string;
+    name: string;
+    locale: string;
+    region: string;
+    consoleType: string;
+    powerState: string;
+    digitalAssistantRemoteControlEnabled: boolean;
+    remoteManagementEnabled: boolean;
+    consoleStreamingEnabled: boolean;
+    wirelessWarning: boolean;
+    outOfHomeWarning: boolean;
+    storageDevices: StorageDeviceEntry[];
+}
+
+interface StorageDeviceEntry {
+    storageDeviceId: string;
+    storageDeviceName: string;
+    isDefault: boolean;
+    freeSpaceBytes: number;
+    totalSpaceBytes: number;
+    isGen9Compatible: null;
+}
+
+interface GetProductFromAlternateIdResult {
+    BigIds: string[];
+    HasMorePages: boolean;
+    Products: ProductsEntry[];
+    TotalResultCount: number;
+}
+
+/** Note this one + subtypes are not fully modeled because it is very huge and contains lots of useless information */
+interface ProductsEntry {
+    LastModifiedDate: string;
+    LocalizedProperties: LocalizedPropertiesEntry[];
+    MarketProperties: MarketPropertiesEntry[];
+    ProductType: string;
+    ProductId: string;
+}
+
+interface LocalizedPropertiesEntry {
+    DeveloperName: string;
+    PublisherName: string;
+    PublisherWebsiteUri: string;
+    SupportUri: string;
+    EligibilityProperties: EligibilityPropertiesEntry[];
+    Franchises: unknown[];
+    Images: LocalizedPropertiesImagesEntry[];
+    Videos: LocalizedPropertiesVideosEntry[];
+    ProductDescription: string;
+    ProductTitle: string;
+    ShortTitle: string;
+    SortTitle: string;
+    FriendlyTitle: null;
+    ShortDescription: string;
+    SearchTitles: SearchTitlesEntry[];
+    VoiceTitle: string;
+    RenderGroupDetails: null;
+    ProductDisplayRanks: unknown[];
+    InteractiveModelConfig: null;
+    Interactive3DEnabled: boolean;
+    Language: string;
+    Markets: string[];
+}
+
+interface EligibilityPropertiesEntry {
+    Remediations: RemediationsEntry[];
+    Affirmations: AffirmationsEntry[];
+}
+
+interface RemediationsEntry {
+    RemediationId: string;
+    Description: string;
+}
+
+interface AffirmationsEntry {
+    AffirmationId: string;
+    AffirmationProductId: string;
+    Description: string;
+}
+
+interface LocalizedPropertiesImagesEntry {
+    FileId: string;
+    EISListingIdentifier: null;
+    BackgroundColor: string;
+    Caption: string;
+    FileSizeInBytes: number;
+    ForegroundColor: string;
+    Height: number;
+    ImagePositionInfo: string;
+    ImagePurpose: string;
+    UnscaledImageSHA256Hash: string;
+    Uri: string;
+    Width: number;
+}
+
+interface LocalizedPropertiesVideosEntry {
+    Uri: string;
+    VideoPurpose: string;
+    Height: number;
+    Width: number;
+    AudioEncoding: string;
+    VideoEncoding: string;
+    VideoPositionInfo: string;
+    Caption: string;
+    FileSizeInBytes: number;
+    PreviewImage: PreviewImageObject;
+    TrailerId: string;
+    SortOrder: number;
+}
+
+interface PreviewImageObject {
+    FileId: string;
+    EISListingIdentifier: null;
+    BackgroundColor: null;
+    Caption: string;
+    FileSizeInBytes: number;
+    ForegroundColor: null;
+    Height: number;
+    ImagePositionInfo: null;
+    ImagePurpose: string;
+    UnscaledImageSHA256Hash: string;
+    Uri: string;
+    Width: number;
+}
+
+interface SearchTitlesEntry {
+    SearchTitleString: string;
+    SearchTitleType: string;
+}
+
+interface MarketPropertiesEntry {
+    OriginalReleaseDate: string;
+    MinimumUserAge: number;
+    ContentRatings: ContentRatingsEntry[];
+    RelatedProducts: RelatedProductsEntry[];
+}
+
+interface ContentRatingsEntry {
+    RatingSystem: string;
+    RatingId: string;
+    RatingDescriptors: unknown[];
+    RatingDisclaimers: unknown[];
+    InteractiveElements: unknown[];
+}
+
+interface RelatedProductsEntry {
+    RelatedProductId: string;
+    RelationshipType: string;
 }
 
 class Xbox extends utils.Adapter {
@@ -24,6 +348,9 @@ class Xbox extends utils.Adapter {
     private APIClient: typeof XboxApi;
     private xboxConnected: boolean;
     private connectionTimer: NodeJS.Timeout | undefined;
+    private pollAPITimer: NodeJS.Timeout | undefined;
+    private readonly pollAPIInterval: number;
+    private readonly checkConnectionInterval: number;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -31,6 +358,8 @@ class Xbox extends utils.Adapter {
             name: 'xbox'
         });
 
+        this.pollAPIInterval = 60_000 * 10;
+        this.checkConnectionInterval = 10_000;
         this.xboxConnected = false;
         this.SGClient = Smartglass();
         this.APIClient = XboxApi({
@@ -94,6 +423,7 @@ class Xbox extends utils.Adapter {
         }
 
         this.checkConnection();
+        this.pollAPI();
     }
 
     /**
@@ -119,7 +449,7 @@ class Xbox extends utils.Adapter {
 
         this.connectionTimer = setTimeout(() => {
             this.checkConnection();
-        }, 10_000);
+        }, this.checkConnectionInterval);
     }
 
     private async connectConsole() {
@@ -148,12 +478,16 @@ class Xbox extends utils.Adapter {
                     const activeTitleId = resp.packet_decoded.protected_payload.apps[0].title_id;
 
                     const appInformation = await this.getAppInformation(activeTitleId);
+                    const imageUrl = await this.getImageUrl(activeTitleId);
 
                     if (appInformation) {
                         await this.setStateAsync('info.activeTitleId', appInformation.productId, true);
                         await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
-                        await this.setStateAsync('info.activeTitleImage', appInformation.imageUrl, true);
                         await this.setStateAsync('info.activeTitleType', appInformation.productType, true);
+                    }
+
+                    if (imageUrl) {
+                        await this.setStateAsync('info.activeTitleImage', imageUrl, true);
                     }
                 }
             });
@@ -173,19 +507,20 @@ class Xbox extends utils.Adapter {
         try {
             await this.APIClient.isAuthenticated();
 
-            const res = await this.APIClient.getProvider('catalog').getProductFromAlternateId(titleId, 'XboxTitleId');
+            const res: GetProductFromAlternateIdResult = await this.APIClient.getProvider(
+                'catalog'
+            ).getProductFromAlternateId(titleId, 'XboxTitleId');
 
             if (res.Products[0] !== undefined) {
                 this.log.debug(
                     `getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`
                 );
-                const imageUrl = res.Products[0].LocalizedProperties[0].Images[0]?.Uri || '';
+
                 const productType = res.Products[0].ProductType;
                 const productId = res.Products[0].ProductId;
 
                 return {
                     shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle,
-                    imageUrl,
                     productType,
                     productId
                 };
@@ -201,7 +536,9 @@ class Xbox extends utils.Adapter {
      */
     private async getModel() {
         try {
-            const res = await this.APIClient.getProvider('smartglass').getConsoleStatus(this.config.liveId);
+            const res: GetConsoleStatusResponse = await this.APIClient.getProvider('smartglass').getConsoleStatus(
+                this.config.liveId
+            );
 
             this.log.debug(`Got xbox console type from Xbox API: ${res.consoleType}`);
 
@@ -237,13 +574,12 @@ class Xbox extends utils.Adapter {
             }
 
             try {
-                const res = await this.APIClient.getProvider('smartglass').getConsolesList();
+                const res: GetConsolesListResponse = await this.APIClient.getProvider('smartglass').getConsolesList();
 
                 this.log.info('The following consoles are available on this account:');
 
                 for (const console of Object.values(res.result)) {
-                    // @ts-expect-error
-                    this.log.info(`- ${console.id} - ${console.consoleType} - ${console.name}`);
+                    this.log.info(`LiveID: ${console.id} (${console.consoleType} - ${console.name})`);
                 }
             } catch (e: any) {
                 this.log.warn(`Failed to get list of consoles: ${this.errorToText(e)}`);
@@ -258,6 +594,10 @@ class Xbox extends utils.Adapter {
         try {
             if (this.connectionTimer) {
                 clearTimeout(this.connectionTimer);
+            }
+
+            if (this.pollAPITimer) {
+                clearTimeout(this.pollAPITimer);
             }
 
             await this.saveTokens(this.APIClient._authentication._tokens.oauth);
@@ -530,7 +870,10 @@ class Xbox extends utils.Adapter {
         try {
             await this.APIClient.isAuthenticated();
             // e.g. 9WZDNCRFJ3TJ Netflix
-            const res = await this.APIClient.getProvider('smartglass').launchApp(this.config.liveId, titleId);
+            const res: LaunchAppResponse = await this.APIClient.getProvider('smartglass').launchApp(
+                this.config.liveId,
+                titleId
+            );
             this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
         } catch (e: any) {
             this.log.warn(`Could not launch title: ${this.errorToText(e)}`);
@@ -551,10 +894,20 @@ class Xbox extends utils.Adapter {
 
             if (catalogRes.Results.length > 1) {
                 // multiple results see if one is installed to find a better matching title
-                const res = await this.APIClient.getProvider('smartglass').getInstalledApps(this.config.liveId);
+                const res: GetInstalledAppsResponse = await this.APIClient.getProvider('smartglass').getInstalledApps(
+                    this.config.liveId
+                );
                 for (const installedApp of res.result) {
                     try {
-                        const res = await this.APIClient.getProvider('titlehub').getTitleId(installedApp.titleId);
+                        if (installedApp.parentId) {
+                            // DLCs cannot be started directly
+                            continue;
+                        }
+
+                        const res: GetTitleIdResponse = await this.APIClient.getProvider('titlehub').getTitleId(
+                            installedApp.titleId
+                        );
+
                         const installedProductId = res.titles[0].detail.availabilities[0].ProductId;
 
                         const matchingApplication = catalogRes.Results.find(
@@ -573,7 +926,10 @@ class Xbox extends utils.Adapter {
 
             if (titleId) {
                 this.log.debug(`Got ID "${titleId}" for "${titleName}" from store`);
-                const res = await this.APIClient.getProvider('smartglass').launchApp(this.config.liveId, titleId);
+                const res: LaunchAppResponse = await this.APIClient.getProvider('smartglass').launchApp(
+                    this.config.liveId,
+                    titleId
+                );
                 this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
             } else {
                 this.log.warn(`No result found for "${titleName}"`);
@@ -626,13 +982,49 @@ class Xbox extends utils.Adapter {
      */
     private async setGamertag() {
         try {
-            const res = await this.APIClient.getProvider('profile').getUserProfile();
+            const res: GetUserProfileResponse = await this.APIClient.getProvider('profile').getUserProfile();
             this.log.debug(`Gamertag response: ${JSON.stringify(res)}`);
             const gamertagObj = res.profileUsers[0].settings.find((val: Record<string, any>) => val.id === 'Gamertag');
 
-            await this.setStateAsync('info.gamertag', gamertagObj.value, true);
+            await this.setStateAsync('info.gamertag', gamertagObj!.value, true);
         } catch (e) {
             this.log.debug(`Cannot retrive gamertag: ${this.errorToText(e)}`);
+        }
+    }
+
+    /**
+     * Gets User profile information and sets gamerscore accordingly
+     */
+    private async setGamerscore() {
+        try {
+            const res: GetUserProfileResponse = await this.APIClient.getProvider('profile').getUserProfile();
+            this.log.debug(`Gamerscore response: ${JSON.stringify(res)}`);
+            const gamerscoreObj = res.profileUsers[0].settings.find(
+                (val: Record<string, any>) => val.id === 'Gamerscore'
+            );
+
+            await this.setStateAsync('info.gamerscore', parseInt(gamerscoreObj!.value), true);
+        } catch (e) {
+            this.log.debug(`Cannot retrive gamerscore: ${this.errorToText(e)}`);
+        }
+    }
+
+    /**
+     * Gets installed apps and sets them comma separated
+     */
+    private async setInstalledApps() {
+        try {
+            const res: GetInstalledAppsResponse = await this.APIClient.getProvider('smartglass').getInstalledApps(
+                this.config.liveId
+            );
+            this.log.debug(`Installed apps response: ${JSON.stringify(res)}`);
+
+            // filter out dlcs
+            const installedTitles = res.result.filter(entry => entry.parentId === null).map(entry => entry.name);
+
+            await this.setStateAsync('info.installedApplications', installedTitles.join(', '), true);
+        } catch (e) {
+            this.log.debug(`Cannot retrive installed apps: ${this.errorToText(e)}`);
         }
     }
 
@@ -646,6 +1038,36 @@ class Xbox extends utils.Adapter {
             return error.message;
         } else {
             return JSON.stringify(error);
+        }
+    }
+
+    /**
+     * Poll states from API and syncs them to ioBroker states
+     */
+    private async pollAPI(): Promise<void> {
+        try {
+            await this.APIClient.isAuthenticated();
+            await this.setGamerscore();
+            await this.setInstalledApps();
+        } catch (e) {
+            this.log.warn(`Could not poll API: ${this.errorToText(e)}`);
+        }
+
+        this.pollAPITimer = setTimeout(() => {
+            this.pollAPI();
+        }, this.pollAPIInterval);
+    }
+
+    /**
+     * Gets the url of the display image for a titleId
+     * @param titleId id of the title
+     */
+    private async getImageUrl(titleId: string): Promise<string | void> {
+        try {
+            const titleRes: GetTitleIdResponse = await this.APIClient.getProvider('titlehub').getTitleId(titleId);
+            return titleRes.titles[0].displayImage;
+        } catch (e) {
+            this.log.warn(`Could not get image url for "${titleId}": ${this.errorToText(e)}`);
         }
     }
 }
