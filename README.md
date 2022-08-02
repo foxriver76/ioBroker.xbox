@@ -321,6 +321,9 @@ For every friend a channel will be created. Under this channel you will find sev
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 1.0.0-beta.7 (2022-08-02)
+* (foxriver76) we have revived acknowledgment flag for power on state
+
 ### 1.0.0-beta.6 (2022-08-02)
 * (foxriver76) we are now synchronizing friends
 

@@ -131,6 +131,7 @@ class Xbox extends utils.Adapter {
             this.log.info(`Succesfully connected to Xbox on ip ${this.config.ip}`);
             this.xboxConnected = true;
             await this.setStateAsync('info.connection', true, true);
+            await this.setStateAsync('settings.power', true, true);
             // Setup Smartglass client config
             this.SGClient.addManager('system_input', (0, systeminput_1.default)());
             this.SGClient.addManager('system_media', (0, systemmedia_1.default)());
@@ -139,6 +140,7 @@ class Xbox extends utils.Adapter {
                 this.log.info('Smartglass connection timeout detected. Reconnecting...');
                 this.xboxConnected = false;
                 await this.setStateAsync('info.connection', false, true);
+                await this.setStateAsync('settings.power', false, true);
                 this.connectConsole();
             });
             this.SGClient.on('_on_console_status', async (resp) => {
@@ -161,6 +163,7 @@ class Xbox extends utils.Adapter {
             this.log.debug(`Failed to connect to xbox. Error: ${e.message}`);
             this.xboxConnected = false;
             await this.setStateAsync('info.connection', false, true);
+            await this.setStateAsync('settings.power', false, true);
         }
     }
     /**
@@ -251,6 +254,7 @@ class Xbox extends utils.Adapter {
             await this.saveTokens(this.APIClient._authentication._tokens.oauth);
             await this.setStateAsync('info.authenticated', false, true);
             await this.setStateAsync('info.connection', false, true);
+            await this.setStateAsync('settings.power', false, true);
             callback();
         }
         catch (_a) {

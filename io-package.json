@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.6",
+    "version": "1.0.0-beta.7",
     "news": {
+      "1.0.0-beta.7": {
+        "en": "we have revived acknowledgment flag for power on state",
+        "de": "wir haben wieder anerkennungsfahne für macht auf staat",
+        "ru": "мы возродили флаг признания для власти на государственном",
+        "pt": "nós temos revivido bandeira de reconhecimento para poder no estado",
+        "nl": "we hebben een erkenningsflage voor macht op staat",
+        "fr": "nous avons relancé le drapeau de reconnaissance pour le pouvoir sur l'état",
+        "it": "abbiamo rianimato la bandiera di riconoscimento per il potere sullo stato",
+        "es": "hemos revivido bandera de reconocimiento para poder en estado",
+        "pl": "przywrócił się do flagi państwowej o władzę nad państwem",
+        "zh-cn": "我们恢复了国家权力的承认国旗"
+      },
       "1.0.0-beta.6": {
         "en": "we are now synchronizing friends",
         "de": "wir sind jetzt synchronisiert",
@@ -74,18 +86,6 @@
         "es": "objetos de estado perdidos fijos",
         "pl": "obiekt nieokreślony",
         "zh-cn": "固定状态"
-      },
-      "1.0.0-beta.0": {
-        "en": "complete TypeScript rewrite\nremoved Python dependencies by siwtching to Xbox API written in Node.js\nfixed title launch (closes #39)\nfixed Xbox Live Auth (closes #63)",
-        "de": "komplette TypeScript-Rewrite\nentfernt Python Abhängigkeiten, indem Sie auf Xbox API in Node geschrieben. j)\nfester titelstart (schließen #39)\nxbox Live Auth (schließt #63)",
-        "ru": "полный типScript rewrite\nудалены зависимости Python с помощью swtching в Xbox API, написанные в Node. Джс\nзапуск заголовка (closes #39)\nфиксированный Xbox Live Auth (closes #63)",
-        "pt": "reescrita completa do TypeScript\nremoveu dependências do Python peneirando para a API do Xbox escrita em Node. Js\nlançamento do título fixo (fecha #39)\nauth Xbox Live fixo (fecha #63)",
-        "nl": "typeScript herschrijving\nverwijderde Python afhankelijkheid door naar Xbox API geschreven in Node. Js\nvertaling:\nxbox Live Auth (closes 63)",
-        "fr": "complet TypeScript rewrite\nsupprimé les dépendances de Python en s'adressant à l'API Xbox écrite à Node. js\nlancement du titre fixe (fermeture #39)\nxbox Live Auth (ferme #63)",
-        "it": "riscrittura completa di TypeScript\nha rimosso le dipendenze di Python spostando l'API di Xbox scritta in Node. j\nlancio del titolo fisso (chiude #39)\nfisso Xbox Live Auth (chiude #63)",
-        "es": "completa TipoScript reescribir\neliminar las dependencias de Python siwtching a Xbox API escrita en Node. js\nlanzamiento de título fijo (cerca #39)\nxbox Live Auth fijo (cerca #63)",
-        "pl": "kompletny rewrite\nusunięta wersja Pythona zależnie od siwtching do Xbox API napisanego w Node. js\noficjalna strona programu (zamknięta #39)\nxbox Live Auth (okrążając #63)",
-        "zh-cn": "完整的类型\n在诺德写成的X箱子公司用兄弟来拆除Python依赖。 j\n固定所有权发射(编号:#39)\n固定X箱Live Auth(编号:第63号)"
       }
     },
     "titleLang": {
