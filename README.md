@@ -312,12 +312,18 @@ In this section you can find a description of every state of the adapter.
 * media.view
 
    *View button for media content.*
+
+### Folder friends
+For every friend a channel will be created. Under this channel you will find several read-only states.
    
 ## Changelog
 <!--
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 1.0.0-beta.6 (2022-08-02)
+* (foxriver76) we are now synchronizing friends
+
 ### 1.0.0-beta.5 (2022-08-01)
 * (foxriver76) fixed `activeTitleImage` which is now the cover and always an url
 * (foxriver76) optimized `launchStoreTitle` by preventing API calls for DLCs

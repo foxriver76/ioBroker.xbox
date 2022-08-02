@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.6",
     "news": {
+      "1.0.0-beta.6": {
+        "en": "we are now synchronizing friends",
+        "de": "wir sind jetzt synchronisiert",
+        "ru": "мы теперь синхронизируем друзей",
+        "pt": "nós estamos agora sincronizando amigos",
+        "nl": "we synchroniseren nu vrienden",
+        "fr": "nous synchronisons maintenant les amis",
+        "it": "siamo ora sincronizzare gli amici",
+        "es": "ahora estamos sincronizando amigos",
+        "pl": "obecnie są przyjaciółmi z synchronizacji",
+        "zh-cn": "我们现在正与朋友同步进行"
+      },
       "1.0.0-beta.5": {
         "en": "fixed `activeTitleImage` which is now the cover and always an url\noptimized `launchStoreTitle` by preventing API calls for DLCs\nadded gamerscore as state (synched every 10 minutes)\nadded list of installed applications to a new state",
         "de": "fest aktiv TitleImage, das ist jetzt die Abdeckung und immer ein url\noptimierter Start StoreTitle durch die Verhinderung von API-Anrufen für DLCs\ngamerscore als zustand hinzugefügt (alle 10 minuten synchronisiert)\nerweiterte liste der installierten anwendungen in einen neuen zustand",
@@ -74,18 +86,6 @@
         "es": "completa TipoScript reescribir\neliminar las dependencias de Python siwtching a Xbox API escrita en Node. js\nlanzamiento de título fijo (cerca #39)\nxbox Live Auth fijo (cerca #63)",
         "pl": "kompletny rewrite\nusunięta wersja Pythona zależnie od siwtching do Xbox API napisanego w Node. js\noficjalna strona programu (zamknięta #39)\nxbox Live Auth (okrążając #63)",
         "zh-cn": "完整的类型\n在诺德写成的X箱子公司用兄弟来拆除Python依赖。 j\n固定所有权发射(编号:#39)\n固定X箱Live Auth(编号:第63号)"
-      },
-      "0.7.10": {
-        "en": "fixed error with mising admin ui on new installations",
-        "de": "Fehler mit fehlender Admin-Benutzeroberfläche bei Neuinstallationen behoben",
-        "ru": "исправлена ошибка с отсутствующим интерфейсом администратора при новых установках",
-        "pt": "corrigido erro com interface de administrador ausente em novas instalações",
-        "nl": "vaste fout met ontbrekende admin ui op nieuwe installaties",
-        "fr": "erreur fixe avec l'interface utilisateur d'administration manquante sur les nouvelles installations",
-        "it": "errore corretto con interfaccia utente di amministrazione mancante sulle nuove installazioni",
-        "es": "Se corrigió el error con la interfaz de usuario de administrador que faltaba en las nuevas instalaciones.",
-        "pl": "naprawiony błąd z brakującym interfejsem administratora w nowych instalacjach",
-        "zh-cn": "修复了新安装时缺少管理 ui 的错误"
       }
     },
     "titleLang": {
@@ -761,6 +761,14 @@
         "type": "string",
         "read": true,
         "write": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "friends",
+      "type": "folder",
+      "common": {
+        "name": "List of friends"
       },
       "native": {}
     }

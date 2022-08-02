@@ -1,6 +1,6 @@
 {
   "name": "iobroker.xbox",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "engines": {
     "node": ">=10.0.0"
   },
@@ -46,7 +46,7 @@
     "@alcalzone/release-script": "^3.5.9",
     "@alcalzone/release-script-plugin-iobroker": "^3.5.9",
     "@iobroker/testing": "^3.0.2",
-    "@types/node": "^18.6.2",
+    "@types/node": "^18.6.3",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
     "chai": "^4.3.6",
@@ -68,6 +68,7 @@
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
     "io-package.json",
     "build/main.js",
+    "build/lib",
     "LICENSE"
   ],
   "readmeFilename": "README.md"
