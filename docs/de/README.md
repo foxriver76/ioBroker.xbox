@@ -363,3 +363,6 @@ der Tastenkombination "STRG + F".
 * media.view
 
    *View Button für Medieninhalte.*
+
+### Folder: Friends
+Für jeden Freund wird ein Channel angelegt, in diesem befinden sich mehrere nur lesbare States.

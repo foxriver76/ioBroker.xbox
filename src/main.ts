@@ -7,6 +7,7 @@ import XboxApi from 'xbox-webapi';
 import SystemInputChannel from 'xbox-smartglass-core-node/src/channels/systeminput';
 // @ts-expect-error currently provides no types
 import SystemMediaChannel from 'xbox-smartglass-core-node/src/channels/systemmedia';
+import { friendsStates } from './lib/friendsStates';
 
 interface AppInformation {
     /** Title of the active App */
@@ -341,6 +342,111 @@ interface ContentRatingsEntry {
 interface RelatedProductsEntry {
     RelatedProductId: string;
     RelationshipType: string;
+}
+
+interface GetFriendsResponse {
+    people: FriendsEntry[];
+    recommendationSummary: null;
+    friendFinderState: null;
+    accountLinkDetails: null;
+}
+
+interface FriendsEntry {
+    xuid: string;
+    isFavorite: boolean;
+    isFollowingCaller: boolean;
+    isFollowedByCaller: boolean;
+    isIdentityShared: boolean;
+    addedDateTimeUtc: string;
+    /** Same as Gamertag */
+    displayName: string;
+    realName: string;
+    /** URL to profile picture */
+    displayPicRaw: string;
+    showUserAsAvatar: string;
+    gamertag: string;
+    gamerScore: string;
+    modernGamertag: string;
+    modernGamertagSuffix: string;
+    uniqueModernGamertag: string;
+    xboxOneRep: string;
+    /** e.g. Offline */
+    presenceState: 'Online' | 'Offline';
+    /** e.g. Offline or the active Game */
+    presenceText: string;
+    presenceDevices: null;
+    isBroadcasting: boolean;
+    isCloaked: null;
+    isQuarantined: boolean;
+    isXbox360Gamerpic: boolean;
+    lastSeenDateTimeUtc: null | string;
+    suggestion: null;
+    recommendation: null;
+    search: null;
+    titleHistory: null;
+    multiplayerSummary: MultiplayerSummaryObject;
+    recentPlayer: null;
+    follower: null;
+    preferredColor: PreferredColorObject;
+    presenceDetails: PresenceDetailsEntry[];
+    titlePresence: null;
+    titleSummaries: null;
+    presenceTitleIds: null;
+    detail: FriendsDetailObject;
+    communityManagerTitles: null;
+    socialManager: null;
+    broadcast: null;
+    tournamentSummary: null;
+    avatar: null;
+    linkedAccounts: LinkedAccountsEntry[];
+    colorTheme: string;
+    preferredFlag: string;
+    preferredPlatforms: unknown[];
+}
+
+interface MultiplayerSummaryObject {
+    InMultiplayerSession: number;
+    InParty: number;
+}
+
+interface PreferredColorObject {
+    primaryColor: string;
+    secondaryColor: string;
+    tertiaryColor: string;
+}
+
+interface FriendsDetailObject {
+    accountTier: string;
+    bio: string;
+    isVerified: boolean;
+    location: string;
+    tenure: string;
+    watermarks: unknown[];
+    blocked: boolean;
+    mute: boolean;
+    followerCount: number;
+    followingCount: number;
+    hasGamePass: boolean;
+}
+
+interface LinkedAccountsEntry {
+    networkName: string;
+    displayName: string;
+    showOnProfile: boolean;
+    isFamilyFriendly: boolean;
+    deeplink: null;
+}
+
+interface PresenceDetailsEntry {
+    IsBroadcasting: boolean;
+    Device: string;
+    PresenceText: string;
+    State: string;
+    TitleId: string;
+    TitleType: null;
+    IsPrimary: boolean;
+    IsGame: boolean;
+    RichPresenceText: null | string;
 }
 
 class Xbox extends utils.Adapter {
@@ -1027,6 +1133,72 @@ class Xbox extends utils.Adapter {
             this.log.debug(`Cannot retrive installed apps: ${this.errorToText(e)}`);
         }
     }
+    /**
+     * Gets all friends and sets them accordingly
+     */
+    private async setFriends(): Promise<void> {
+        const res: GetFriendsResponse = await this.APIClient.getProvider('people').getFriends();
+        // get all friends in iobroker, check if in API response, else delete
+        const objectsRes = await this.getObjectViewAsync('system', 'channel', {
+            startkey: `${this.namespace}.friends.`,
+            endkey: `${this.namespace}.friends.\u9999`
+        });
+
+        const friendsNames = res.people.map(entry => entry.gamertag);
+        /** Stores friends which exist in iob (forbidden chars replaced) */
+        const adapterFriendsNames: string[] = [];
+
+        for (const obj of objectsRes.rows) {
+            const name = obj.id.split('.').pop() as string;
+            adapterFriendsNames.push(name);
+
+            if (!friendsNames.includes(name)) {
+                // friend no longer in list
+                this.log.info(`Friend "${name}" has been removed from list`);
+                await this.delObjectAsync(`friends.${name}`, { recursive: true });
+            }
+        }
+
+        for (const friend of res.people) {
+            // set not exists friend
+            if (!adapterFriendsNames.includes(friend.gamertag.replace(this.FORBIDDEN_CHARS, '_'))) {
+                await this.createFriend(friend.gamertag);
+            }
+
+            await this.setStateAsync(`friends.${friend.gamertag}.activeTitle`, friend.presenceText, true);
+            await this.setStateAsync(`friends.${friend.gamertag}.profilePicture`, friend.displayPicRaw, true);
+            await this.setStateAsync(`friends.${friend.gamertag}.gamerscore`, parseInt(friend.gamerScore), true);
+            await this.setStateAsync(`friends.${friend.gamertag}.gamertag`, friend.gamertag, true);
+            await this.setStateAsync(
+                `friends.${friend.gamertag}.onlineStatus`,
+                friend.presenceState === 'Online',
+                true
+            );
+        }
+    }
+
+    /**
+     * Creates state objects for a given friend
+     *
+     * @param friend name of the friend
+     */
+    private async createFriend(friend: string): Promise<void> {
+        this.log.info(`Create objects for friend "${friend}"`);
+
+        friend = friend.replace(this.FORBIDDEN_CHARS, '_');
+
+        await this.setObjectAsync(`friends.${friend}`, {
+            type: 'channel',
+            common: {
+                name: friend
+            },
+            native: {}
+        });
+
+        for (const [id, state] of Object.entries(friendsStates)) {
+            await this.setObjectAsync(`friends.${friend}.${id}`, state);
+        }
+    }
 
     /**
      * Checks if a real error was thrown and returns message then, else it stringifies
@@ -1049,6 +1221,7 @@ class Xbox extends utils.Adapter {
             await this.APIClient.isAuthenticated();
             await this.setGamerscore();
             await this.setInstalledApps();
+            await this.setFriends();
         } catch (e) {
             this.log.warn(`Could not poll API: ${this.errorToText(e)}`);
         }
