@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.7",
+    "version": "1.0.0-beta.8",
     "news": {
+      "1.0.0-beta.8": {
+        "en": "removed unused messagebox",
+        "de": "nicht genutzte nachrichtenbox",
+        "ru": "удалить неиспользуемый почтовый ящик",
+        "pt": "caixa de mensagem não utilizada",
+        "nl": "verwijder ongebruikte berichten",
+        "fr": "boîte de message inutilisée",
+        "it": "rimosso casella di messaggio non utilizzata",
+        "es": "removido mensajería no utilizado",
+        "pl": "usunąć",
+        "zh-cn": "拆除未用的信息箱"
+      },
       "1.0.0-beta.7": {
         "en": "we have revived acknowledgment flag for power on state",
         "de": "wir haben wieder anerkennungsfahne für macht auf staat",
@@ -74,18 +86,6 @@
         "es": "lanzamiento StoreTitle State lanzará aplicaciones por sus nombres",
         "pl": "dodać Statek StoreTitle (ang.)",
         "zh-cn": "发射 被绑架国以其名称发射了材料"
-      },
-      "1.0.0-beta.1": {
-        "en": "fixed missing state objects",
-        "de": "feste fehlende zustandsobjekte",
-        "ru": "фиксированные отсутствующие государственные объекты",
-        "pt": "objetos de estado ausentes fixos",
-        "nl": "vermiste objecten",
-        "fr": "objets d'état manquants fixes",
-        "it": "oggetti di stato mancanti fissi",
-        "es": "objetos de estado perdidos fijos",
-        "pl": "obiekt nieokreślony",
-        "zh-cn": "固定状态"
       }
     },
     "titleLang": {
@@ -118,7 +118,7 @@
     "connectionType": "local",
     "dataSource": "poll",
     "license": "MIT",
-    "messagebox": true,
+    "messagebox": false,
     "stopTimeout": 2000,
     "docs": {
       "de": "docs/de/README.md",
