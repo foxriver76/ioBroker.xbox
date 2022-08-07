@@ -11,7 +11,7 @@ import { friendsStates } from './lib/friendsStates';
 
 interface AppInformation {
     /** Title of the active App */
-    shortTitle: string;
+    title: string;
     /** Product Type e.g. Game */
     productType: string;
     /** Unique ID to launch title */
@@ -590,7 +590,7 @@ class Xbox extends utils.Adapter {
 
                     if (appInformation) {
                         await this.setStateAsync('info.activeTitleId', appInformation.productId, true);
-                        await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
+                        await this.setStateAsync('info.activeTitleName', appInformation.title, true);
                         await this.setStateAsync('info.activeTitleType', appInformation.productType, true);
                     }
 
@@ -627,9 +627,12 @@ class Xbox extends utils.Adapter {
 
                 const productType = res.Products[0].ProductType;
                 const productId = res.Products[0].ProductId;
+                const title =
+                    res.Products[0].LocalizedProperties[0].ShortTitle ||
+                    res.Products[0].LocalizedProperties[0].ProductTitle;
 
                 return {
-                    shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle,
+                    title,
                     productType,
                     productId
                 };

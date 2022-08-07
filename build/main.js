@@ -150,7 +150,7 @@ class Xbox extends utils.Adapter {
                     const imageUrl = await this.getImageUrl(activeTitleId);
                     if (appInformation) {
                         await this.setStateAsync('info.activeTitleId', appInformation.productId, true);
-                        await this.setStateAsync('info.activeTitleName', appInformation.shortTitle, true);
+                        await this.setStateAsync('info.activeTitleName', appInformation.title, true);
                         await this.setStateAsync('info.activeTitleType', appInformation.productType, true);
                     }
                     if (imageUrl) {
@@ -179,8 +179,10 @@ class Xbox extends utils.Adapter {
                 this.log.debug(`getAppInformation returned app from xbox api: ${res.Products[0].LocalizedProperties[0].ShortTitle} for ${titleId}`);
                 const productType = res.Products[0].ProductType;
                 const productId = res.Products[0].ProductId;
+                const title = res.Products[0].LocalizedProperties[0].ShortTitle ||
+                    res.Products[0].LocalizedProperties[0].ProductTitle;
                 return {
-                    shortTitle: res.Products[0].LocalizedProperties[0].ShortTitle,
+                    title,
                     productType,
                     productId
                 };

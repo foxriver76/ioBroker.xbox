@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.8",
+    "version": "1.0.0-beta.9",
     "news": {
+      "1.0.0-beta.9": {
+        "en": "we fixed `activeTitleName` of applications which have no short title",
+        "de": "wir haben aktiv fixiert TitleName der Anträge, die keinen Kurztitel haben",
+        "ru": "мы исправили активную Название приложения, которые не имеют короткого названия",
+        "pt": "nós fixamos ativo TítuloNome de aplicações que não têm título curto",
+        "nl": "we zijn actief. TitleName van aanvragen die geen korte titel hebben",
+        "fr": "nous avons réparé actif TitreNom des applications qui n'ont pas de titre court",
+        "it": "abbiamo fissato attivo TitoloNome delle applicazioni che non hanno un breve titolo",
+        "es": "fijamos activos TítuloNombre de aplicaciones que no tienen título corto",
+        "pl": "aktywnie działał Tytułu aplikacji nie posiada krótkiego tytułu",
+        "zh-cn": "我们的固定活动 无短期所有权的申请的标题"
+      },
       "1.0.0-beta.8": {
         "en": "removed unused messagebox",
         "de": "nicht genutzte nachrichtenbox",
@@ -74,18 +86,6 @@
         "es": "hemos optimizado el lanzamientoStoreTitle para comprobar las aplicaciones instaladas primero\nhemos optimizado el registro de errores",
         "pl": "zoptymalizowano startStoreTitle, aby sprawdzić zainstalowane aplikacje\nzoptymalizował błąd logowania",
         "zh-cn": "我们优化了发射StoreTitle,以检查首次安装的配件。\n我们优化了错误伐木"
-      },
-      "1.0.0-beta.2": {
-        "en": "added `launchStoreTitle` state to launch apps by their names",
-        "de": "einführung StoreTitle Staat Apps mit ihren Namen starten",
-        "ru": "добавлен запуск StoreTitle государство для запуска приложений по их именам",
-        "pt": "lançamento adicionado StoreTitle state para lançar aplicativos por seus nomes",
-        "nl": "vertaling: Vertaling:",
-        "fr": "lancement ajouté StoreTitle État pour lancer des applications par leurs noms",
-        "it": "lancio aggiunto StoreTitle stato per lanciare applicazioni con i loro nomi",
-        "es": "lanzamiento StoreTitle State lanzará aplicaciones por sus nombres",
-        "pl": "dodać Statek StoreTitle (ang.)",
-        "zh-cn": "发射 被绑架国以其名称发射了材料"
       }
     },
     "titleLang": {
