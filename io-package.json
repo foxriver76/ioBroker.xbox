@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.9",
+    "version": "1.0.0-beta.10",
     "news": {
+      "1.0.0-beta.10": {
+        "en": "we now determine correct store locale for germany if system language is \"de\"",
+        "de": "wir bestimmen jetzt korrekte filiallokal für germanie, wenn systemsprache de",
+        "ru": "мы теперь определяем правильную местность магазина для германии, если язык системы де",
+        "pt": "nós agora determinamos locale de loja correta para a alemanha se a linguagem do sistema é de",
+        "nl": "we bepalen nu de juiste winkel voor duitsland als de systeemtaal",
+        "fr": "on détermine maintenant la localisation correcte du magasin pour l'allemand si la langue du système est de",
+        "it": "noi ora determinare corretto negozio locale per la germany se il linguaggio di sistema è de",
+        "es": "ahora determinamos la tienda local para alemania si el lenguaje del sistema es de",
+        "pl": "obecnie określamy odpowiednie sklepy dla germani, jeśli język systemowy jest degradowany",
+        "zh-cn": "我们现在决定,如果系统语言被取消,那么当地人是正确的。"
+      },
       "1.0.0-beta.9": {
         "en": "we fixed `activeTitleName` of applications which have no short title",
         "de": "wir haben aktiv fixiert TitleName der Anträge, die keinen Kurztitel haben",
@@ -64,18 +76,6 @@
         "zh-cn": "固定 现今是其实的所有权,而且总是是一种奢侈。\n优化发射 D. 防止基于性别的暴力的呼吁\n增加作为国家(每十分钟)的游戏中心\n在新国家安装的应用清单"
       },
       "1.0.0-beta.4": {
-        "en": "we have optimized `launchStoreTitle` to check for installed apps first\nwe have optimized error logging",
-        "de": "wir haben startStoreTitle optimiert, um zuerst für installierte Apps zu überprüfen\nwir haben die fehlerprotokollierung optimiert",
-        "ru": "мы оптимизировали запускStoreTitle для проверки установленных приложений первым\nмы оптимизировали логирование ошибок",
-        "pt": "nós otimizamos o launchStoreTitle para verificar para aplicativos instalados primeiro\nnós temos registro de erro otimizado",
-        "nl": "we hebben de lancering van StarTitle geïnstalleerd\nwe hebben een fout gemaakt",
-        "fr": "nous avons optimisé le lancementStoreTitle pour vérifier d'abord les applications installées\nnous avons optimisé l'enregistrement d'erreurs",
-        "it": "abbiamo ottimizzato il lancioStoreTitle per controllare prima le app installate\nabbiamo ottimizzato la registrazione degli errori",
-        "es": "hemos optimizado el lanzamientoStoreTitle para comprobar las aplicaciones instaladas primero\nhemos optimizado el registro de errores",
-        "pl": "zoptymalizowano startStoreTitle, aby sprawdzić zainstalowane aplikacje\nzoptymalizował błąd logowania",
-        "zh-cn": "我们优化了发射StoreTitle,以检查首次安装的配件。\n我们优化了错误伐木"
-      },
-      "1.0.0-beta.3": {
         "en": "we have optimized `launchStoreTitle` to check for installed apps first\nwe have optimized error logging",
         "de": "wir haben startStoreTitle optimiert, um zuerst für installierte Apps zu überprüfen\nwir haben die fehlerprotokollierung optimiert",
         "ru": "мы оптимизировали запускStoreTitle для проверки установленных приложений первым\nмы оптимизировали логирование ошибок",

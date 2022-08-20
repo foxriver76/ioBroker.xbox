@@ -61,6 +61,7 @@ class Xbox extends utils.Adapter {
         this.subscribeStates('*');
         await this.ensureMeta();
         await this.loadTokens();
+        await this.determineStoreLocales();
         try {
             // update token
             this.APIClient._authentication._tokens.oauth = await this.APIClient._authentication.refreshToken(this.APIClient._authentication._tokens.oauth.refresh_token);
@@ -539,7 +540,7 @@ class Xbox extends utils.Adapter {
         var _a;
         try {
             await this.APIClient.isAuthenticated();
-            const catalogRes = await this.APIClient.getProvider('catalog').searchTitle(titleName);
+            const catalogRes = await this.APIClient.getProvider('catalog').searchTitle(titleName, this.marketLocale, this.languageLocale);
             let titleId = (_a = catalogRes.Results[0]) === null || _a === void 0 ? void 0 : _a.Products[0].ProductId;
             if (catalogRes.Results.length > 1) {
                 // multiple results see if one is installed to find a better matching title
@@ -750,6 +751,29 @@ class Xbox extends utils.Adapter {
         catch (e) {
             this.log.warn(`Could not get image url for "${titleId}": ${this.errorToText(e)}`);
         }
+    }
+    /**
+     * Determines the language and the locale for the store
+     * currently it uses de if system is on DE else it uses en-us
+     */
+    async determineStoreLocales() {
+        try {
+            const config = await this.getForeignObjectAsync('system.config');
+            if ((config === null || config === void 0 ? void 0 : config.common.language) === 'de') {
+                this.languageLocale = 'de-de';
+                this.marketLocale = 'de';
+            }
+            else {
+                this.languageLocale = 'en-us';
+                this.marketLocale = 'us';
+            }
+        }
+        catch (e) {
+            this.languageLocale = 'en-us';
+            this.marketLocale = 'us';
+            this.log.error(`Could not determine store locale: ${e.message}`);
+        }
+        this.log.debug(`Store locale is ${this.marketLocale}/${this.languageLocale}`);
     }
 }
 if (require.main !== module) {

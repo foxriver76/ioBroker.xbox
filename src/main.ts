@@ -457,6 +457,8 @@ class Xbox extends utils.Adapter {
     private pollAPITimer: NodeJS.Timeout | undefined;
     private readonly pollAPIInterval: number;
     private readonly checkConnectionInterval: number;
+    private marketLocale: string | undefined;
+    private languageLocale: string | undefined;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -486,6 +488,7 @@ class Xbox extends utils.Adapter {
 
         await this.ensureMeta();
         await this.loadTokens();
+        await this.determineStoreLocales();
 
         try {
             // update token
@@ -1001,7 +1004,11 @@ class Xbox extends utils.Adapter {
     private async launchStoreApplication(titleName: string): Promise<void> {
         try {
             await this.APIClient.isAuthenticated();
-            const catalogRes = await this.APIClient.getProvider('catalog').searchTitle(titleName);
+            const catalogRes = await this.APIClient.getProvider('catalog').searchTitle(
+                titleName,
+                this.marketLocale,
+                this.languageLocale
+            );
 
             let titleId = catalogRes.Results[0]?.Products[0].ProductId;
 
@@ -1249,6 +1256,30 @@ class Xbox extends utils.Adapter {
         } catch (e) {
             this.log.warn(`Could not get image url for "${titleId}": ${this.errorToText(e)}`);
         }
+    }
+
+    /**
+     * Determines the language and the locale for the store
+     * currently it uses de if system is on DE else it uses en-us
+     */
+    private async determineStoreLocales(): Promise<void> {
+        try {
+            const config = await this.getForeignObjectAsync('system.config');
+
+            if (config?.common.language === 'de') {
+                this.languageLocale = 'de-de';
+                this.marketLocale = 'de';
+            } else {
+                this.languageLocale = 'en-us';
+                this.marketLocale = 'us';
+            }
+        } catch (e: any) {
+            this.languageLocale = 'en-us';
+            this.marketLocale = 'us';
+            this.log.error(`Could not determine store locale: ${e.message}`);
+        }
+
+        this.log.debug(`Store locale is ${this.marketLocale}/${this.languageLocale}`);
     }
 }
 
