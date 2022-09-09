@@ -321,6 +321,10 @@ For every friend a channel will be created. Under this channel you will find sev
 	Placeholder for the next version (at the beginning of the line):
 	### __WORK IN PROGRESS__
 -->
+### 1.0.0 (2022-09-09)
+* (foxriver76) updated dependencies
+* (foxriver76) see previous beta versions
+
 ### 1.0.0-beta.10 (2022-08-20)
 * (foxriver76) we now determine correct store locale for germany if system language is "de"
 

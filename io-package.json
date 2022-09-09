@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0-beta.10",
+    "version": "1.0.0",
     "news": {
+      "1.0.0": {
+        "en": "updated dependencies\nsee previous beta versions",
+        "de": "aktualisierte abhängigkeiten\nvorherige beta-versionen",
+        "ru": "обновленные зависимости\nувидеть предыдущие бета-версии",
+        "pt": "dependências atualizadas\nver versões anteriores do beta",
+        "nl": "vertaling:\nzie vorige beta versie",
+        "fr": "dépendances actualisées\nvoir les versions antérieures de bêta",
+        "it": "dipendenze aggiornate\nvedi versioni beta precedenti",
+        "es": "dependencias actualizadas\nver versiones anteriores beta",
+        "pl": "zależności aktualizacji\nzobacz wcześniejsze wersje beta",
+        "zh-cn": "二. 最新依赖\n见以前的图表"
+      },
       "1.0.0-beta.10": {
         "en": "we now determine correct store locale for germany if system language is \"de\"",
         "de": "wir bestimmen jetzt korrekte filiallokal für germanie, wenn systemsprache de",
@@ -74,18 +86,6 @@
         "es": "activo fijo TítuloImage que es ahora la cubierta y siempre una url\nlanzamiento optimizado StoreTitle previniendo llamadas de API para DLCs\nañadido gamerscore como estado (sin fecha cada 10 minutos)\nlista agregada de aplicaciones instaladas a un nuevo estado",
         "pl": "stały Obraz, który jest teraz okładką i zawsze jest urlą\noptymalizować start StoreTitle poprzez zapobieganie połączeń API dla DLC\ndodał do gry wskaźnik jako stan (synchronizowany co 10 minut)\nlista zainstalowanych aplikacji do nowego stanu",
         "zh-cn": "固定 现今是其实的所有权,而且总是是一种奢侈。\n优化发射 D. 防止基于性别的暴力的呼吁\n增加作为国家(每十分钟)的游戏中心\n在新国家安装的应用清单"
-      },
-      "1.0.0-beta.4": {
-        "en": "we have optimized `launchStoreTitle` to check for installed apps first\nwe have optimized error logging",
-        "de": "wir haben startStoreTitle optimiert, um zuerst für installierte Apps zu überprüfen\nwir haben die fehlerprotokollierung optimiert",
-        "ru": "мы оптимизировали запускStoreTitle для проверки установленных приложений первым\nмы оптимизировали логирование ошибок",
-        "pt": "nós otimizamos o launchStoreTitle para verificar para aplicativos instalados primeiro\nnós temos registro de erro otimizado",
-        "nl": "we hebben de lancering van StarTitle geïnstalleerd\nwe hebben een fout gemaakt",
-        "fr": "nous avons optimisé le lancementStoreTitle pour vérifier d'abord les applications installées\nnous avons optimisé l'enregistrement d'erreurs",
-        "it": "abbiamo ottimizzato il lancioStoreTitle per controllare prima le app installate\nabbiamo ottimizzato la registrazione degli errori",
-        "es": "hemos optimizado el lanzamientoStoreTitle para comprobar las aplicaciones instaladas primero\nhemos optimizado el registro de errores",
-        "pl": "zoptymalizowano startStoreTitle, aby sprawdzić zainstalowane aplikacje\nzoptymalizował błąd logowania",
-        "zh-cn": "我们优化了发射StoreTitle,以检查首次安装的配件。\n我们优化了错误伐木"
       }
     },
     "titleLang": {
