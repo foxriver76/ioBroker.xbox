@@ -123,8 +123,7 @@
     "docs": {
       "de": "docs/de/README.md",
       "en": "README.md"
-    },
-    "unsafePerm": true
+    }
   },
   "native": {
     "ip": "",
