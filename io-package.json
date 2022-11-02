@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "news": {
+      "1.0.1": {
+        "en": "we have optimized error logging messages",
+        "de": "wir haben fehlermeldungen optimiert",
+        "ru": "мы оптимизировали сообщения о регистрации ошибок",
+        "pt": "nós temos mensagens de registro de erro otimizadas",
+        "nl": "we hebben een fout gemaakt om berichten te vinden",
+        "fr": "nous avons optimisé les messages de journalisation des erreurs",
+        "it": "abbiamo ottimizzato i messaggi di registrazione degli errori",
+        "es": "hemos optimizado los mensajes de registro de errores",
+        "pl": "zoptymalizowano błędy logowania wiadomości",
+        "uk": "ми оптимізували повідомлення про помилку",
+        "zh-cn": "我们已优化了错误的信息砍伐"
+      },
       "1.0.0": {
         "en": "updated dependencies\nsee previous beta versions",
         "de": "aktualisierte abhängigkeiten\nvorherige beta-versionen",
@@ -74,18 +87,6 @@
         "es": "ahora estamos sincronizando amigos",
         "pl": "obecnie są przyjaciółmi z synchronizacji",
         "zh-cn": "我们现在正与朋友同步进行"
-      },
-      "1.0.0-beta.5": {
-        "en": "fixed `activeTitleImage` which is now the cover and always an url\noptimized `launchStoreTitle` by preventing API calls for DLCs\nadded gamerscore as state (synched every 10 minutes)\nadded list of installed applications to a new state",
-        "de": "fest aktiv TitleImage, das ist jetzt die Abdeckung und immer ein url\noptimierter Start StoreTitle durch die Verhinderung von API-Anrufen für DLCs\ngamerscore als zustand hinzugefügt (alle 10 minuten synchronisiert)\nerweiterte liste der installierten anwendungen in einen neuen zustand",
-        "ru": "фиксированная активная НазваниеИзображение, которое сейчас крышка и всегда URL\nоптимизированный запуск StoreTitle, предотвращая API звонки для DLC\nдобавлена геймерскор как государство (считается каждые 10 минут)\nдобавлен список установленных приложений в новое состояние",
-        "pt": "activo fixo TitleImage que é agora a capa e sempre uma url\nlançamento otimizado StoreTitle, impedindo chamadas de API para DLCs\nadicionado gamerscore como estado (sinado a cada 10 minutos)\nlista adicionada de aplicativos instalados para um novo estado",
-        "nl": "vertaling: Titellemage die nu de dekmantel is en altijd een uil\noptimaal lancering Vertaling:\nvoegde gamerscore toe als staat (synched elke 10 minuten)\nvertaling:",
-        "fr": "actif fixe TitleImage qui est maintenant la couverture et toujours une url\nlancement optimisé StoreTitle en empêchant les appels API pour les DLC\ngamerscore ajouté en état (synché toutes les 10 minutes)\nliste ajoutée des applications installées à un nouvel état",
-        "it": "attivo fisso TitoloImage che è ora la copertina e sempre un url\nlancio ottimizzato StoreTitle impedendo le chiamate API per i DLC\naggiunto gamerscore come stato (sinciato ogni 10 minuti)\nelenco aggiunto delle applicazioni installate a un nuovo stato",
-        "es": "activo fijo TítuloImage que es ahora la cubierta y siempre una url\nlanzamiento optimizado StoreTitle previniendo llamadas de API para DLCs\nañadido gamerscore como estado (sin fecha cada 10 minutos)\nlista agregada de aplicaciones instaladas a un nuevo estado",
-        "pl": "stały Obraz, który jest teraz okładką i zawsze jest urlą\noptymalizować start StoreTitle poprzez zapobieganie połączeń API dla DLC\ndodał do gry wskaźnik jako stan (synchronizowany co 10 minut)\nlista zainstalowanych aplikacji do nowego stanu",
-        "zh-cn": "固定 现今是其实的所有权,而且总是是一种奢侈。\n优化发射 D. 防止基于性别的暴力的呼吁\n增加作为国家(每十分钟)的游戏中心\n在新国家安装的应用清单"
       }
     },
     "titleLang": {

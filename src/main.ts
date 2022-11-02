@@ -501,11 +501,13 @@ class Xbox extends utils.Adapter {
             this.log.info('User is authenticated with Xbox Live');
             await this.getModel();
             await this.setGamertag();
-        } catch (e: any) {
+        } catch (e) {
             // it's not a real error has no message
             this.log.debug(`Error: ${this.errorToText(e)}`);
             this.log.info(`Xbox login url available at: ${this.APIClient._authentication.generateAuthorizationUrl()}`);
-            this.log.info('Copy the token after login into "apiToken" of the adapter config to enable the Xbox api');
+            this.log.info(
+                'Copy the token (value after code=) after login into "apiToken" of the adapter config to enable the Xbox api'
+            );
             this.log.debug(`Current Token: ${this.config.apiToken}`);
 
             // tokens file did not work out, so we try via apiToken
@@ -524,8 +526,8 @@ class Xbox extends utils.Adapter {
 
                     await this.getModel();
                     await this.setGamertag();
-                } catch (e: any) {
-                    this.log.debug(`Error: ${e.body}`);
+                } catch (e) {
+                    this.log.debug(`Error: ${this.errorToText(e)}`);
                     this.log.warn('User failed to authenticate.');
                 }
             }
@@ -550,8 +552,8 @@ class Xbox extends utils.Adapter {
                 await this.SGClient.discovery(this.config.ip);
                 this.log.debug(`Xbox found in network: ${this.config.ip}`);
                 this.connectConsole();
-            } catch (e: any) {
-                this.log.warn(`Failed to discover Xbox on ip ${this.config.ip}: ${e}`);
+            } catch (e) {
+                this.log.warn(`Failed to discover Xbox on ip ${this.config.ip}: ${this.errorToText(e)}`);
                 this.xboxConnected = false;
             }
         }
@@ -602,8 +604,8 @@ class Xbox extends utils.Adapter {
                     }
                 }
             });
-        } catch (e: any) {
-            this.log.debug(`Failed to connect to xbox. Error: ${e.message}`);
+        } catch (e) {
+            this.log.debug(`Failed to connect to xbox. Error: ${this.errorToText(e)}`);
             this.xboxConnected = false;
             await this.setStateAsync('info.connection', false, true);
             await this.setStateAsync('settings.power', false, true);
@@ -640,7 +642,7 @@ class Xbox extends utils.Adapter {
                     productId
                 };
             }
-        } catch (e: any) {
+        } catch (e) {
             // no real error with message
             this.log.debug(`No connection to webAPI: ${this.errorToText(e)}`);
         }
@@ -696,7 +698,7 @@ class Xbox extends utils.Adapter {
                 for (const console of Object.values(res.result)) {
                     this.log.info(`LiveID: ${console.id} (${console.consoleType} - ${console.name})`);
                 }
-            } catch (e: any) {
+            } catch (e) {
                 this.log.warn(`Failed to get list of consoles: ${this.errorToText(e)}`);
             }
         }
@@ -914,7 +916,7 @@ class Xbox extends utils.Adapter {
             await this.APIClient.isAuthenticated();
             await this.APIClient.getProvider('smartglass').powerOn(this.config.liveId);
             this.log.debug('Powered on xbox using Xbox api');
-        } catch (e: any) {
+        } catch (e) {
             this.log.debug(`Failed to turn on Xbox using API: ${this.errorToText(e)}`);
             // it failed so we use the SGClient
             try {
@@ -923,7 +925,7 @@ class Xbox extends utils.Adapter {
                     ip: this.config.ip,
                     live_id: this.config.liveId
                 });
-            } catch (e: any) {
+            } catch (e) {
                 this.log.warn(`Could not power on Xbox: ${this.errorToText(e)}`);
             }
         }
@@ -939,14 +941,14 @@ class Xbox extends utils.Adapter {
             await this.APIClient.getProvider('smartglass').powerOff(this.config.liveId);
 
             this.log.debug('Powered off xbox using xbox api');
-        } catch (e: any) {
+        } catch (e) {
             this.log.debug(`Failed to turn off xbox using xbox api: ${this.errorToText(e)}`);
             try {
                 // no we try it via smartglass
                 await this.SGClient.powerOff();
                 this.log.debug('Powered off xbox using smartglass');
-            } catch (e: any) {
-                this.log.warn(`Could not turn off Xbox: ${e}`);
+            } catch (e) {
+                this.log.warn(`Could not turn off Xbox: ${this.errorToText(e)}`);
             }
         }
     }
@@ -959,7 +961,7 @@ class Xbox extends utils.Adapter {
     private async sendMediaCmd(command: string) {
         try {
             await this.SGClient.getManager('system_media').sendCommand(command);
-        } catch (e: any) {
+        } catch (e) {
             this.log.warn(`Could not send media command "${command}": ${this.errorToText(e)}`);
         }
     }
@@ -972,7 +974,7 @@ class Xbox extends utils.Adapter {
     private async sendButton(command: string) {
         try {
             await this.SGClient.getManager('system_input').sendCommand(command);
-        } catch (e: any) {
+        } catch (e) {
             this.log.warn(`Could not send gamepad command "${command}": ${this.errorToText(e)}`);
         }
     }
@@ -991,7 +993,7 @@ class Xbox extends utils.Adapter {
                 titleId
             );
             this.log.debug(`Launch application "${titleId}" result: ${JSON.stringify(res)}`);
-        } catch (e: any) {
+        } catch (e) {
             this.log.warn(`Could not launch title: ${this.errorToText(e)}`);
         }
     }
@@ -1054,7 +1056,7 @@ class Xbox extends utils.Adapter {
             } else {
                 this.log.warn(`No result found for "${titleName}"`);
             }
-        } catch (e: any) {
+        } catch (e) {
             this.log.warn(`Could not launch title: ${this.errorToText(e)}`);
         }
     }
@@ -1083,8 +1085,8 @@ class Xbox extends utils.Adapter {
             // @ts-expect-error
             this.APIClient._authentication._tokens.oauth = JSON.parse(data.file as string);
             this.log.info('Successfully loaded token');
-        } catch (e: any) {
-            this.log.debug(`No tokens to load: ${e.message}`);
+        } catch (e) {
+            this.log.debug(`No tokens to load: ${this.errorToText(e)}`);
         }
     }
 
@@ -1273,10 +1275,10 @@ class Xbox extends utils.Adapter {
                 this.languageLocale = 'en-us';
                 this.marketLocale = 'us';
             }
-        } catch (e: any) {
+        } catch (e) {
             this.languageLocale = 'en-us';
             this.marketLocale = 'us';
-            this.log.error(`Could not determine store locale: ${e.message}`);
+            this.log.error(`Could not determine store locale: ${this.errorToText(e)}`);
         }
 
         this.log.debug(`Store locale is ${this.marketLocale}/${this.languageLocale}`);

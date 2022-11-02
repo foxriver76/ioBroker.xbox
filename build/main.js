@@ -75,7 +75,7 @@ class Xbox extends utils.Adapter {
             // it's not a real error has no message
             this.log.debug(`Error: ${this.errorToText(e)}`);
             this.log.info(`Xbox login url available at: ${this.APIClient._authentication.generateAuthorizationUrl()}`);
-            this.log.info('Copy the token after login into "apiToken" of the adapter config to enable the Xbox api');
+            this.log.info('Copy the token (value after code=) after login into "apiToken" of the adapter config to enable the Xbox api');
             this.log.debug(`Current Token: ${this.config.apiToken}`);
             // tokens file did not work out, so we try via apiToken
             if (this.config.apiToken) {
@@ -92,7 +92,7 @@ class Xbox extends utils.Adapter {
                     await this.setGamertag();
                 }
                 catch (e) {
-                    this.log.debug(`Error: ${e.body}`);
+                    this.log.debug(`Error: ${this.errorToText(e)}`);
                     this.log.warn('User failed to authenticate.');
                 }
             }
@@ -117,7 +117,7 @@ class Xbox extends utils.Adapter {
                 this.connectConsole();
             }
             catch (e) {
-                this.log.warn(`Failed to discover Xbox on ip ${this.config.ip}: ${e}`);
+                this.log.warn(`Failed to discover Xbox on ip ${this.config.ip}: ${this.errorToText(e)}`);
                 this.xboxConnected = false;
             }
         }
@@ -161,7 +161,7 @@ class Xbox extends utils.Adapter {
             });
         }
         catch (e) {
-            this.log.debug(`Failed to connect to xbox. Error: ${e.message}`);
+            this.log.debug(`Failed to connect to xbox. Error: ${this.errorToText(e)}`);
             this.xboxConnected = false;
             await this.setStateAsync('info.connection', false, true);
             await this.setStateAsync('settings.power', false, true);
@@ -485,7 +485,7 @@ class Xbox extends utils.Adapter {
                 this.log.debug('Powered off xbox using smartglass');
             }
             catch (e) {
-                this.log.warn(`Could not turn off Xbox: ${e}`);
+                this.log.warn(`Could not turn off Xbox: ${this.errorToText(e)}`);
             }
         }
     }
@@ -602,7 +602,7 @@ class Xbox extends utils.Adapter {
             this.log.info('Successfully loaded token');
         }
         catch (e) {
-            this.log.debug(`No tokens to load: ${e.message}`);
+            this.log.debug(`No tokens to load: ${this.errorToText(e)}`);
         }
     }
     /**
@@ -771,7 +771,7 @@ class Xbox extends utils.Adapter {
         catch (e) {
             this.languageLocale = 'en-us';
             this.marketLocale = 'us';
-            this.log.error(`Could not determine store locale: ${e.message}`);
+            this.log.error(`Could not determine store locale: ${this.errorToText(e)}`);
         }
         this.log.debug(`Store locale is ${this.marketLocale}/${this.languageLocale}`);
     }
