@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "news": {
+      "1.0.2": {
+        "en": "we have ensured, that instance object is existing again",
+        "de": "wir haben sichergestellt, dass die instanz wieder existiert",
+        "ru": "мы обеспечили, что объект экземпляра существующий снова",
+        "pt": "nós temos assegurado, esse objeto de instância é existente novamente",
+        "nl": "we hebben verzekerd dat dat voorwerp weer bestaat",
+        "fr": "nous avons assuré, cet objet d'instance est encore existant",
+        "it": "abbiamo assicurato, che oggetto di istanza è ancora esistente",
+        "es": "nos hemos asegurado, ese objeto de instancia está existiendo de nuevo",
+        "pl": "wskazuje się, że obiekt jest już ponownie istniejący",
+        "uk": "ми забезпечили, що об'єкт екземпляра вже існуючий",
+        "zh-cn": "我们已确保,例如目标再次存在。"
+      },
       "1.0.1": {
         "en": "we have optimized error logging messages",
         "de": "wir haben fehlermeldungen optimiert",
@@ -75,18 +88,6 @@
         "es": "hemos revivido bandera de reconocimiento para poder en estado",
         "pl": "przywrócił się do flagi państwowej o władzę nad państwem",
         "zh-cn": "我们恢复了国家权力的承认国旗"
-      },
-      "1.0.0-beta.6": {
-        "en": "we are now synchronizing friends",
-        "de": "wir sind jetzt synchronisiert",
-        "ru": "мы теперь синхронизируем друзей",
-        "pt": "nós estamos agora sincronizando amigos",
-        "nl": "we synchroniseren nu vrienden",
-        "fr": "nous synchronisons maintenant les amis",
-        "it": "siamo ora sincronizzare gli amici",
-        "es": "ahora estamos sincronizando amigos",
-        "pl": "obecnie są przyjaciółmi z synchronizacji",
-        "zh-cn": "我们现在正与朋友同步进行"
       }
     },
     "titleLang": {
@@ -134,6 +135,14 @@
   "protectedNative": [],
   "objects": [],
   "instanceObjects": [
+    {
+      "_id": "",
+      "type": "device",
+      "common": {
+        "name": "Xbox device"
+      },
+      "native": {}
+    },
     {
       "_id": "info",
       "type": "channel",
