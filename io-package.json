@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "news": {
+      "1.1.0": {
+        "en": "allow to send web API commands even if Xbox is locally not connected",
+        "de": "erlauben, Web-API-Befehle zu senden, auch wenn Xbox lokal nicht angeschlossen ist",
+        "ru": "позволяют отправлять команды web API, даже если Xbox локально не подключен",
+        "pt": "permitir enviar comandos de API da Web mesmo que o Xbox esteja conectado localmente",
+        "nl": "als Xbox niet met elkaar verbonden is",
+        "fr": "permettre d'envoyer des commandes API web même si Xbox n'est pas connecté localement",
+        "it": "consentire di inviare comandi web API anche se Xbox non è localmente collegato",
+        "es": "permite enviar comandos de API web incluso si Xbox no está conectado localmente",
+        "pl": "umożliwia wysłanie poleceń API w internecie, nawet jeśli Xbox nie jest lokalnie połączony ze sobą",
+        "uk": "не підключено до команди веб API, навіть якщо Xbox локально не підключено",
+        "zh-cn": "即使X箱在当地没有联系,也允许发送API指挥网。"
+      },
       "1.0.2": {
         "en": "we have ensured, that instance object is existing again",
         "de": "wir haben sichergestellt, dass die instanz wieder existiert",
@@ -76,18 +89,6 @@
         "es": "removido mensajería no utilizado",
         "pl": "usunąć",
         "zh-cn": "拆除未用的信息箱"
-      },
-      "1.0.0-beta.7": {
-        "en": "we have revived acknowledgment flag for power on state",
-        "de": "wir haben wieder anerkennungsfahne für macht auf staat",
-        "ru": "мы возродили флаг признания для власти на государственном",
-        "pt": "nós temos revivido bandeira de reconhecimento para poder no estado",
-        "nl": "we hebben een erkenningsflage voor macht op staat",
-        "fr": "nous avons relancé le drapeau de reconnaissance pour le pouvoir sur l'état",
-        "it": "abbiamo rianimato la bandiera di riconoscimento per il potere sullo stato",
-        "es": "hemos revivido bandera de reconocimiento para poder en estado",
-        "pl": "przywrócił się do flagi państwowej o władzę nad państwem",
-        "zh-cn": "我们恢复了国家权力的承认国旗"
       }
     },
     "titleLang": {

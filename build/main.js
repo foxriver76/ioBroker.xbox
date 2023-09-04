@@ -278,10 +278,6 @@ class Xbox extends utils.Adapter {
             this.powerOn();
             return;
         }
-        if (!this.xboxConnected) {
-            this.log.warn(`Ignoring state change of "${id}", because not connected`);
-            return;
-        }
         switch (id) {
             case 'settings.power':
                 await this.powerOff();
@@ -495,6 +491,10 @@ class Xbox extends utils.Adapter {
      * @param command command to send via media manager
      */
     async sendMediaCmd(command) {
+        if (!this.xboxConnected) {
+            this.log.warn(`Cannot send media command "${command}", because not connected`);
+            return;
+        }
         try {
             await this.SGClient.getManager('system_media').sendCommand(command);
         }
@@ -508,6 +508,10 @@ class Xbox extends utils.Adapter {
      * @param command command to send via input manager
      */
     async sendButton(command) {
+        if (!this.xboxConnected) {
+            this.log.warn(`Cannot send button command "${command}", because not connected`);
+            return;
+        }
         try {
             await this.SGClient.getManager('system_input').sendCommand(command);
         }
@@ -597,7 +601,6 @@ class Xbox extends utils.Adapter {
         this.APIClient._authentication._tokensFile = '.tokens.json';
         try {
             const data = await this.readFileAsync(this.name, 'tokens.json');
-            // @ts-expect-error
             this.APIClient._authentication._tokens.oauth = JSON.parse(data.file);
             this.log.info('Successfully loaded token');
         }
