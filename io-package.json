@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "news": {
+      "1.1.2": {
+        "en": "(@foxriver76) upgrade lib to fix most of the commands",
+        "de": "(@foxriver76) upgrade lib, um die meisten befehle zu beheben",
+        "ru": "(@foxriver76) обновление lib, чтобы исправить большинство команд",
+        "pt": "(@foxriver76) atualizar lib para corrigir a maioria dos comandos",
+        "nl": "(@foxriver76) upgrade lib om de meeste commando's op te lossen",
+        "fr": "(@foxriver76) upgrade lib pour corriger la plupart des commandes",
+        "it": "(@foxriver76) upgrade lib per correggere la maggior parte dei comandi",
+        "es": "(@foxriver76) actualizar lib para fijar la mayoría de los comandos",
+        "pl": "(@ foxriver76) upgrade lib aby naprawić większość poleceń",
+        "uk": "(@foxriver76) update lib для виправлення більшості команд",
+        "zh-cn": "(@ foxriver76) 升级 lib 以修正大多数命令"
+      },
       "1.1.1": {
         "en": "(@foxriver76) upgrade lib to fix most of the commands",
         "de": "(@foxriver76) upgrade lib, um die meisten befehle zu beheben",
@@ -78,18 +91,6 @@
         "es": "ahora determinamos la tienda local para alemania si el lenguaje del sistema es de",
         "pl": "obecnie określamy odpowiednie sklepy dla germani, jeśli język systemowy jest degradowany",
         "zh-cn": "我们现在决定,如果系统语言被取消,那么当地人是正确的。"
-      },
-      "1.0.0-beta.9": {
-        "en": "we fixed `activeTitleName` of applications which have no short title",
-        "de": "wir haben aktiv fixiert TitleName der Anträge, die keinen Kurztitel haben",
-        "ru": "мы исправили активную Название приложения, которые не имеют короткого названия",
-        "pt": "nós fixamos ativo TítuloNome de aplicações que não têm título curto",
-        "nl": "we zijn actief. TitleName van aanvragen die geen korte titel hebben",
-        "fr": "nous avons réparé actif TitreNom des applications qui n'ont pas de titre court",
-        "it": "abbiamo fissato attivo TitoloNome delle applicazioni che non hanno un breve titolo",
-        "es": "fijamos activos TítuloNombre de aplicaciones que no tienen título corto",
-        "pl": "aktywnie działał Tytułu aplikacji nie posiada krótkiego tytułu",
-        "zh-cn": "我们的固定活动 无短期所有权的申请的标题"
       }
     },
     "titleLang": {
