@@ -30,7 +30,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.3",
     "xbox-smartglass-core-node": "^0.6.10",
-    "xbox-webapi": "^1.4.1"
+    "xbox-webapi": "^1.4.2"
   },
   "scripts": {
     "prebuild": "rimraf ./build",
