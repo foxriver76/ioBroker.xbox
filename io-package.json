@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "xbox",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "news": {
+      "1.1.1": {
+        "en": "(@foxriver76) upgrade lib to fix most of the commands",
+        "de": "(@foxriver76) upgrade lib, um die meisten befehle zu beheben",
+        "ru": "(@foxriver76) обновление lib, чтобы исправить большинство команд",
+        "pt": "(@foxriver76) atualizar lib para corrigir a maioria dos comandos",
+        "nl": "(@foxriver76) upgrade lib om de meeste commando's op te lossen",
+        "fr": "(@foxriver76) upgrade lib pour corriger la plupart des commandes",
+        "it": "(@foxriver76) upgrade lib per correggere la maggior parte dei comandi",
+        "es": "(@foxriver76) actualizar lib para fijar la mayoría de los comandos",
+        "pl": "(@ foxriver76) upgrade lib aby naprawić większość poleceń",
+        "uk": "(@foxriver76) update lib для виправлення більшості команд",
+        "zh-cn": "(@ foxriver76) 升级 lib 以修正大多数命令"
+      },
       "1.1.0": {
         "en": "allow to send web API commands even if Xbox is locally not connected",
         "de": "erlauben, Web-API-Befehle zu senden, auch wenn Xbox lokal nicht angeschlossen ist",
@@ -77,18 +90,6 @@
         "es": "fijamos activos TítuloNombre de aplicaciones que no tienen título corto",
         "pl": "aktywnie działał Tytułu aplikacji nie posiada krótkiego tytułu",
         "zh-cn": "我们的固定活动 无短期所有权的申请的标题"
-      },
-      "1.0.0-beta.8": {
-        "en": "removed unused messagebox",
-        "de": "nicht genutzte nachrichtenbox",
-        "ru": "удалить неиспользуемый почтовый ящик",
-        "pt": "caixa de mensagem não utilizada",
-        "nl": "verwijder ongebruikte berichten",
-        "fr": "boîte de message inutilisée",
-        "it": "rimosso casella di messaggio non utilizzata",
-        "es": "removido mensajería no utilizado",
-        "pl": "usunąć",
-        "zh-cn": "拆除未用的信息箱"
       }
     },
     "titleLang": {
