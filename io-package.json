@@ -119,6 +119,7 @@
     ],
     "readme": "https://github.com/foxriver76/ioBroker.xbox/blob/master/README.md",
     "loglevel": "info",
+    "tier": 2,
     "type": "multimedia",
     "connectionType": "local",
     "dataSource": "poll",
