@@ -122,7 +122,10 @@
     "type": "multimedia",
     "connectionType": "local",
     "dataSource": "poll",
-    "license": "MIT",
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
     "messagebox": false,
     "stopTimeout": 2000,
     "docs": {
