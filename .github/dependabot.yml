@@ -1,13 +1,16 @@
+# Dependabot will run on day 5 of each month at 03:56 (Europe/Berlin timezone)
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "04:00"
-  open-pull-requests-limit: 10
-  versioning-strategy: increase-if-necessary
-  ignore:
-  - dependency-name: ping
-    versions:
-    - 0.4.0
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 15
+    versioning-strategy: "increase-if-necessary"
+    ignore:
+      - dependency-name: "ping"
+        versions:
+          - "0.4.0"
