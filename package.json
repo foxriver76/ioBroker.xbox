@@ -2,7 +2,7 @@
   "name": "iobroker.xbox",
   "version": "1.1.2",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "description": "ioBroker Xbox Adapter",
   "author": {
