@@ -128,7 +128,12 @@
     "docs": {
       "de": "docs/de/README.md",
       "en": "README.md"
-    }
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ]
   },
   "native": {
     "ip": "",
